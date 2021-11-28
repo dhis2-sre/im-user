@@ -12,7 +12,7 @@ push-docker-image:
 	IMAGE_TAG=$(tag) docker compose push prod
 
 dev:
-	docker compose up --build dev
+	docker compose up --build dev database
 
 test: clean
 	docker compose run --no-deps test
