@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/dhis2-sre/im-users/pgk/config"
 	"github.com/dhis2-sre/im-users/pgk/database"
+	"github.com/dhis2-sre/im-users/pgk/health"
 	"github.com/dhis2-sre/im-users/pgk/helper"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-contrib/cors"
@@ -26,7 +27,7 @@ func main() {
 	r.Use(cors.Default())
 
 	router := r.Group(c.BasePath)
-	router.GET("/health", handler.Health)
+	router.GET("/health", health.Health)
 	router.POST("/signup", errorHandler(handler.Signup))
 
 	if err := r.Run(); err != nil {

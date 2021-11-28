@@ -47,7 +47,3 @@ func (h *Handler) Signup(c *gin.Context) error {
 	c.JSON(http.StatusCreated, user)
 	return nil
 }
-
-func (h *Handler) Health(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "UP"})
-}
