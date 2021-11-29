@@ -25,23 +25,32 @@ func main() {
 
 	r := gin.Default()
 	r.Use(cors.Default())
+	r.Use(errorHandler())
 
 	router := r.Group(c.BasePath)
 	router.GET("/health", health.Health)
-	router.POST("/signup", errorHandler(handler.Signup))
+	router.POST("/signup", handler.Signup)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func errorHandler(fn func(c *gin.Context) error) gin.HandlerFunc {
+func errorHandler() gin.HandlerFunc {
+	return errorHandlerT(gin.ErrorTypeAny)
+}
+
+func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		err := fn(c)
-		if err == nil {
+		c.Next()
+		detectedErrors := c.Errors.ByType(errType)
+
+		if len(detectedErrors) > 0 {
+			// TODO: Handle more than one error
+			err := detectedErrors[0].Err
+			c.JSON(helper.ToHttpStatusCode(err), err.Error())
+			c.Abort()
 			return
 		}
-		c.JSON(helper.ToHttpStatusCode(err), err.Error())
-		c.Abort()
 	}
 }

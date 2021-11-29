@@ -26,7 +26,7 @@ type Handler struct {
 // @Failure 400 {object} map[string]interface{}
 // @Router /signup [post]
 // @Param signupRequest body SignupRequest true "Email and Password json object"
-func (h *Handler) Signup(c *gin.Context) error {
+func (h *Handler) Signup(c *gin.Context) {
 	type SignupRequest struct {
 		Email    string `json:"email" binding:"required,email"`
 		Password string `json:"password" binding:"required,gte=16,lte=128"`
@@ -36,14 +36,16 @@ func (h *Handler) Signup(c *gin.Context) error {
 
 	err := helper.DataBinder(c, &request)
 	if err != nil {
-		return err
+		// TODO: Error handling for the error handler... :-/ ?
+		c.Error(err)
+		return
 	}
 
 	user, err := h.service.Signup(request.Email, request.Password)
 	if err != nil {
-		return err
+		c.Error(err)
+		return
 	}
 
 	c.JSON(http.StatusCreated, user)
-	return nil
 }
