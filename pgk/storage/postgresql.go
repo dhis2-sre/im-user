@@ -1,4 +1,4 @@
-package database
+package storage
 
 import (
 	"fmt"
@@ -9,12 +9,12 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func ProvideDatabase(config config.Config) (*gorm.DB, error) {
-	host := config.Postgresql.Host
-	port := config.Postgresql.Port
-	username := config.Postgresql.Username
-	password := config.Postgresql.Password
-	name := config.Postgresql.DatabaseName
+func ProvideDatabase(c config.Config) (*gorm.DB, error) {
+	host := c.Postgresql.Host
+	port := c.Postgresql.Port
+	username := c.Postgresql.Username
+	password := c.Postgresql.Password
+	name := c.Postgresql.DatabaseName
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", host, username, password, name, port)
 

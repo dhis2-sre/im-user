@@ -1,10 +1,11 @@
 package main
 
 import (
+	"github.com/dhis2-sre/im-users/internal/middleware"
 	"github.com/dhis2-sre/im-users/pgk/config"
-	"github.com/dhis2-sre/im-users/pgk/database"
 	"github.com/dhis2-sre/im-users/pgk/health"
-	"github.com/dhis2-sre/im-users/pgk/helper"
+	"github.com/dhis2-sre/im-users/pgk/storage"
+	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,43 +15,32 @@ import (
 func main() {
 	c := config.ProvideConfig()
 
-	db, err := database.ProvideDatabase(c)
+	db, err := storage.ProvideDatabase(c)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	repository := user.ProvideRepository(db)
-	service := user.ProvideService(repository)
-	handler := user.ProvideHandler(service)
+	userRepository := user.ProvideRepository(db)
+	userService := user.ProvideService(userRepository)
+
+	authenticationMiddleware := middleware.ProvideAuthenticationMiddleware(userService)
+
+	redis := storage.ProvideRedis(c)
+	tokenRepository := token.ProvideTokenRepository(redis)
+	tokenService := token.ProvideTokenService(c, tokenRepository)
+
+	userHandler := user.ProvideHandler(userService, tokenService)
 
 	r := gin.Default()
 	r.Use(cors.Default())
-	r.Use(errorHandler())
+	r.Use(middleware.ErrorHandler())
 
 	router := r.Group(c.BasePath)
 	router.GET("/health", health.Health)
-	router.POST("/signup", handler.Signup)
+	router.POST("/signup", userHandler.Signup)
+	router.POST("/signin", authenticationMiddleware.BasicAuthentication, userHandler.SignIn)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
-	}
-}
-
-func errorHandler() gin.HandlerFunc {
-	return errorHandlerT(gin.ErrorTypeAny)
-}
-
-func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Next()
-		detectedErrors := c.Errors.ByType(errType)
-
-		if len(detectedErrors) > 0 {
-			// TODO: Handle more than one error
-			err := detectedErrors[0].Err
-			c.JSON(helper.ToHttpStatusCode(err), err.Error())
-			c.Abort()
-			return
-		}
 	}
 }
