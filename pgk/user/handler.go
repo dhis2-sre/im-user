@@ -149,3 +149,28 @@ func (h Handler) Me(c *gin.Context) {
 
 	c.JSON(http.StatusOK, userWithGroups)
 }
+
+// SignOut godoc
+// @Summary Sign out user
+// @Description Delete refresh tokens...
+// @Tags Restricted
+// @Accept json
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /signout [get]
+// @Security OAuth2Password
+func (h Handler) SignOut(c *gin.Context) {
+	user, err := helper.GetUserFromContext(c)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	if err := h.tokenService.SignOut(user.ID); err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, "Signed out successfully")
+}

@@ -44,6 +44,7 @@ func main() {
 	tokenAuthenticationRouter := router.Group("")
 	tokenAuthenticationRouter.Use(authenticationMiddleware.TokenAuthentication)
 	tokenAuthenticationRouter.GET("/me", userHandler.Me)
+	tokenAuthenticationRouter.GET("/signout", userHandler.SignOut)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
