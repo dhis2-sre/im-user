@@ -135,7 +135,7 @@ func (h Handler) RefreshToken(c *gin.Context) {
 // @Router /me [get]
 // @Security OAuth2Password
 func (h Handler) Me(c *gin.Context) {
-	user, err := helper.GetUserFromToken(h.config, c)
+	user, err := helper.GetUserFromContext(c)
 	if err != nil {
 		c.Error(err)
 		return

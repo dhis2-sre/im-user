@@ -8,9 +8,8 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwt"
-	"github.com/mitchellh/mapstructure"
+	"gorm.io/gorm"
 	"log"
-	"strconv"
 	"time"
 )
 
@@ -65,17 +64,19 @@ func ValidateAccessToken(tokenString string, key *rsa.PublicKey) (*accessTokenCl
 		return nil, errors.New("user not found in claims")
 	}
 
-	// TODO: This is about as ugly as it gets...
-	var user *model.User
-	err = mapstructure.Decode(userData, &user)
-	idRaw := userData.(map[string]interface{})["ID"]
-	idString := fmt.Sprintf("%v", idRaw)
-	IdInt, _ := strconv.Atoi(idString)
-	user.ID = uint(IdInt)
-	// TODO: End of ugly
+	userMap, ok := userData.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("failed to parse user data")
+	}
 
-	if err != nil {
-		return nil, err
+	id := userMap["ID"].(float64)
+	email := userMap["Email"].(string)
+
+	user := &model.User{
+		Model: gorm.Model{
+			ID: uint(id),
+		},
+		Email: email,
 	}
 
 	return &accessTokenClaims{

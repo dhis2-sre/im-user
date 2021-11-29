@@ -23,13 +23,13 @@ func main() {
 	userRepository := user.ProvideRepository(db)
 	userService := user.ProvideService(userRepository)
 
-	authenticationMiddleware := middleware.ProvideAuthenticationMiddleware(userService)
-
 	redis := storage.ProvideRedis(c)
 	tokenRepository := token.ProvideTokenRepository(redis)
 	tokenService := token.ProvideTokenService(c, tokenRepository)
 
 	userHandler := user.ProvideHandler(c, userService, tokenService)
+
+	authenticationMiddleware := middleware.ProvideAuthenticationMiddleware(userService, tokenService)
 
 	r := gin.Default()
 	r.Use(cors.Default())
@@ -38,9 +38,12 @@ func main() {
 	router := r.Group(c.BasePath)
 	router.GET("/health", health.Health)
 	router.POST("/signup", userHandler.Signup)
-	router.POST("/signin", authenticationMiddleware.BasicAuthentication, userHandler.SignIn)
 	router.POST("/refresh", userHandler.RefreshToken)
-	router.GET("/me", userHandler.Me)
+	router.POST("/signin", authenticationMiddleware.BasicAuthentication, userHandler.SignIn)
+
+	tokenAuthenticationRouter := router.Group("")
+	tokenAuthenticationRouter.Use(authenticationMiddleware.TokenAuthentication)
+	tokenAuthenticationRouter.GET("/me", userHandler.Me)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
