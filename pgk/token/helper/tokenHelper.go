@@ -36,7 +36,6 @@ func GenerateAccessToken(user *model.User, key *rsa.PrivateKey, expirationInSeco
 
 	signed, err := jwt.Sign(token, jwa.RS256, key)
 	if err != nil {
-		log.Printf("Failed to sign token: %s", err)
 		return "", err
 	}
 
