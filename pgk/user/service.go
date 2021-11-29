@@ -13,8 +13,8 @@ import (
 type Service interface {
 	Signup(email string, password string) (*model.User, error)
 	SignIn(email string, password string) (*model.User, error)
+	FindById(id uint) (*model.User, error)
 	//	FindByEmail(email string) (*model.User, error)
-	//	FindById(id uint) (*model.User, error)
 }
 
 func ProvideService(repository Repository) Service {

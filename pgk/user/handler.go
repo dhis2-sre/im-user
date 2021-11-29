@@ -77,3 +77,47 @@ func (h *Handler) SignIn(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, tokens)
 }
+
+type RefreshTokenRequest struct {
+	RefreshToken string `json:"refreshToken" binding:"required"`
+}
+
+// RefreshToken godoc
+// @Summary Refresh tokens
+// @Description Post a refresh token and this endpoint will return a fresh set of tokens
+// @Tags Public
+// @Accept json
+// @Produce json
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /refresh [post]
+// @Param refreshTokenRequest body RefreshTokenRequest true "Refresh token request"
+func (h Handler) RefreshToken(c *gin.Context) {
+	var request RefreshTokenRequest
+
+	err := helper.DataBinder(c, &request)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	refreshToken, err := h.tokenService.ValidateRefreshToken(request.RefreshToken)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	user, err := h.userService.FindById(refreshToken.UserId)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	tokens, err := h.tokenService.GetTokens(user, refreshToken.ID.String())
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusCreated, tokens)
+}

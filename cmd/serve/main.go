@@ -39,6 +39,7 @@ func main() {
 	router.GET("/health", health.Health)
 	router.POST("/signup", userHandler.Signup)
 	router.POST("/signin", authenticationMiddleware.BasicAuthentication, userHandler.SignIn)
+	router.POST("/refresh", userHandler.RefreshToken)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
