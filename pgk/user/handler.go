@@ -1,20 +1,23 @@
 package user
 
 import (
+	"github.com/dhis2-sre/im-users/pgk/config"
 	"github.com/dhis2-sre/im-users/pgk/helper"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func ProvideHandler(userService Service, tokenService token.Service) Handler {
+func ProvideHandler(config config.Config, userService Service, tokenService token.Service) Handler {
 	return Handler{
+		config,
 		userService,
 		tokenService,
 	}
 }
 
 type Handler struct {
+	config       config.Config
 	userService  Service
 	tokenService token.Service
 }
@@ -120,4 +123,29 @@ func (h Handler) RefreshToken(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, tokens)
+}
+
+// Me godoc
+// @Summary User details
+// @Description Show user details
+// @Tags Restricted
+// @Accept json
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /me [get]
+// @Security OAuth2Password
+func (h Handler) Me(c *gin.Context) {
+	user, err := helper.GetUserFromToken(h.config, c)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	userWithGroups, err := h.userService.FindById(user.ID)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, userWithGroups)
 }

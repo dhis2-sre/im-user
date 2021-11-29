@@ -29,7 +29,7 @@ func main() {
 	tokenRepository := token.ProvideTokenRepository(redis)
 	tokenService := token.ProvideTokenService(c, tokenRepository)
 
-	userHandler := user.ProvideHandler(userService, tokenService)
+	userHandler := user.ProvideHandler(c, userService, tokenService)
 
 	r := gin.Default()
 	r.Use(cors.Default())
@@ -40,6 +40,7 @@ func main() {
 	router.POST("/signup", userHandler.Signup)
 	router.POST("/signin", authenticationMiddleware.BasicAuthentication, userHandler.SignIn)
 	router.POST("/refresh", userHandler.RefreshToken)
+	router.GET("/me", userHandler.Me)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
