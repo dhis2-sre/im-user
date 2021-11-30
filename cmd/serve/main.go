@@ -35,6 +35,7 @@ func main() {
 	groupHandler := group.ProvideHandler(groupService, userService)
 
 	authenticationMiddleware := middleware.ProvideAuthentication(userService, tokenService)
+	authorizationMiddleware := middleware.ProvideAuthorization(userService)
 
 	r := gin.Default()
 	r.Use(cors.Default())
@@ -52,7 +53,9 @@ func main() {
 	tokenAuthenticationRouter.GET("/me", userHandler.Me)
 	tokenAuthenticationRouter.GET("/signout", userHandler.SignOut)
 
-	tokenAuthenticationRouter.POST("/groups", groupHandler.Create)
+	administratorRestrictedRouter := tokenAuthenticationRouter.Group("")
+	administratorRestrictedRouter.Use(authorizationMiddleware.RequireAdministrator)
+	administratorRestrictedRouter.POST("/groups", groupHandler.Create)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
