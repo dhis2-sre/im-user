@@ -9,8 +9,8 @@ type User struct {
 	gorm.Model
 	Email       string  `gorm:"index;unique"`
 	Password    string  `json:"-"`
-	Groups      []Group `gorm:"many2many:user_groups;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	AdminGroups []Group `gorm:"many2many:user_groups;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Groups      []Group `gorm:"many2many:user_groups;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	AdminGroups []Group `gorm:"many2many:user_groups;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func (u *User) IsMemberOfById(groupId uint) bool {
