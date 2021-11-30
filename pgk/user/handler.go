@@ -5,6 +5,7 @@ import (
 	"github.com/dhis2-sre/im-users/pgk/helper"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -41,14 +42,13 @@ func (h *Handler) Signup(c *gin.Context) {
 	var request SignupRequest
 
 	if err := helper.DataBinder(c, &request); err != nil {
-		// TODO: Error handling for the error handler... :-/ ?
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	user, err := h.userService.Signup(request.Email, request.Password)
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
@@ -67,13 +67,13 @@ func (h *Handler) Signup(c *gin.Context) {
 func (h *Handler) SignIn(c *gin.Context) {
 	user, err := helper.GetUserFromContext(c)
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	tokens, err := h.tokenService.GetTokens(user, "")
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
@@ -98,25 +98,25 @@ func (h Handler) RefreshToken(c *gin.Context) {
 	var request RefreshTokenRequest
 
 	if err := helper.DataBinder(c, &request); err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	refreshToken, err := h.tokenService.ValidateRefreshToken(request.RefreshToken)
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	user, err := h.userService.FindById(refreshToken.UserId)
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	tokens, err := h.tokenService.GetTokens(user, refreshToken.ID.String())
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
@@ -135,13 +135,13 @@ func (h Handler) RefreshToken(c *gin.Context) {
 func (h Handler) Me(c *gin.Context) {
 	user, err := helper.GetUserFromContext(c)
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	userWithGroups, err := h.userService.FindById(user.ID)
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
@@ -161,14 +161,20 @@ func (h Handler) Me(c *gin.Context) {
 func (h Handler) SignOut(c *gin.Context) {
 	user, err := helper.GetUserFromContext(c)
 	if err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	if err := h.tokenService.SignOut(user.ID); err != nil {
-		c.Error(err)
+		h.pushError(c, err)
 		return
 	}
 
 	c.JSON(http.StatusOK, "Signed out successfully")
+}
+
+func (h Handler) pushError(c *gin.Context, err error) {
+	if e := c.Error(err); e != nil {
+		log.Fatalln(e)
+	}
 }
