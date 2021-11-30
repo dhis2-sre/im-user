@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/dhis2-sre/im-users/internal/middleware"
 	"github.com/dhis2-sre/im-users/pgk/config"
+	"github.com/dhis2-sre/im-users/pgk/group"
 	"github.com/dhis2-sre/im-users/pgk/health"
 	"github.com/dhis2-sre/im-users/pgk/storage"
 	"github.com/dhis2-sre/im-users/pgk/token"
@@ -29,6 +30,10 @@ func main() {
 
 	userHandler := user.ProvideHandler(c, userService, tokenService)
 
+	groupRepository := group.ProvideRepository(db)
+	groupService := group.ProvideService(groupRepository, userRepository)
+	groupHandler := group.ProvideHandler(groupService, userService)
+
 	authenticationMiddleware := middleware.ProvideAuthenticationMiddleware(userService, tokenService)
 
 	r := gin.Default()
@@ -46,6 +51,8 @@ func main() {
 	tokenAuthenticationRouter.Use(authenticationMiddleware.TokenAuthentication)
 	tokenAuthenticationRouter.GET("/me", userHandler.Me)
 	tokenAuthenticationRouter.GET("/signout", userHandler.SignOut)
+
+	tokenAuthenticationRouter.POST("/groups", groupHandler.Create)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
