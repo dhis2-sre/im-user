@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/pgk/helper"
+	"github.com/dhis2-sre/im-users/pgk/model"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"strconv"
 )
@@ -97,4 +100,73 @@ func (h Handler) AddUserToGroup(c *gin.Context) {
 	}
 
 	c.Status(http.StatusCreated)
+}
+
+type createClusterConfigurationRequest struct {
+	KubernetesConfiguration *multipart.FileHeader `form:"kubernetesConfiguration" binding:"required"`
+}
+
+// AddClusterConfiguration godoc
+// @Summary Add cluster configuration to a group
+// @Description Add cluster configuration to a group...
+// @Tags Administrative
+// @Accept multipart/form-data
+// @Produce json
+// @Success 201 {object} map[string]interface{} //model.Group
+// @Failure 400 {object} map[string]interface{}
+// @Router /groups/{groupId}/cluster-configuration [post]
+// @Param groupId path string true "Group ID"
+// @Param kubernetesConfiguration formData file true "SOPS encrypted Kubernetes configuration file"
+// @Security OAuth2Password
+func (h Handler) AddClusterConfiguration(c *gin.Context) {
+	var request createClusterConfigurationRequest
+	if err := helper.DataBinder(c, &request); err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	groupIdString := c.Param("groupId")
+	groupId, err := strconv.ParseUint(groupIdString, 10, 64)
+	if err != nil {
+		badRequest := apperror.NewBadRequest(err.Error())
+		_ = c.Error(badRequest)
+		return
+	}
+
+	kubernetesConfiguration, err := h.getBytes(request.KubernetesConfiguration)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	clusterConfiguration := &model.ClusterConfiguration{
+		GroupID:                 uint(groupId),
+		KubernetesConfiguration: kubernetesConfiguration,
+	}
+
+	err = h.groupService.AddClusterConfiguration(clusterConfiguration)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.Status(http.StatusCreated)
+}
+
+func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
+	if file == nil {
+		return nil, nil
+	}
+
+	openedFile, err := file.Open()
+	if err != nil {
+		return nil, err
+	}
+
+	bytes, err := ioutil.ReadAll(openedFile)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes, nil
 }

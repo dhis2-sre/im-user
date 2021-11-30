@@ -60,6 +60,7 @@ func main() {
 	administratorRestrictedRouter.Use(authorizationMiddleware.RequireAdministrator)
 	administratorRestrictedRouter.POST("/groups", groupHandler.Create)
 	administratorRestrictedRouter.POST("/groups/:groupId/users/:userId", groupHandler.AddUserToGroup)
+	administratorRestrictedRouter.POST("/groups/:groupId/cluster-configuration", groupHandler.AddClusterConfiguration)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
