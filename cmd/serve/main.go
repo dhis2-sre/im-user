@@ -34,7 +34,7 @@ func main() {
 	groupService := group.ProvideService(groupRepository, userRepository)
 	groupHandler := group.ProvideHandler(groupService, userService)
 
-	authenticationMiddleware := middleware.ProvideAuthenticationMiddleware(userService, tokenService)
+	authenticationMiddleware := middleware.ProvideAuthentication(userService, tokenService)
 
 	r := gin.Default()
 	r.Use(cors.Default())

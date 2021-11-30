@@ -5,12 +5,11 @@ import (
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"strings"
 )
 
-func ProvideAuthenticationMiddleware(userService user.Service, tokenService token.Service) AuthenticationMiddleware {
+func ProvideAuthentication(userService user.Service, tokenService token.Service) AuthenticationMiddleware {
 	return AuthenticationMiddleware{
 		userService,
 		tokenService,
@@ -57,19 +56,12 @@ func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 
 	u, err := m.tokenService.ValidateAccessToken(authorizationHeader)
 	if err != nil {
-		err := apperror.NewUnauthorized("Provided token is invalid")
-		m.pushError(c, err)
+		unauthorized := apperror.NewUnauthorized("Provided token is invalid")
+		_ = c.Error(unauthorized)
 		return
 	}
 
 	c.Set("user", u)
 
 	c.Next()
-}
-
-func (m AuthenticationMiddleware) pushError(c *gin.Context, err error) {
-	e := c.Error(err)
-	if e != nil {
-		log.Fatalln(e)
-	}
 }
