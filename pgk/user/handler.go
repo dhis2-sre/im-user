@@ -40,8 +40,7 @@ func (h *Handler) Signup(c *gin.Context) {
 
 	var request SignupRequest
 
-	err := helper.DataBinder(c, &request)
-	if err != nil {
+	if err := helper.DataBinder(c, &request); err != nil {
 		// TODO: Error handling for the error handler... :-/ ?
 		c.Error(err)
 		return
@@ -98,8 +97,7 @@ type RefreshTokenRequest struct {
 func (h Handler) RefreshToken(c *gin.Context) {
 	var request RefreshTokenRequest
 
-	err := helper.DataBinder(c, &request)
-	if err != nil {
+	if err := helper.DataBinder(c, &request); err != nil {
 		c.Error(err)
 		return
 	}
