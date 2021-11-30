@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/pgk/config"
-	"github.com/dhis2-sre/im-users/pgk/helper"
+	"github.com/dhis2-sre/im-users/pgk/handler"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -42,7 +42,7 @@ func (h *Handler) Signup(c *gin.Context) {
 
 	var request SignupRequest
 
-	if err := helper.DataBinder(c, &request); err != nil {
+	if err := handler.DataBinder(c, &request); err != nil {
 		_ = c.Error(err)
 		return
 	}
@@ -66,7 +66,7 @@ func (h *Handler) Signup(c *gin.Context) {
 // @Router /signin [post]
 // @Security BasicAuthentication
 func (h *Handler) SignIn(c *gin.Context) {
-	user, err := helper.GetUserFromContext(c)
+	user, err := handler.GetUserFromContext(c)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -98,7 +98,7 @@ type RefreshTokenRequest struct {
 func (h Handler) RefreshToken(c *gin.Context) {
 	var request RefreshTokenRequest
 
-	if err := helper.DataBinder(c, &request); err != nil {
+	if err := handler.DataBinder(c, &request); err != nil {
 		_ = c.Error(err)
 		return
 	}
@@ -134,7 +134,7 @@ func (h Handler) RefreshToken(c *gin.Context) {
 // @Router /me [get]
 // @Security OAuth2Password
 func (h Handler) Me(c *gin.Context) {
-	user, err := helper.GetUserFromContext(c)
+	user, err := handler.GetUserFromContext(c)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -160,7 +160,7 @@ func (h Handler) Me(c *gin.Context) {
 // @Router /signout [get]
 // @Security OAuth2Password
 func (h Handler) SignOut(c *gin.Context) {
-	user, err := helper.GetUserFromContext(c)
+	user, err := handler.GetUserFromContext(c)
 	if err != nil {
 		_ = c.Error(err)
 		return

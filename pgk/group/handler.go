@@ -3,7 +3,7 @@ package group
 import (
 	"fmt"
 	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/pgk/helper"
+	"github.com/dhis2-sre/im-users/pgk/handler"
 	"github.com/dhis2-sre/im-users/pgk/model"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-gonic/gin"
@@ -47,7 +47,7 @@ type CreateGroupRequest struct {
 func (h Handler) Create(c *gin.Context) {
 	var request CreateGroupRequest
 
-	if err := helper.DataBinder(c, &request); err != nil {
+	if err := handler.DataBinder(c, &request); err != nil {
 		_ = c.Error(err)
 		return
 	}
@@ -120,7 +120,7 @@ type createClusterConfigurationRequest struct {
 // @Security OAuth2Password
 func (h Handler) AddClusterConfiguration(c *gin.Context) {
 	var request createClusterConfigurationRequest
-	if err := helper.DataBinder(c, &request); err != nil {
+	if err := handler.DataBinder(c, &request); err != nil {
 		_ = c.Error(err)
 		return
 	}

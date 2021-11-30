@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/pgk/helper"
+	"github.com/dhis2-sre/im-users/pgk/handler"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -17,7 +17,7 @@ type AuthorizationMiddleware struct {
 }
 
 func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
-	u, err := helper.GetUserFromContext(c)
+	u, err := handler.GetUserFromContext(c)
 	if err != nil {
 		_ = c.Error(err)
 		return
