@@ -39,6 +39,7 @@ func main() {
 	router.GET("/health", health.Health)
 	router.POST("/signup", userHandler.Signup)
 	router.POST("/refresh", userHandler.RefreshToken)
+	router.GET("/findbyid/:id", userHandler.FindById)
 	router.POST("/signin", authenticationMiddleware.BasicAuthentication, userHandler.SignIn)
 
 	tokenAuthenticationRouter := router.Group("")

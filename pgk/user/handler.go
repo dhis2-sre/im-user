@@ -1,12 +1,14 @@
 package user
 
 import (
+	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/pgk/config"
 	"github.com/dhis2-sre/im-users/pgk/helper"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func ProvideHandler(config config.Config, userService Service, tokenService token.Service) Handler {
@@ -171,6 +173,33 @@ func (h Handler) SignOut(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, "Signed out successfully")
+}
+
+// FindById godoc
+// @Summary User details by id
+// @Description Show user details by id
+// @Tags Public
+// @Accept json
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router /findbyid [get]
+// @Param id path string true "User id"
+func (h Handler) FindById(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		badRequest := apperror.NewBadRequest("Error parsing id")
+		h.pushError(c, badRequest)
+		return
+	}
+
+	userWithGroups, err := h.userService.FindById(uint(id))
+	if err != nil {
+		h.pushError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, userWithGroups)
 }
 
 func (h Handler) pushError(c *gin.Context, err error) {
