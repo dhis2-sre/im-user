@@ -5,6 +5,7 @@ import (
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -42,6 +43,12 @@ func (m AuthenticationMiddleware) BasicAuthentication(c *gin.Context) {
 	c.Next()
 }
 
+func (m AuthenticationMiddleware) handleError(c *gin.Context, e error) {
+	// Trigger username/password prompt
+	c.Header("WWW-Authenticate", "Basic realm=\"DHIS2\"")
+	_ = c.AbortWithError(http.StatusUnauthorized, e)
+}
+
 func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 	authorizationHeader := c.GetHeader("Authorization")
 	if strings.HasPrefix(authorizationHeader, "Bearer ") {
@@ -51,7 +58,7 @@ func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 	u, err := m.tokenService.ValidateAccessToken(authorizationHeader)
 	if err != nil {
 		err := apperror.NewUnauthorized("Provided token is invalid")
-		m.handleError(c, err)
+		m.pushError(c, err)
 		return
 	}
 
@@ -60,8 +67,9 @@ func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 	c.Next()
 }
 
-func (m AuthenticationMiddleware) handleError(c *gin.Context, e error) {
-	// Trigger username/password prompt
-	c.Header("WWW-Authenticate", "Basic realm=\"DHIS2\"")
-	_ = c.AbortWithError(http.StatusUnauthorized, e)
+func (m AuthenticationMiddleware) pushError(c *gin.Context, err error) {
+	e := c.Error(err)
+	if e != nil {
+		log.Fatalln(e)
+	}
 }
