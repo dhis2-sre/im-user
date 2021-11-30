@@ -59,6 +59,7 @@ func main() {
 	administratorRestrictedRouter := tokenAuthenticationRouter.Group("")
 	administratorRestrictedRouter.Use(authorizationMiddleware.RequireAdministrator)
 	administratorRestrictedRouter.POST("/groups", groupHandler.Create)
+	administratorRestrictedRouter.POST("/groups/:groupId/users/:userId", groupHandler.AddUserToGroup)
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
