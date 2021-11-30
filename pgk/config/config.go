@@ -34,7 +34,10 @@ func ProvideConfig() Config {
 			Host: requireEnv("REDIS_HOST"),
 			Port: requireEnvAsInt("REDIS_PORT"),
 		},
-		AdminUser:   user{},
+		AdminUser: user{
+			Email:    requireEnv("ADMIN_USER_EMAIL"),
+			Password: requireEnv("ADMIN_USER_PASSWORD"),
+		},
 		DefaultUser: user{},
 	}
 }

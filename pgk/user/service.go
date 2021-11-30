@@ -14,7 +14,7 @@ type Service interface {
 	Signup(email string, password string) (*model.User, error)
 	SignIn(email string, password string) (*model.User, error)
 	FindById(id uint) (*model.User, error)
-	//	FindByEmail(email string) (*model.User, error)
+	FindByEmail(email string) (*model.User, error)
 }
 
 func ProvideService(repository Repository) Service {
@@ -110,10 +110,10 @@ func comparePasswords(storedPassword string, suppliedPassword string) (bool, err
 	return hex.EncodeToString(hash) == passwordAndSalt[0], nil
 }
 
-func (s service) FindByEmail(email string) (*model.User, error) {
-	return s.repository.FindByEmail(email)
-}
-
 func (s service) FindById(id uint) (*model.User, error) {
 	return s.repository.FindById(id)
+}
+
+func (s service) FindByEmail(email string) (*model.User, error) {
+	return s.repository.FindByEmail(email)
 }

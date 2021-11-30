@@ -5,6 +5,7 @@ import (
 	"github.com/dhis2-sre/im-users/pgk/config"
 	"github.com/dhis2-sre/im-users/pgk/group"
 	"github.com/dhis2-sre/im-users/pgk/health"
+	"github.com/dhis2-sre/im-users/pgk/model"
 	"github.com/dhis2-sre/im-users/pgk/storage"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/dhis2-sre/im-users/pgk/user"
@@ -34,6 +35,8 @@ func main() {
 	groupService := group.ProvideService(groupRepository, userRepository)
 	groupHandler := group.ProvideHandler(groupService, userService)
 
+	createAdminUser(c, userService, groupService)
+
 	authenticationMiddleware := middleware.ProvideAuthentication(userService, tokenService)
 	authorizationMiddleware := middleware.ProvideAuthorization(userService)
 
@@ -59,5 +62,31 @@ func main() {
 
 	if err := r.Run(); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func createAdminUser(config config.Config, userService user.Service, groupService group.Service) {
+	adminUserEmail := config.AdminUser.Email
+	adminUserPassword := config.AdminUser.Password
+
+	u, _ := userService.FindByEmail(adminUserEmail)
+	if u != nil && u.ID > 0 {
+		log.Println("Admin user exists")
+		return
+	}
+
+	adminUser, err := userService.Signup(adminUserEmail, adminUserPassword)
+	if err != nil {
+		log.Fatalf("Failed to create admin user: %s", err)
+	}
+
+	g, err := groupService.Create(model.AdministratorGroupName, "")
+	if err != nil {
+		log.Fatalf("Failed to create admin group: %s", err)
+	}
+
+	err = groupService.AddUser(g.ID, adminUser.ID)
+	if err != nil {
+		log.Fatalf("Failed to add user to admin group: %s", err)
 	}
 }
