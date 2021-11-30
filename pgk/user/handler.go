@@ -6,7 +6,6 @@ import (
 	"github.com/dhis2-sre/im-users/pgk/helper"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -44,13 +43,13 @@ func (h *Handler) Signup(c *gin.Context) {
 	var request SignupRequest
 
 	if err := helper.DataBinder(c, &request); err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	user, err := h.userService.Signup(request.Email, request.Password)
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -69,13 +68,13 @@ func (h *Handler) Signup(c *gin.Context) {
 func (h *Handler) SignIn(c *gin.Context) {
 	user, err := helper.GetUserFromContext(c)
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	tokens, err := h.tokenService.GetTokens(user, "")
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -100,25 +99,25 @@ func (h Handler) RefreshToken(c *gin.Context) {
 	var request RefreshTokenRequest
 
 	if err := helper.DataBinder(c, &request); err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	refreshToken, err := h.tokenService.ValidateRefreshToken(request.RefreshToken)
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	user, err := h.userService.FindById(refreshToken.UserId)
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	tokens, err := h.tokenService.GetTokens(user, refreshToken.ID.String())
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -137,13 +136,13 @@ func (h Handler) RefreshToken(c *gin.Context) {
 func (h Handler) Me(c *gin.Context) {
 	user, err := helper.GetUserFromContext(c)
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	userWithGroups, err := h.userService.FindById(user.ID)
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -163,12 +162,12 @@ func (h Handler) Me(c *gin.Context) {
 func (h Handler) SignOut(c *gin.Context) {
 	user, err := helper.GetUserFromContext(c)
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	if err := h.tokenService.SignOut(user.ID); err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -189,21 +188,15 @@ func (h Handler) FindById(c *gin.Context) {
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		badRequest := apperror.NewBadRequest("Error parsing id")
-		h.pushError(c, badRequest)
+		_ = c.Error(badRequest)
 		return
 	}
 
 	userWithGroups, err := h.userService.FindById(uint(id))
 	if err != nil {
-		h.pushError(c, err)
+		_ = c.Error(err)
 		return
 	}
 
 	c.JSON(http.StatusOK, userWithGroups)
-}
-
-func (h Handler) pushError(c *gin.Context, err error) {
-	if e := c.Error(err); e != nil {
-		log.Fatalln(e)
-	}
 }
