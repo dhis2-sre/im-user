@@ -15,6 +15,7 @@ dev:
 	docker compose up --build dev database redis
 
 test: clean
+	docker compose up -d database redis
 	docker compose run --no-deps test
 	$(clean-cmd)
 
@@ -41,5 +42,8 @@ swagger-client:
 	swagger generate client -f swagger/docs/swagger.yaml -t swagger/client
 
 swagger: swagger-docs swagger-client
+
+di:
+	wire gen ./internal/di
 
 .PHONY: binary docker-image push-docker-image dev test dev-test helm-package publish-helm

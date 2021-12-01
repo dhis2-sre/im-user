@@ -13,6 +13,7 @@ require (
 	github.com/go-openapi/validate v0.20.3
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofrs/uuid v4.0.0+incompatible
+	github.com/google/wire v0.5.0
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
