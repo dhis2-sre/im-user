@@ -4,6 +4,7 @@ import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/internal/handler"
 	"github.com/dhis2-sre/im-users/pgk/config"
+	"github.com/dhis2-sre/im-users/pgk/model/dto"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -24,22 +25,22 @@ type Handler struct {
 	tokenService token.Service
 }
 
+type SignupRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required,gte=16,lte=128"`
+}
+
 // Signup godoc
 // @Summary User sign in
 // @Description Posting username (email) and password... And user is returned
 // @Tags Public
 // @Accept json
 // @Produce json
-// @Success 201 {object} map[string]interface{} //model.User
+// @Success 201 {object} dto.User
 // @Failure 400 {object} map[string]interface{}
 // @Router /signup [post]
 // @Param signupRequest body SignupRequest true "Email and Password json object"
 func (h *Handler) Signup(c *gin.Context) {
-	type SignupRequest struct {
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required,gte=16,lte=128"`
-	}
-
 	var request SignupRequest
 
 	if err := handler.DataBinder(c, &request); err != nil {
@@ -53,7 +54,7 @@ func (h *Handler) Signup(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	c.JSON(http.StatusCreated, dto.ToUser(user))
 }
 
 // SignIn godoc
@@ -62,7 +63,8 @@ func (h *Handler) Signup(c *gin.Context) {
 // @Tags Public
 // @Accept json
 // @Produce json
-// @Success 201 {object} map[string]interface{}
+// @Success 201 {object} token.Tokens
+// @Failure 401 {object} string
 // @Router /signin [post]
 // @Security BasicAuthentication
 func (h *Handler) SignIn(c *gin.Context) {
@@ -146,7 +148,7 @@ func (h Handler) Me(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, userWithGroups)
+	c.JSON(http.StatusOK, dto.ToUser(userWithGroups))
 }
 
 // SignOut godoc
@@ -171,7 +173,7 @@ func (h Handler) SignOut(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, "Signed out successfully")
+	c.String(http.StatusOK, "Signed out successfully")
 }
 
 // FindById godoc
@@ -180,9 +182,9 @@ func (h Handler) SignOut(c *gin.Context) {
 // @Tags Public
 // @Accept json
 // @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Router /findbyid [get]
-// @Param id path string true "User id"
+// @Success 200 {object} dto.User
+// @Router /findbyid/{id} [get]
+// @Param id path uint true "User id"
 func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -198,5 +200,5 @@ func (h Handler) FindById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, userWithGroups)
+	c.JSON(http.StatusOK, dto.ToUser(userWithGroups))
 }

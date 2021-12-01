@@ -1,0 +1,310 @@
+definitions:
+  dto.Group:
+    properties:
+      hostname:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/dto.User'
+        type: array
+    type: object
+  dto.User:
+    properties:
+      adminGroups:
+        items:
+          $ref: '#/definitions/dto.Group'
+        type: array
+      email:
+        type: string
+      groups:
+        items:
+          $ref: '#/definitions/dto.Group'
+        type: array
+      id:
+        type: integer
+    type: object
+  group.CreateGroupRequest:
+    properties:
+      hostname:
+        type: string
+      name:
+        type: string
+    required:
+    - hostname
+    - name
+    type: object
+  token.Tokens:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+      jti:
+        type: string
+      refresh_token:
+        type: string
+      token_type:
+        type: string
+    type: object
+  user.RefreshTokenRequest:
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+    type: object
+  user.SignupRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+info:
+  contact: {}
+  title: Instance Manager User Service
+  version: 0.1.0
+paths:
+  /findbyid/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Show user details by id
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.User'
+      summary: User details by id
+      tags:
+      - Public
+  /groups:
+    post:
+      consumes:
+      - application/json
+      description: Posting name and hostname...
+      parameters:
+      - description: Create group request
+        in: body
+        name: createGroupRequest
+        required: true
+        schema:
+          $ref: '#/definitions/group.CreateGroupRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Group'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - OAuth2Password: []
+      summary: Create group
+      tags:
+      - Administrative
+  /groups/{groupId}/cluster-configuration:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Add cluster configuration to a group...
+      parameters:
+      - description: Group ID
+        in: path
+        name: groupId
+        required: true
+        type: string
+      - description: SOPS encrypted Kubernetes configuration file
+        in: formData
+        name: kubernetesConfiguration
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - OAuth2Password: []
+      summary: Add cluster configuration to a group
+      tags:
+      - Administrative
+  /me:
+    get:
+      consumes:
+      - application/json
+      description: Show user details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - OAuth2Password: []
+      summary: User details
+      tags:
+      - Restricted
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: Post a refresh token and this endpoint will return a fresh set
+        of tokens
+      parameters:
+      - description: Refresh token request
+        in: body
+        name: refreshTokenRequest
+        required: true
+        schema:
+          $ref: '#/definitions/user.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Refresh tokens
+      tags:
+      - Public
+  /signin:
+    post:
+      consumes:
+      - application/json
+      description: Classic basic http auth...
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/token.Tokens'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BasicAuthentication: []
+      summary: User sign in
+      tags:
+      - Public
+  /signout:
+    get:
+      consumes:
+      - application/json
+      description: Delete refresh tokens...
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - OAuth2Password: []
+      summary: Sign out user
+      tags:
+      - Restricted
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Posting username (email) and password... And user is returned
+      parameters:
+      - description: Email and Password json object
+        in: body
+        name: signupRequest
+        required: true
+        schema:
+          $ref: '#/definitions/user.SignupRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User sign in
+      tags:
+      - Public
+  /users/{userId}/groups/{groupId}:
+    post:
+      consumes:
+      - application/json
+      description: Add user to group
+      parameters:
+      - description: User id
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: Group id
+        in: path
+        name: groupId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - OAuth2Password: []
+      summary: Add user to group
+      tags:
+      - Administrative
+swagger: "2.0"

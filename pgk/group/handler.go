@@ -5,6 +5,7 @@ import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/internal/handler"
 	"github.com/dhis2-sre/im-users/pgk/model"
+	"github.com/dhis2-sre/im-users/pgk/model/dto"
 	"github.com/dhis2-sre/im-users/pgk/user"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -39,7 +40,7 @@ type CreateGroupRequest struct {
 // @Tags Administrative
 // @Accept json
 // @Produce json
-// @Success 201 {object} map[string]interface{} //model.Group
+// @Success 201 {object} dto.Group
 // @Failure 400 {object} map[string]interface{}
 // @Router /groups [post]
 // @Param createGroupRequest body CreateGroupRequest true "Create group request"
@@ -58,7 +59,7 @@ func (h Handler) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, group)
+	c.JSON(http.StatusCreated, dto.ToGroup(group))
 }
 
 // AddUserToGroup godoc
@@ -67,7 +68,7 @@ func (h Handler) Create(c *gin.Context) {
 // @Tags Administrative
 // @Accept json
 // @Produce json
-// @Success 201 {none} string
+// @Success 201 {string} string
 // @Failure 400 {object} map[string]interface{}
 // @Router /users/{userId}/groups/{groupId} [post]
 // @Param userId path string true "User id"

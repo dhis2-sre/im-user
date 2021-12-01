@@ -9,11 +9,16 @@ import (
 	"github.com/dhis2-sre/im-users/pgk/storage"
 	"github.com/dhis2-sre/im-users/pgk/token"
 	"github.com/dhis2-sre/im-users/pgk/user"
+	"github.com/dhis2-sre/im-users/swagger/docs"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"log"
 )
 
+// @title Instance Manager User Service
+// @version 0.1.0
 func main() {
 	c := config.ProvideConfig()
 
@@ -50,6 +55,9 @@ func main() {
 	router.POST("/refresh", userHandler.RefreshToken)
 	router.GET("/findbyid/:id", userHandler.FindById)
 	router.POST("/signin", authenticationMiddleware.BasicAuthentication, userHandler.SignIn)
+
+	docs.SwaggerInfo.BasePath = c.BasePath
+	router.GET("/swagger/*any", authenticationMiddleware.BasicAuthentication, ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	tokenAuthenticationRouter := router.Group("")
 	tokenAuthenticationRouter.Use(authenticationMiddleware.TokenAuthentication)

@@ -34,4 +34,12 @@ publish-helm:
         -F "chart=@api-gateway-$(version).tgz" \
         https://helm-charts.fitfit.dk/api/charts
 
+swagger-docs:
+	swag init -g ./cmd/serve/main.go --output swagger/docs
+
+swagger-client:
+	swagger generate client -f swagger/docs/swagger.yaml -t swagger/client
+
+swagger: swagger-docs swagger-client
+
 .PHONY: binary docker-image push-docker-image dev test dev-test helm-package publish-helm
