@@ -17,7 +17,7 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 		if len(detectedErrors) > 0 {
 			// TODO: Handle more than one error
 			err := detectedErrors[0].Err
-			c.String(apperror.ToHttpStatusCode(err), "%s", err.Error())
+			c.String(apperror.ToHttpStatusCode(err), err.Error())
 			c.Abort()
 			return
 		}
