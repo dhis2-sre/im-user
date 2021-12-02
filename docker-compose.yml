@@ -12,9 +12,13 @@ version: "3.6"
 services:
   prod:
     image: dhis2/im-users:${IMAGE_TAG:-latest}
-    build: .
+    build:
+      context: .
+      args:
+        APP_NAME: im-users
     ports:
       - "8080:8080"
+
   test:
     <<: *common-dev-test
     command: /bin/sh -c 'go test -v ./...'
