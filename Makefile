@@ -32,7 +32,7 @@ helm-chart:
 
 publish-helm:
 	@curl --user "$(CHART_AUTH_USER):$(CHART_AUTH_PASS)" \
-        -F "chart=@api-gateway-$(version).tgz" \
+        -F "chart=@im-users-$(version).tgz" \
         https://helm-charts.fitfit.dk/api/charts
 
 swagger-docs:
@@ -46,4 +46,4 @@ swagger: swagger-docs swagger-client
 di:
 	wire gen ./internal/di
 
-.PHONY: binary docker-image push-docker-image dev test dev-test helm-package publish-helm
+.PHONY: binary docker-image push-docker-image dev test dev-test helm-chart publish-helm
