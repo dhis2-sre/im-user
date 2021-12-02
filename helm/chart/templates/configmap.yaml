@@ -1,0 +1,19 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "im-users.fullname" . }}
+  labels:
+    {{- include "im-users.labels" . | nindent 4 }}
+data:
+  BASE_PATH: {{ .Values.basePath }}
+
+  PORT: {{ .Values.containerPort | quote }}
+
+  REDIS_HOST: {{ .Values.redis.host }}
+  REDIS_PORT: {{ .Values.redis.port | quote }}
+
+  ACCESS_TOKEN_EXPIRATION_IN_SECONDS: {{ .Values.accessTokenExpirationInSeconds | quote }}
+  REFRESH_TOKEN_EXPIRATION_IN_SECONDS: {{ .Values.refreshTokenExpirationInSeconds | quote }}
+
+  USER_EMAIL: ""
+  PASSWORD: ""
