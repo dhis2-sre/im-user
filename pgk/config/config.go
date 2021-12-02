@@ -12,8 +12,7 @@ import (
 
 func ProvideConfig() Config {
 	return Config{
-		ServerPort: requireEnv("SERVER_PORT"),
-		BasePath:   requireEnv("BASE_PATH"),
+		BasePath: requireEnv("BASE_PATH"),
 		Authentication: authentication{
 			Keys: keys{
 				PrivateKey: requireEnv("PRIVATE_KEY"),
@@ -43,7 +42,6 @@ func ProvideConfig() Config {
 }
 
 type Config struct {
-	ServerPort     string
 	BasePath       string
 	Authentication authentication
 	Postgresql     postgresql
