@@ -12,10 +12,7 @@ version: "3.6"
 services:
   prod:
     image: dhis2/im-users:${IMAGE_TAG:-latest}
-    build:
-      context: .
-      args:
-        APP_NAME: im-users
+    build: .
     ports:
       - "8080:8080"
 
