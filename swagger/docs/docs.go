@@ -80,7 +80,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/group.CreateGroupRequest"
+                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pgk_group.CreateGroupRequest"
                         }
                     }
                 ],
@@ -202,7 +202,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.RefreshTokenRequest"
+                            "$ref": "#/definitions/pgk_user.RefreshTokenRequest"
                         }
                     }
                 ],
@@ -314,7 +314,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.SignupRequest"
+                            "$ref": "#/definitions/pgk_user.SignupRequest"
                         }
                     }
                 ],
@@ -431,7 +431,7 @@ var doc = `{
                 }
             }
         },
-        "group.CreateGroupRequest": {
+        "github.com_dhis2-sre_im-users_pgk_group.CreateGroupRequest": {
             "type": "object",
             "required": [
                 "hostname",
@@ -442,6 +442,73 @@ var doc = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github.com_dhis2-sre_im-users_pgk_user.RefreshTokenRequest": {
+            "type": "object",
+            "required": [
+                "refreshToken"
+            ],
+            "properties": {
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "github.com_dhis2-sre_im-users_pgk_user.SignupRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "pgk_group.CreateGroupRequest": {
+            "type": "object",
+            "required": [
+                "hostname",
+                "name"
+            ],
+            "properties": {
+                "hostname": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "pgk_user.RefreshTokenRequest": {
+            "type": "object",
+            "required": [
+                "refreshToken"
+            ],
+            "properties": {
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "pgk_user.SignupRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }
@@ -462,32 +529,6 @@ var doc = `{
                     "type": "string"
                 },
                 "token_type": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.RefreshTokenRequest": {
-            "type": "object",
-            "required": [
-                "refreshToken"
-            ],
-            "properties": {
-                "refreshToken": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.SignupRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
                     "type": "string"
                 }
             }

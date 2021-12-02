@@ -27,7 +27,7 @@ definitions:
       id:
         type: integer
     type: object
-  group.CreateGroupRequest:
+  github.com_dhis2-sre_im-users_pgk_group.CreateGroupRequest:
     properties:
       hostname:
         type: string
@@ -36,6 +36,50 @@ definitions:
     required:
     - hostname
     - name
+    type: object
+  github.com_dhis2-sre_im-users_pgk_user.RefreshTokenRequest:
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+    type: object
+  github.com_dhis2-sre_im-users_pgk_user.SignupRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  pgk_group.CreateGroupRequest:
+    properties:
+      hostname:
+        type: string
+      name:
+        type: string
+    required:
+    - hostname
+    - name
+    type: object
+  pgk_user.RefreshTokenRequest:
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+    type: object
+  pgk_user.SignupRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
     type: object
   token.Tokens:
     properties:
@@ -49,23 +93,6 @@ definitions:
         type: string
       token_type:
         type: string
-    type: object
-  user.RefreshTokenRequest:
-    properties:
-      refreshToken:
-        type: string
-    required:
-    - refreshToken
-    type: object
-  user.SignupRequest:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    required:
-    - email
-    - password
     type: object
 info:
   contact: {}
@@ -104,7 +131,7 @@ paths:
         name: createGroupRequest
         required: true
         schema:
-          $ref: '#/definitions/group.CreateGroupRequest'
+          $ref: '#/definitions/github.com_dhis2-sre_im-users_pgk_group.CreateGroupRequest'
       produces:
       - application/json
       responses:
@@ -186,7 +213,7 @@ paths:
         name: refreshTokenRequest
         required: true
         schema:
-          $ref: '#/definitions/user.RefreshTokenRequest'
+          $ref: '#/definitions/pgk_user.RefreshTokenRequest'
       produces:
       - application/json
       responses:
@@ -258,7 +285,7 @@ paths:
         name: signupRequest
         required: true
         schema:
-          $ref: '#/definitions/user.SignupRequest'
+          $ref: '#/definitions/pgk_user.SignupRequest'
       produces:
       - application/json
       responses:

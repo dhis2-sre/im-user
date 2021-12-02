@@ -16,6 +16,7 @@ import (
 
 type Environment struct {
 	Config                   config.Config
+	TokenHandler             token.Handler
 	UserService              user.Service
 	UserHandler              user.Handler
 	GroupService             group.Service
@@ -26,6 +27,7 @@ type Environment struct {
 
 func ProvideEnvironment(
 	config config.Config,
+	tokenHandler token.Handler,
 	userService user.Service,
 	userHandler user.Handler,
 	groupService group.Service,
@@ -35,6 +37,7 @@ func ProvideEnvironment(
 ) Environment {
 	return Environment{
 		config,
+		tokenHandler,
 		userService,
 		userHandler,
 		groupService,
@@ -61,6 +64,8 @@ func GetEnvironment() Environment {
 		group.ProvideRepository,
 		group.ProvideService,
 		group.ProvideHandler,
+
+		token.ProvideHandler,
 
 		middleware.ProvideAuthentication,
 		middleware.ProvideAuthorization,

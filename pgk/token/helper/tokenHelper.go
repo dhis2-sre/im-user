@@ -7,11 +7,20 @@ import (
 	"github.com/dhis2-sre/im-users/pgk/model"
 	"github.com/gofrs/uuid"
 	"github.com/lestrrat-go/jwx/jwa"
+	"github.com/lestrrat-go/jwx/jwk"
 	"github.com/lestrrat-go/jwx/jwt"
 	"gorm.io/gorm"
 	"log"
 	"time"
 )
+
+func CreateJwks(publicKey *rsa.PublicKey) (jwk.Key, error) {
+	key, err := jwk.New(publicKey)
+	if err != nil {
+		return nil, err
+	}
+	return key, nil
+}
 
 func GenerateAccessToken(user *model.User, key *rsa.PrivateKey, expirationInSeconds int) (string, error) {
 	unixTime := time.Now().Unix()

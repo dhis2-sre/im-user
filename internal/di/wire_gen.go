@@ -20,19 +20,20 @@ import (
 
 func GetEnvironment() Environment {
 	configConfig := config.ProvideConfig()
+	handler := token.ProvideHandler(configConfig)
 	db := provideDatabase(configConfig)
 	repository := user.ProvideRepository(db)
 	service := user.ProvideService(repository)
 	client := storage.ProvideRedis(configConfig)
 	tokenRepository := token.ProvideTokenRepository(client)
 	tokenService := token.ProvideTokenService(configConfig, tokenRepository)
-	handler := user.ProvideHandler(configConfig, service, tokenService)
+	userHandler := user.ProvideHandler(configConfig, service, tokenService)
 	groupRepository := group.ProvideRepository(db)
 	groupService := group.ProvideService(groupRepository, repository)
 	groupHandler := group.ProvideHandler(groupService, service)
 	authenticationMiddleware := middleware.ProvideAuthentication(service, tokenService)
 	authorizationMiddleware := middleware.ProvideAuthorization(service)
-	environment := ProvideEnvironment(configConfig, service, handler, groupService, groupHandler, authenticationMiddleware, authorizationMiddleware)
+	environment := ProvideEnvironment(configConfig, handler, service, userHandler, groupService, groupHandler, authenticationMiddleware, authorizationMiddleware)
 	return environment
 }
 
@@ -40,6 +41,7 @@ func GetEnvironment() Environment {
 
 type Environment struct {
 	Config                   config.Config
+	TokenHandler             token.Handler
 	UserService              user.Service
 	UserHandler              user.Handler
 	GroupService             group.Service
@@ -50,6 +52,7 @@ type Environment struct {
 
 func ProvideEnvironment(config2 config.Config,
 
+	tokenHandler token.Handler,
 	userService user.Service,
 	userHandler user.Handler,
 	groupService group.Service,
@@ -57,7 +60,8 @@ func ProvideEnvironment(config2 config.Config,
 	authenticationMiddleware middleware.AuthenticationMiddleware,
 	authorizationMiddleware middleware.AuthorizationMiddleware,
 ) Environment {
-	return Environment{config2, userService,
+	return Environment{config2, tokenHandler,
+		userService,
 		userHandler,
 		groupService,
 		groupHandler,

@@ -25,6 +25,7 @@ func GetEngine(environment di.Environment) *gin.Engine {
 
 	router := r.Group(basePath)
 	router.GET("/health", health.Health)
+	router.GET("/jwks", environment.TokenHandler.Jwks)
 	router.POST("/signup", environment.UserHandler.Signup)
 	router.POST("/refresh", environment.UserHandler.RefreshToken)
 	router.GET("/findbyid/:id", environment.UserHandler.FindById)

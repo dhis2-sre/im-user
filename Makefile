@@ -36,7 +36,7 @@ publish-helm:
         https://helm-charts.fitfit.dk/api/charts
 
 swagger-docs:
-	swag init -g ./cmd/serve/main.go --output swagger/docs
+	swag init --parseDependency --parseDepth 2 -g ./cmd/serve/main.go --output swagger/docs
 
 swagger-client:
 	swagger generate client -f swagger/docs/swagger.yaml -t swagger/client
