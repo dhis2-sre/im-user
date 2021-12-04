@@ -38,6 +38,7 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	tokenAuthenticationRouter.Use(environment.AuthenticationMiddleware.TokenAuthentication)
 	tokenAuthenticationRouter.GET("/me", environment.UserHandler.Me)
 	tokenAuthenticationRouter.GET("/signout", environment.UserHandler.SignOut)
+	tokenAuthenticationRouter.GET("/groups/:name/id", environment.GroupHandler.NameToId)
 
 	administratorRestrictedRouter := tokenAuthenticationRouter.Group("")
 	administratorRestrictedRouter.Use(environment.AuthorizationMiddleware.RequireAdministrator)

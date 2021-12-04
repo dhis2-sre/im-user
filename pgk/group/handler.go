@@ -171,3 +171,53 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 
 	return bytes, nil
 }
+
+// NameToId godoc
+// @Summary Group id by group name
+// @Description Return group id given group name
+// @Tags Restricted
+// @Accept json
+// @Produce json
+// @Success 200 {object} uint
+// @Failure 401 {object} map[string]interface{}
+// @Failure 404 {object} string
+// @Router /groups/{name}/id [get]
+// @Param name path string true "Group name"
+// @Security OAuth2Password
+func (h Handler) NameToId(c *gin.Context) {
+	name := c.Param("name")
+
+	/*
+		u, err := handler.GetUserFromContext(c)
+		if err != nil {
+			_ = c.Error(err)
+			return
+		}
+
+		userWithGroups, err := h.userService.FindById(u.ID)
+		if err != nil {
+			notFound := apperror.NewNotFound("user", strconv.Itoa(int(u.ID)))
+			_ = c.Error(notFound)
+			return
+		}
+	*/
+	group, err := h.groupService.FindByName(name)
+	if err != nil {
+		notFound := apperror.NewNotFound("group", name)
+		_ = c.Error(notFound)
+		return
+	}
+
+	// No authorization checks will be done here, if someone knows the name of the group they can have the id too
+	/*
+		instance := &model.Instance{GroupID: group.ID}
+		canRead := g.instanceAuthorizer.CanRead(userWithGroups, instance)
+
+		if !canRead {
+			unauthorized := apperrors.NewUnauthorized("Read access denied")
+			handler.HandleError(c, unauthorized)
+			return
+		}
+	*/
+	c.JSON(http.StatusOK, group.ID)
+}
