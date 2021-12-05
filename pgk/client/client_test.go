@@ -27,3 +27,21 @@ func TestFindUserById(t *testing.T) {
 	assert.Equal(t, int64(1), u.ID)
 	assert.Equal(t, environment.Config.AdminUser.Email, u.Email)
 }
+
+func TestFindGroupById(t *testing.T) {
+	environment := di.GetEnvironment()
+	r := server.GetEngine(environment)
+	ts := httptest.NewServer(r)
+	defer ts.Close()
+
+	parsedUrl, err := url.Parse(ts.URL)
+	assert.NoError(t, err)
+	host := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), parsedUrl.Port())
+	c := ProvideClient(host)
+
+	u, err := c.FindGroupById(1)
+	assert.NoError(t, err)
+
+	assert.Equal(t, int64(1), u.ID)
+	//	assert.Equal(t, environment.Config., u.Email)
+}

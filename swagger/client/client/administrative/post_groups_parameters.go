@@ -65,7 +65,7 @@ type PostGroupsParams struct {
 
 	   Create group request
 	*/
-	CreateGroupRequest *models.GithubComDhis2SreImUsersPgkGroupCreateGroupRequest
+	CreateGroupRequest *models.PgkGroupCreateGroupRequest
 
 	timeout    time.Duration
 	Context    context.Context
@@ -121,13 +121,13 @@ func (o *PostGroupsParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithCreateGroupRequest adds the createGroupRequest to the post groups params
-func (o *PostGroupsParams) WithCreateGroupRequest(createGroupRequest *models.GithubComDhis2SreImUsersPgkGroupCreateGroupRequest) *PostGroupsParams {
+func (o *PostGroupsParams) WithCreateGroupRequest(createGroupRequest *models.PgkGroupCreateGroupRequest) *PostGroupsParams {
 	o.SetCreateGroupRequest(createGroupRequest)
 	return o
 }
 
 // SetCreateGroupRequest adds the createGroupRequest to the post groups params
-func (o *PostGroupsParams) SetCreateGroupRequest(createGroupRequest *models.GithubComDhis2SreImUsersPgkGroupCreateGroupRequest) {
+func (o *PostGroupsParams) SetCreateGroupRequest(createGroupRequest *models.PgkGroupCreateGroupRequest) {
 	o.CreateGroupRequest = createGroupRequest
 }
 

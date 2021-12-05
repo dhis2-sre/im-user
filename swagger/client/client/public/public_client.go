@@ -32,6 +32,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	GetFindbyidID(params *GetFindbyidIDParams, opts ...ClientOption) (*GetFindbyidIDOK, error)
 
+	GetGroupsID(params *GetGroupsIDParams, opts ...ClientOption) (*GetGroupsIDOK, error)
+
 	PostRefresh(params *PostRefreshParams, opts ...ClientOption) (*PostRefreshCreated, error)
 
 	PostSignin(params *PostSigninParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PostSigninCreated, error)
@@ -78,6 +80,46 @@ func (a *Client) GetFindbyidID(params *GetFindbyidIDParams, opts ...ClientOption
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for GetFindbyidID: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  GetGroupsID groups details by id
+
+  Show group details by id
+*/
+func (a *Client) GetGroupsID(params *GetGroupsIDParams, opts ...ClientOption) (*GetGroupsIDOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetGroupsIDParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetGroupsID",
+		Method:             "GET",
+		PathPattern:        "/groups/{id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &GetGroupsIDReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetGroupsIDOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetGroupsID: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

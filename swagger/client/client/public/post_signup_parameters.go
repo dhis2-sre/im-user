@@ -65,7 +65,7 @@ type PostSignupParams struct {
 
 	   Email and Password json object
 	*/
-	SignupRequest *models.PgkUserSignupRequest
+	SignupRequest *models.GithubComDhis2SreImUsersPgkUserSignupRequest
 
 	timeout    time.Duration
 	Context    context.Context
@@ -121,13 +121,13 @@ func (o *PostSignupParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithSignupRequest adds the signupRequest to the post signup params
-func (o *PostSignupParams) WithSignupRequest(signupRequest *models.PgkUserSignupRequest) *PostSignupParams {
+func (o *PostSignupParams) WithSignupRequest(signupRequest *models.GithubComDhis2SreImUsersPgkUserSignupRequest) *PostSignupParams {
 	o.SetSignupRequest(signupRequest)
 	return o
 }
 
 // SetSignupRequest adds the signupRequest to the post signup params
-func (o *PostSignupParams) SetSignupRequest(signupRequest *models.PgkUserSignupRequest) {
+func (o *PostSignupParams) SetSignupRequest(signupRequest *models.GithubComDhis2SreImUsersPgkUserSignupRequest) {
 	o.SignupRequest = signupRequest
 }
 

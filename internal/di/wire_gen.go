@@ -20,20 +20,20 @@ import (
 
 func GetEnvironment() Environment {
 	configConfig := config.ProvideConfig()
+	client := storage.ProvideRedis(configConfig)
+	repository := token.ProvideTokenRepository(client)
+	service := token.ProvideTokenService(configConfig, repository)
 	handler := token.ProvideHandler(configConfig)
 	db := provideDatabase(configConfig)
-	repository := user.ProvideRepository(db)
-	service := user.ProvideService(repository)
-	client := storage.ProvideRedis(configConfig)
-	tokenRepository := token.ProvideTokenRepository(client)
-	tokenService := token.ProvideTokenService(configConfig, tokenRepository)
-	userHandler := user.ProvideHandler(configConfig, service, tokenService)
+	userRepository := user.ProvideRepository(db)
+	userService := user.ProvideService(userRepository)
+	userHandler := user.ProvideHandler(configConfig, userService, service)
 	groupRepository := group.ProvideRepository(db)
-	groupService := group.ProvideService(groupRepository, repository)
-	groupHandler := group.ProvideHandler(groupService, service)
-	authenticationMiddleware := middleware.ProvideAuthentication(service, tokenService)
-	authorizationMiddleware := middleware.ProvideAuthorization(service)
-	environment := ProvideEnvironment(configConfig, handler, service, userHandler, groupService, groupHandler, authenticationMiddleware, authorizationMiddleware)
+	groupService := group.ProvideService(groupRepository, userRepository)
+	groupHandler := group.ProvideHandler(groupService, userService)
+	authenticationMiddleware := middleware.ProvideAuthentication(userService, service)
+	authorizationMiddleware := middleware.ProvideAuthorization(userService)
+	environment := ProvideEnvironment(configConfig, service, handler, userService, userHandler, groupService, groupHandler, authenticationMiddleware, authorizationMiddleware)
 	return environment
 }
 
@@ -41,6 +41,7 @@ func GetEnvironment() Environment {
 
 type Environment struct {
 	Config                   config.Config
+	TokenService             token.Service
 	TokenHandler             token.Handler
 	UserService              user.Service
 	UserHandler              user.Handler
@@ -52,6 +53,7 @@ type Environment struct {
 
 func ProvideEnvironment(config2 config.Config,
 
+	tokenService token.Service,
 	tokenHandler token.Handler,
 	userService user.Service,
 	userHandler user.Handler,
@@ -60,7 +62,8 @@ func ProvideEnvironment(config2 config.Config,
 	authenticationMiddleware middleware.AuthenticationMiddleware,
 	authorizationMiddleware middleware.AuthorizationMiddleware,
 ) Environment {
-	return Environment{config2, tokenHandler,
+	return Environment{config2, tokenService,
+		tokenHandler,
 		userService,
 		userHandler,
 		groupService,

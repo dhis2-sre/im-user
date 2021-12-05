@@ -65,7 +65,7 @@ type PostRefreshParams struct {
 
 	   Refresh token request
 	*/
-	RefreshTokenRequest *models.PgkUserRefreshTokenRequest
+	RefreshTokenRequest *models.GithubComDhis2SreImUsersPgkUserRefreshTokenRequest
 
 	timeout    time.Duration
 	Context    context.Context
@@ -121,13 +121,13 @@ func (o *PostRefreshParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithRefreshTokenRequest adds the refreshTokenRequest to the post refresh params
-func (o *PostRefreshParams) WithRefreshTokenRequest(refreshTokenRequest *models.PgkUserRefreshTokenRequest) *PostRefreshParams {
+func (o *PostRefreshParams) WithRefreshTokenRequest(refreshTokenRequest *models.GithubComDhis2SreImUsersPgkUserRefreshTokenRequest) *PostRefreshParams {
 	o.SetRefreshTokenRequest(refreshTokenRequest)
 	return o
 }
 
 // SetRefreshTokenRequest adds the refreshTokenRequest to the post refresh params
-func (o *PostRefreshParams) SetRefreshTokenRequest(refreshTokenRequest *models.PgkUserRefreshTokenRequest) {
+func (o *PostRefreshParams) SetRefreshTokenRequest(refreshTokenRequest *models.GithubComDhis2SreImUsersPgkUserRefreshTokenRequest) {
 	o.RefreshTokenRequest = refreshTokenRequest
 }
 

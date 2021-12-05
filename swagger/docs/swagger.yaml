@@ -131,7 +131,7 @@ paths:
         name: createGroupRequest
         required: true
         schema:
-          $ref: '#/definitions/github.com_dhis2-sre_im-users_pgk_group.CreateGroupRequest'
+          $ref: '#/definitions/pgk_group.CreateGroupRequest'
       produces:
       - application/json
       responses:
@@ -144,11 +144,63 @@ paths:
           schema:
             additionalProperties: true
             type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties: true
+            type: object
+        "415":
+          description: Unsupported Media Type
+          schema:
+            additionalProperties: true
+            type: object
       security:
       - OAuth2Password: []
       summary: Create group
       tags:
       - Administrative
+  /groups-name-to-id/{name}:
+    get:
+      consumes:
+      - application/json
+      description: Return group id given group name
+      parameters:
+      - description: Group name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "415":
+          description: Unsupported Media Type
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - OAuth2Password: []
+      summary: Group id by group name
+      tags:
+      - Restricted
   /groups/{groupId}/cluster-configuration:
     post:
       consumes:
@@ -178,11 +230,52 @@ paths:
           schema:
             additionalProperties: true
             type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties: true
+            type: object
+        "415":
+          description: Unsupported Media Type
+          schema:
+            additionalProperties: true
+            type: object
       security:
       - OAuth2Password: []
       summary: Add cluster configuration to a group
       tags:
       - Administrative
+  /groups/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Show group details by id
+      parameters:
+      - description: Group id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Group'
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties: true
+            type: object
+        "415":
+          description: Unsupported Media Type
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Group details by id
+      tags:
+      - Public
   /me:
     get:
       consumes:
@@ -213,7 +306,7 @@ paths:
         name: refreshTokenRequest
         required: true
         schema:
-          $ref: '#/definitions/pgk_user.RefreshTokenRequest'
+          $ref: '#/definitions/github.com_dhis2-sre_im-users_pgk_user.RefreshTokenRequest'
       produces:
       - application/json
       responses:
@@ -285,7 +378,7 @@ paths:
         name: signupRequest
         required: true
         schema:
-          $ref: '#/definitions/pgk_user.SignupRequest'
+          $ref: '#/definitions/github.com_dhis2-sre_im-users_pgk_user.SignupRequest'
       produces:
       - application/json
       responses:
@@ -326,6 +419,16 @@ paths:
             type: string
         "400":
           description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties: true
+            type: object
+        "415":
+          description: Unsupported Media Type
           schema:
             additionalProperties: true
             type: object

@@ -20,6 +20,7 @@ test: clean
 	$(clean-cmd)
 
 dev-test: clean
+	docker compose up -d database redis
 	docker compose run --no-deps dev-test
 	$(clean-cmd)
 

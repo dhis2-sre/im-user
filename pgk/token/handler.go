@@ -30,7 +30,7 @@ type Handler struct {
 // @Tags Public
 // @Accept json
 // @Produce json
-// @Success 200 {object} jwk.Key
+// @Success 200 {object} map[string]interface{}
 // @Router /signup [post]
 func (h *Handler) Jwks(c *gin.Context) {
 	jwks, err := helper.CreateJwks(h.publicKey)

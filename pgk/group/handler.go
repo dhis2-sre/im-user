@@ -42,6 +42,8 @@ type CreateGroupRequest struct {
 // @Produce json
 // @Success 201 {object} dto.Group
 // @Failure 400 {object} map[string]interface{}
+// @Failure 403 {object} map[string]interface{}
+// @Failure 415 {object} map[string]interface{}
 // @Router /groups [post]
 // @Param createGroupRequest body CreateGroupRequest true "Create group request"
 // @Security OAuth2Password
@@ -70,6 +72,8 @@ func (h Handler) Create(c *gin.Context) {
 // @Produce json
 // @Success 201 {string} string
 // @Failure 400 {object} map[string]interface{}
+// @Failure 403 {object} map[string]interface{}
+// @Failure 415 {object} map[string]interface{}
 // @Router /users/{userId}/groups/{groupId} [post]
 // @Param userId path string true "User id"
 // @Param groupId path string true "Group id"
@@ -115,6 +119,8 @@ type createClusterConfigurationRequest struct {
 // @Produce json
 // @Success 201 {object} map[string]interface{} //model.Group
 // @Failure 400 {object} map[string]interface{}
+// @Failure 403 {object} map[string]interface{}
+// @Failure 415 {object} map[string]interface{}
 // @Router /groups/{groupId}/cluster-configuration [post]
 // @Param groupId path string true "Group ID"
 // @Param kubernetesConfiguration formData file true "SOPS encrypted Kubernetes configuration file"
@@ -180,8 +186,10 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 // @Produce json
 // @Success 200 {object} uint
 // @Failure 401 {object} map[string]interface{}
+// @Failure 403 {object} map[string]interface{}
+// @Failure 415 {object} map[string]interface{}
 // @Failure 404 {object} string
-// @Router /groups/{name}/id [get]
+// @Router /groups-name-to-id/{name} [get]
 // @Param name path string true "Group name"
 // @Security OAuth2Password
 func (h Handler) NameToId(c *gin.Context) {
@@ -220,4 +228,33 @@ func (h Handler) NameToId(c *gin.Context) {
 		}
 	*/
 	c.JSON(http.StatusOK, group.ID)
+}
+
+// FindById godoc
+// @Summary Group details by id
+// @Description Show group details by id
+// @Tags Public
+// @Accept json
+// @Produce json
+// @Success 200 {object} dto.Group
+// @Failure 403 {object} map[string]interface{}
+// @Failure 415 {object} map[string]interface{}
+// @Router /groups/{id} [get]
+// @Param id path uint true "Group id"
+func (h Handler) FindById(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		badRequest := apperror.NewBadRequest("Error parsing id")
+		_ = c.Error(badRequest)
+		return
+	}
+
+	group, err := h.groupService.FindById(uint(id))
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.ToGroup(group))
 }

@@ -35,6 +35,18 @@ func (o *PostGroupsReader) ReadResponse(response runtime.ClientResponse, consume
 			return nil, err
 		}
 		return nil, result
+	case 403:
+		result := NewPostGroupsForbidden()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+	case 415:
+		result := NewPostGroupsUnsupportedMediaType()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	default:
 		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
@@ -93,6 +105,66 @@ func (o *PostGroupsBadRequest) GetPayload() interface{} {
 }
 
 func (o *PostGroupsBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewPostGroupsForbidden creates a PostGroupsForbidden with default headers values
+func NewPostGroupsForbidden() *PostGroupsForbidden {
+	return &PostGroupsForbidden{}
+}
+
+/* PostGroupsForbidden describes a response with status code 403, with default header values.
+
+Forbidden
+*/
+type PostGroupsForbidden struct {
+	Payload interface{}
+}
+
+func (o *PostGroupsForbidden) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] postGroupsForbidden  %+v", 403, o.Payload)
+}
+func (o *PostGroupsForbidden) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *PostGroupsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewPostGroupsUnsupportedMediaType creates a PostGroupsUnsupportedMediaType with default headers values
+func NewPostGroupsUnsupportedMediaType() *PostGroupsUnsupportedMediaType {
+	return &PostGroupsUnsupportedMediaType{}
+}
+
+/* PostGroupsUnsupportedMediaType describes a response with status code 415, with default header values.
+
+Unsupported Media Type
+*/
+type PostGroupsUnsupportedMediaType struct {
+	Payload interface{}
+}
+
+func (o *PostGroupsUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] postGroupsUnsupportedMediaType  %+v", 415, o.Payload)
+}
+func (o *PostGroupsUnsupportedMediaType) GetPayload() interface{} {
+	return o.Payload
+}
+
+func (o *PostGroupsUnsupportedMediaType) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
