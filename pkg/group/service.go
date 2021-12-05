@@ -2,8 +2,8 @@ package group
 
 import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/pgk/model"
-	"github.com/dhis2-sre/im-users/pgk/user"
+	"github.com/dhis2-sre/im-users/pkg/model"
+	"github.com/dhis2-sre/im-users/pkg/user"
 	"strconv"
 )
 

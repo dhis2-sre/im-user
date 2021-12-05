@@ -4,11 +4,11 @@ package di
 
 import (
 	"github.com/dhis2-sre/im-users/internal/middleware"
-	"github.com/dhis2-sre/im-users/pgk/config"
-	"github.com/dhis2-sre/im-users/pgk/group"
-	"github.com/dhis2-sre/im-users/pgk/storage"
-	"github.com/dhis2-sre/im-users/pgk/token"
-	"github.com/dhis2-sre/im-users/pgk/user"
+	"github.com/dhis2-sre/im-users/pkg/config"
+	"github.com/dhis2-sre/im-users/pkg/group"
+	"github.com/dhis2-sre/im-users/pkg/storage"
+	"github.com/dhis2-sre/im-users/pkg/token"
+	"github.com/dhis2-sre/im-users/pkg/user"
 	"github.com/google/wire"
 	"gorm.io/gorm"
 	"log"

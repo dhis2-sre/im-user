@@ -27,7 +27,7 @@ definitions:
       id:
         type: integer
     type: object
-  github.com_dhis2-sre_im-users_pgk_group.CreateGroupRequest:
+  github.com_dhis2-sre_im-users_pkg_group.CreateGroupRequest:
     properties:
       hostname:
         type: string
@@ -37,14 +37,14 @@ definitions:
     - hostname
     - name
     type: object
-  github.com_dhis2-sre_im-users_pgk_user.RefreshTokenRequest:
+  github.com_dhis2-sre_im-users_pkg_user.RefreshTokenRequest:
     properties:
       refreshToken:
         type: string
     required:
     - refreshToken
     type: object
-  github.com_dhis2-sre_im-users_pgk_user.SignupRequest:
+  github.com_dhis2-sre_im-users_pkg_user.SignupRequest:
     properties:
       email:
         type: string
@@ -54,7 +54,7 @@ definitions:
     - email
     - password
     type: object
-  pgk_group.CreateGroupRequest:
+  pkg_group.CreateGroupRequest:
     properties:
       hostname:
         type: string
@@ -64,14 +64,14 @@ definitions:
     - hostname
     - name
     type: object
-  pgk_user.RefreshTokenRequest:
+  pkg_user.RefreshTokenRequest:
     properties:
       refreshToken:
         type: string
     required:
     - refreshToken
     type: object
-  pgk_user.SignupRequest:
+  pkg_user.SignupRequest:
     properties:
       email:
         type: string
@@ -131,7 +131,7 @@ paths:
         name: createGroupRequest
         required: true
         schema:
-          $ref: '#/definitions/pgk_group.CreateGroupRequest'
+          $ref: '#/definitions/pkg_group.CreateGroupRequest'
       produces:
       - application/json
       responses:
@@ -306,7 +306,7 @@ paths:
         name: refreshTokenRequest
         required: true
         schema:
-          $ref: '#/definitions/github.com_dhis2-sre_im-users_pgk_user.RefreshTokenRequest'
+          $ref: '#/definitions/github.com_dhis2-sre_im-users_pkg_user.RefreshTokenRequest'
       produces:
       - application/json
       responses:
@@ -378,7 +378,7 @@ paths:
         name: signupRequest
         required: true
         schema:
-          $ref: '#/definitions/github.com_dhis2-sre_im-users_pgk_user.SignupRequest'
+          $ref: '#/definitions/github.com_dhis2-sre_im-users_pkg_user.SignupRequest'
       produces:
       - application/json
       responses:

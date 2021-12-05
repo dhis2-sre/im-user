@@ -4,9 +4,9 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/pgk/config"
-	"github.com/dhis2-sre/im-users/pgk/model"
-	"github.com/dhis2-sre/im-users/pgk/token/helper"
+	"github.com/dhis2-sre/im-users/pkg/config"
+	"github.com/dhis2-sre/im-users/pkg/model"
+	"github.com/dhis2-sre/im-users/pkg/token/helper"
 	"github.com/gofrs/uuid"
 	"log"
 )

@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/internal/handler"
-	"github.com/dhis2-sre/im-users/pgk/user"
+	"github.com/dhis2-sre/im-users/pkg/user"
 	"github.com/gin-gonic/gin"
 	"log"
 )

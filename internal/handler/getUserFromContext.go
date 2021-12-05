@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/pgk/model"
+	"github.com/dhis2-sre/im-users/pkg/model"
 	"github.com/gin-gonic/gin"
 )
 

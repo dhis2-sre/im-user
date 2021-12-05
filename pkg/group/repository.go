@@ -1,7 +1,7 @@
 package group
 
 import (
-	"github.com/dhis2-sre/im-users/pgk/model"
+	"github.com/dhis2-sre/im-users/pkg/model"
 	"gorm.io/gorm"
 )
 

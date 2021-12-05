@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/pgk/token"
-	"github.com/dhis2-sre/im-users/pgk/user"
+	"github.com/dhis2-sre/im-users/pkg/token"
+	"github.com/dhis2-sre/im-users/pkg/user"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"

@@ -2,7 +2,7 @@ package storage
 
 import (
 	"fmt"
-	"github.com/dhis2-sre/im-users/pgk/config"
+	"github.com/dhis2-sre/im-users/pkg/config"
 	"github.com/go-redis/redis"
 )
 

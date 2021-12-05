@@ -1,6 +1,6 @@
 package dto
 
-import "github.com/dhis2-sre/im-users/pgk/model"
+import "github.com/dhis2-sre/im-users/pkg/model"
 
 type Group struct {
 	Id       uint   `json:"id"`

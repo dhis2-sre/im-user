@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/pgk/model"
+	"github.com/dhis2-sre/im-users/pkg/model"
 	"golang.org/x/crypto/scrypt"
 	"strings"
 )

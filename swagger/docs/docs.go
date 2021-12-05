@@ -80,7 +80,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/pgk_group.CreateGroupRequest"
+                            "$ref": "#/definitions/pkg_group.CreateGroupRequest"
                         }
                     }
                 ],
@@ -340,7 +340,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pgk_user.RefreshTokenRequest"
+                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pkg_user.RefreshTokenRequest"
                         }
                     }
                 ],
@@ -452,7 +452,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pgk_user.SignupRequest"
+                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pkg_user.SignupRequest"
                         }
                     }
                 ],
@@ -583,7 +583,7 @@ var doc = `{
                 }
             }
         },
-        "github.com_dhis2-sre_im-users_pgk_group.CreateGroupRequest": {
+        "github.com_dhis2-sre_im-users_pkg_group.CreateGroupRequest": {
             "type": "object",
             "required": [
                 "hostname",
@@ -598,7 +598,7 @@ var doc = `{
                 }
             }
         },
-        "github.com_dhis2-sre_im-users_pgk_user.RefreshTokenRequest": {
+        "github.com_dhis2-sre_im-users_pkg_user.RefreshTokenRequest": {
             "type": "object",
             "required": [
                 "refreshToken"
@@ -609,7 +609,7 @@ var doc = `{
                 }
             }
         },
-        "github.com_dhis2-sre_im-users_pgk_user.SignupRequest": {
+        "github.com_dhis2-sre_im-users_pkg_user.SignupRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -624,7 +624,7 @@ var doc = `{
                 }
             }
         },
-        "pgk_group.CreateGroupRequest": {
+        "pkg_group.CreateGroupRequest": {
             "type": "object",
             "required": [
                 "hostname",
@@ -639,7 +639,7 @@ var doc = `{
                 }
             }
         },
-        "pgk_user.RefreshTokenRequest": {
+        "pkg_user.RefreshTokenRequest": {
             "type": "object",
             "required": [
                 "refreshToken"
@@ -650,7 +650,7 @@ var doc = `{
                 }
             }
         },
-        "pgk_user.SignupRequest": {
+        "pkg_user.SignupRequest": {
             "type": "object",
             "required": [
                 "email",
