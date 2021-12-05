@@ -1,2 +1,4 @@
 image:
   pullPolicy: Always
+
+basePath: /skaffold/
