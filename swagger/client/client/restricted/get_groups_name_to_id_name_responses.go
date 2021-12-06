@@ -96,13 +96,13 @@ func NewGetGroupsNameToIDNameUnauthorized() *GetGroupsNameToIDNameUnauthorized {
 Unauthorized
 */
 type GetGroupsNameToIDNameUnauthorized struct {
-	Payload interface{}
+	Payload string
 }
 
 func (o *GetGroupsNameToIDNameUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /groups-name-to-id/{name}][%d] getGroupsNameToIdNameUnauthorized  %+v", 401, o.Payload)
 }
-func (o *GetGroupsNameToIDNameUnauthorized) GetPayload() interface{} {
+func (o *GetGroupsNameToIDNameUnauthorized) GetPayload() string {
 	return o.Payload
 }
 
@@ -126,13 +126,13 @@ func NewGetGroupsNameToIDNameForbidden() *GetGroupsNameToIDNameForbidden {
 Forbidden
 */
 type GetGroupsNameToIDNameForbidden struct {
-	Payload interface{}
+	Payload string
 }
 
 func (o *GetGroupsNameToIDNameForbidden) Error() string {
 	return fmt.Sprintf("[GET /groups-name-to-id/{name}][%d] getGroupsNameToIdNameForbidden  %+v", 403, o.Payload)
 }
-func (o *GetGroupsNameToIDNameForbidden) GetPayload() interface{} {
+func (o *GetGroupsNameToIDNameForbidden) GetPayload() string {
 	return o.Payload
 }
 
@@ -186,13 +186,13 @@ func NewGetGroupsNameToIDNameUnsupportedMediaType() *GetGroupsNameToIDNameUnsupp
 Unsupported Media Type
 */
 type GetGroupsNameToIDNameUnsupportedMediaType struct {
-	Payload interface{}
+	Payload string
 }
 
 func (o *GetGroupsNameToIDNameUnsupportedMediaType) Error() string {
 	return fmt.Sprintf("[GET /groups-name-to-id/{name}][%d] getGroupsNameToIdNameUnsupportedMediaType  %+v", 415, o.Payload)
 }
-func (o *GetGroupsNameToIDNameUnsupportedMediaType) GetPayload() interface{} {
+func (o *GetGroupsNameToIDNameUnsupportedMediaType) GetPayload() string {
 	return o.Payload
 }
 

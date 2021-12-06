@@ -131,7 +131,7 @@ paths:
         name: createGroupRequest
         required: true
         schema:
-          $ref: '#/definitions/pkg_group.CreateGroupRequest'
+          $ref: '#/definitions/github.com_dhis2-sre_im-users_pkg_group.CreateGroupRequest'
       produces:
       - application/json
       responses:
@@ -180,13 +180,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            type: string
         "403":
           description: Forbidden
           schema:
-            additionalProperties: true
-            type: object
+            type: string
         "404":
           description: Not Found
           schema:
@@ -194,8 +192,7 @@ paths:
         "415":
           description: Unsupported Media Type
           schema:
-            additionalProperties: true
-            type: object
+            type: string
       security:
       - OAuth2Password: []
       summary: Group id by group name
@@ -266,13 +263,15 @@ paths:
         "403":
           description: Forbidden
           schema:
-            additionalProperties: true
-            type: object
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
         "415":
           description: Unsupported Media Type
           schema:
-            additionalProperties: true
-            type: object
+            type: string
       summary: Group details by id
       tags:
       - Public
@@ -306,7 +305,7 @@ paths:
         name: refreshTokenRequest
         required: true
         schema:
-          $ref: '#/definitions/github.com_dhis2-sre_im-users_pkg_user.RefreshTokenRequest'
+          $ref: '#/definitions/pkg_user.RefreshTokenRequest'
       produces:
       - application/json
       responses:
@@ -378,7 +377,7 @@ paths:
         name: signupRequest
         required: true
         schema:
-          $ref: '#/definitions/github.com_dhis2-sre_im-users_pkg_user.SignupRequest'
+          $ref: '#/definitions/pkg_user.SignupRequest'
       produces:
       - application/json
       responses:

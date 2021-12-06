@@ -35,6 +35,12 @@ func (o *GetGroupsIDReader) ReadResponse(response runtime.ClientResponse, consum
 			return nil, err
 		}
 		return nil, result
+	case 404:
+		result := NewGetGroupsIDNotFound()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 415:
 		result := NewGetGroupsIDUnsupportedMediaType()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -88,17 +94,47 @@ func NewGetGroupsIDForbidden() *GetGroupsIDForbidden {
 Forbidden
 */
 type GetGroupsIDForbidden struct {
-	Payload interface{}
+	Payload string
 }
 
 func (o *GetGroupsIDForbidden) Error() string {
 	return fmt.Sprintf("[GET /groups/{id}][%d] getGroupsIdForbidden  %+v", 403, o.Payload)
 }
-func (o *GetGroupsIDForbidden) GetPayload() interface{} {
+func (o *GetGroupsIDForbidden) GetPayload() string {
 	return o.Payload
 }
 
 func (o *GetGroupsIDForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
+}
+
+// NewGetGroupsIDNotFound creates a GetGroupsIDNotFound with default headers values
+func NewGetGroupsIDNotFound() *GetGroupsIDNotFound {
+	return &GetGroupsIDNotFound{}
+}
+
+/* GetGroupsIDNotFound describes a response with status code 404, with default header values.
+
+Not Found
+*/
+type GetGroupsIDNotFound struct {
+	Payload string
+}
+
+func (o *GetGroupsIDNotFound) Error() string {
+	return fmt.Sprintf("[GET /groups/{id}][%d] getGroupsIdNotFound  %+v", 404, o.Payload)
+}
+func (o *GetGroupsIDNotFound) GetPayload() string {
+	return o.Payload
+}
+
+func (o *GetGroupsIDNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
@@ -118,13 +154,13 @@ func NewGetGroupsIDUnsupportedMediaType() *GetGroupsIDUnsupportedMediaType {
 Unsupported Media Type
 */
 type GetGroupsIDUnsupportedMediaType struct {
-	Payload interface{}
+	Payload string
 }
 
 func (o *GetGroupsIDUnsupportedMediaType) Error() string {
 	return fmt.Sprintf("[GET /groups/{id}][%d] getGroupsIdUnsupportedMediaType  %+v", 415, o.Payload)
 }
-func (o *GetGroupsIDUnsupportedMediaType) GetPayload() interface{} {
+func (o *GetGroupsIDUnsupportedMediaType) GetPayload() string {
 	return o.Payload
 }
 

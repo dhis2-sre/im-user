@@ -185,10 +185,10 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} uint
-// @Failure 401 {object} map[string]interface{}
-// @Failure 403 {object} map[string]interface{}
-// @Failure 415 {object} map[string]interface{}
+// @Failure 401 {object} string
+// @Failure 403 {object} string
 // @Failure 404 {object} string
+// @Failure 415 {object} string
 // @Router /groups-name-to-id/{name} [get]
 // @Param name path string true "Group name"
 // @Security OAuth2Password
@@ -237,8 +237,9 @@ func (h Handler) NameToId(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} dto.Group
-// @Failure 403 {object} map[string]interface{}
-// @Failure 415 {object} map[string]interface{}
+// @Failure 403 {object} string
+// @Failure 404 {object} string
+// @Failure 415 {object} string
 // @Router /groups/{id} [get]
 // @Param id path uint true "Group id"
 func (h Handler) FindById(c *gin.Context) {

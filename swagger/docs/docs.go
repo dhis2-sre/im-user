@@ -80,7 +80,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/pkg_group.CreateGroupRequest"
+                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pkg_group.CreateGroupRequest"
                         }
                     }
                 ],
@@ -152,15 +152,13 @@ var doc = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "string"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "string"
                         }
                     },
                     "404": {
@@ -172,8 +170,7 @@ var doc = `{
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "string"
                         }
                     }
                 }
@@ -277,15 +274,19 @@ var doc = `{
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "415": {
                         "description": "Unsupported Media Type",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "string"
                         }
                     }
                 }
@@ -340,7 +341,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pkg_user.RefreshTokenRequest"
+                            "$ref": "#/definitions/pkg_user.RefreshTokenRequest"
                         }
                     }
                 ],
@@ -452,7 +453,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pkg_user.SignupRequest"
+                            "$ref": "#/definitions/pkg_user.SignupRequest"
                         }
                     }
                 ],
