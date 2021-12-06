@@ -14,8 +14,8 @@ type Client interface {
 	FindGroupById(id uint) (*models.DtoGroup, error)
 }
 
-func ProvideClient(host string) Client {
-	transport := httptransport.New(host, "", nil)
+func ProvideClient(host string, basePath string) Client {
+	transport := httptransport.New(host, basePath, nil)
 	userService := client.New(transport, strfmt.Default)
 	return &cli{userService}
 }
