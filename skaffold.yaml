@@ -17,3 +17,22 @@ deploy:
         valuesFiles:
           - helm/data/secrets/feature/values.yaml
           - helm/data/values/feature/values.yaml
+
+      - name: im-user-postgresql-feature
+        namespace: instance-manager-feature
+        remoteChart: postgresql
+        #version: ???
+        repo: https://charts.bitnami.com/bitnami
+        useHelmSecrets: true
+        valuesFiles:
+          - helm/data/secrets/feature/postgresql.yaml
+
+      - name: im-user-redis-feature
+        namespace: instance-manager-feature
+        remoteChart: redis
+        #version: ???
+        repo: https://charts.bitnami.com/bitnami
+        setValues:
+          architecture: standalone
+          auth:
+            enabled: false

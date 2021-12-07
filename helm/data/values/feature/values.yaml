@@ -6,3 +6,7 @@ basePath: /skaffold/
 groups:
   names: whoami,play
   hostnames: whoami.im.feature.test.c.dhis2.org,play.im.feature.test.c.dhis2.org
+
+database:
+  host: im-user-postgresql-feature.instance-manager-feature.svc.cluster.local
+  port: "5432"
