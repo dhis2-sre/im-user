@@ -80,7 +80,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github.com_dhis2-sre_im-users_pkg_group.CreateGroupRequest"
+                            "$ref": "#/definitions/pkg_group.CreateGroupRequest"
                         }
                     }
                 ],
@@ -541,9 +541,29 @@ var doc = `{
         }
     },
     "definitions": {
+        "dto.ClusterConfiguration": {
+            "type": "object",
+            "properties": {
+                "groupId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kubernetesConfiguration": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "dto.Group": {
             "type": "object",
             "properties": {
+                "clusterConfiguration": {
+                    "$ref": "#/definitions/dto.ClusterConfiguration"
+                },
                 "hostname": {
                     "type": "string"
                 },

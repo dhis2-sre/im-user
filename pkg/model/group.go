@@ -14,7 +14,7 @@ type Group struct {
 	Name                 string               `gorm:"unique;"`
 	Hostname             string               `gorm:"unique;"`
 	Users                []User               `gorm:"many2many:user_groups;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	ClusterConfiguration ClusterConfiguration `json:"-"`
+	ClusterConfiguration ClusterConfiguration `json:"clusterConfiguration"`
 }
 
 type ClusterConfiguration struct {

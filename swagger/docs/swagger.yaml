@@ -1,6 +1,19 @@
 definitions:
+  dto.ClusterConfiguration:
+    properties:
+      groupId:
+        type: integer
+      id:
+        type: integer
+      kubernetesConfiguration:
+        items:
+          type: integer
+        type: array
+    type: object
   dto.Group:
     properties:
+      clusterConfiguration:
+        $ref: '#/definitions/dto.ClusterConfiguration'
       hostname:
         type: string
       id:
@@ -131,7 +144,7 @@ paths:
         name: createGroupRequest
         required: true
         schema:
-          $ref: '#/definitions/github.com_dhis2-sre_im-users_pkg_group.CreateGroupRequest'
+          $ref: '#/definitions/pkg_group.CreateGroupRequest'
       produces:
       - application/json
       responses:

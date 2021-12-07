@@ -3,10 +3,11 @@ package dto
 import "github.com/dhis2-sre/im-users/pkg/model"
 
 type Group struct {
-	Id       uint   `json:"id"`
-	Name     string `json:"name"`
-	Hostname string `json:"hostname"`
-	Users    []User `json:"users"`
+	Id                   uint                 `json:"id"`
+	Name                 string               `json:"name"`
+	Hostname             string               `json:"hostname"`
+	Users                []User               `json:"users"`
+	ClusterConfiguration ClusterConfiguration `json:"clusterConfiguration,omitempty"`
 }
 
 type ClusterConfiguration struct {
@@ -16,11 +17,17 @@ type ClusterConfiguration struct {
 }
 
 func ToGroup(group *model.Group) Group {
+	clusterConfiguration := ClusterConfiguration{
+		Id:                      group.ClusterConfiguration.ID,
+		GroupID:                 group.ID,
+		KubernetesConfiguration: group.ClusterConfiguration.KubernetesConfiguration,
+	}
 	return Group{
-		Id:       group.ID,
-		Name:     group.Name,
-		Hostname: group.Hostname,
-		Users:    toUsers(group.Users),
+		Id:                   group.ID,
+		Name:                 group.Name,
+		Hostname:             group.Hostname,
+		Users:                toUsers(group.Users),
+		ClusterConfiguration: clusterConfiguration,
 	}
 }
 

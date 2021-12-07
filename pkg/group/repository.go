@@ -34,7 +34,9 @@ func (r repository) Create(group *model.Group) error {
 
 func (r repository) FindById(id uint) (*model.Group, error) {
 	var group *model.Group
-	err := r.db.First(&group, id).Error
+	err := r.db.
+		Preload("ClusterConfiguration").
+		First(&group, id).Error
 	return group, err
 }
 

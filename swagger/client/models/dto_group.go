@@ -19,6 +19,9 @@ import (
 // swagger:model dto.Group
 type DtoGroup struct {
 
+	// cluster configuration
+	ClusterConfiguration *DtoClusterConfiguration `json:"clusterConfiguration,omitempty"`
+
 	// hostname
 	Hostname string `json:"hostname,omitempty"`
 
@@ -36,6 +39,10 @@ type DtoGroup struct {
 func (m *DtoGroup) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateClusterConfiguration(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateUsers(formats); err != nil {
 		res = append(res, err)
 	}
@@ -43,6 +50,25 @@ func (m *DtoGroup) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *DtoGroup) validateClusterConfiguration(formats strfmt.Registry) error {
+	if swag.IsZero(m.ClusterConfiguration) { // not required
+		return nil
+	}
+
+	if m.ClusterConfiguration != nil {
+		if err := m.ClusterConfiguration.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clusterConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clusterConfiguration")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -76,6 +102,10 @@ func (m *DtoGroup) validateUsers(formats strfmt.Registry) error {
 func (m *DtoGroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateClusterConfiguration(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateUsers(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -83,6 +113,22 @@ func (m *DtoGroup) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *DtoGroup) contextValidateClusterConfiguration(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ClusterConfiguration != nil {
+		if err := m.ClusterConfiguration.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clusterConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clusterConfiguration")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
