@@ -8,11 +8,13 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func ProvideConfig() Config {
 	return Config{
 		BasePath: requireEnv("BASE_PATH"),
+		Groups:   getGroups(),
 		Authentication: authentication{
 			Keys: keys{
 				PrivateKey: requireEnv("PRIVATE_KEY"),
@@ -41,8 +43,26 @@ func ProvideConfig() Config {
 	}
 }
 
+func getGroups() []group {
+	groupNames := requireEnvAsArray("GROUP_NAMES")
+	groupHostnames := requireEnvAsArray("GROUP_HOSTNAMES")
+
+	if len(groupNames) != len(groupHostnames) {
+		log.Fatalln("len(GROUP_NAMES) != len(GROUP_HOSTNAMES)")
+	}
+
+	groups := make([]group, len(groupNames))
+	for i := 0; i < len(groupNames); i++ {
+		groups[i].Name = groupNames[i]
+		groups[i].Hostname = groupHostnames[i]
+	}
+
+	return groups
+}
+
 type Config struct {
 	BasePath       string
+	Groups         []group
 	Authentication authentication
 	Postgresql     postgresql
 	Redis          redis
@@ -119,12 +139,25 @@ type user struct {
 	Password string
 }
 
+type group struct {
+	Name     string
+	Hostname string
+}
+
 func requireEnv(key string) string {
 	value, exists := os.LookupEnv(key)
 	if !exists {
 		log.Fatalf("Can't find environment varialbe: %s\n", key)
 	}
 	return value
+}
+
+func requireEnvAsArray(key string) []string {
+	value, exists := os.LookupEnv(key)
+	if !exists {
+		log.Fatalf("Can't find environment varialbe: %s\n", key)
+	}
+	return strings.Split(value, ",")
 }
 
 func requireEnvAsInt(key string) int {

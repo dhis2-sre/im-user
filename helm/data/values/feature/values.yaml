@@ -2,3 +2,7 @@ image:
   pullPolicy: Always
 
 basePath: /skaffold/
+
+groups:
+  names: whoami,play
+  hostnames: whoami.im.feature.test.c.dhis2.org,play.im.feature.test.c.dhis2.org

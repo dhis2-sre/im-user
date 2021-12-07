@@ -17,3 +17,6 @@ data:
 
   USER_EMAIL: ""
   PASSWORD: ""
+
+  GROUP_NAMES: {{ .Values.groups.names }}
+  GROUP_HOSTNAMES: {{ .Values.groups.hostnames }}

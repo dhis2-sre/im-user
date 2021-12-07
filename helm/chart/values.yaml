@@ -2,6 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+groups:
+  names: whoami
+  hostnames: whoami.im.feature.test.c.dhis2.org
+
 containerPort: 8080
 
 basePath: /

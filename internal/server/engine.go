@@ -14,6 +14,7 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"log"
+	"strings"
 )
 
 func GetEngine(environment di.Environment) *gin.Engine {
@@ -53,7 +54,27 @@ func GetEngine(environment di.Environment) *gin.Engine {
 
 	createAdminUser(environment.Config, environment.UserService, environment.GroupService)
 
+	createGroups(environment.Config, environment.GroupService)
+
 	return r
+}
+
+func createGroups(config config.Config, groupService group.Service) {
+	log.Println("Creating groups...")
+	groups := config.Groups
+	for _, g := range groups {
+		newGroup, err := groupService.Create(g.Name, g.Hostname)
+		if err != nil {
+			if strings.HasPrefix(err.Error(), "ERROR: duplicate key value violates unique constraint \"groups_name_key\" (SQLSTATE 23505)") {
+				log.Println("Group exists:", g.Name)
+			} else {
+				log.Fatalln(err)
+			}
+		}
+		if newGroup != nil {
+			log.Println(newGroup)
+		}
+	}
 }
 
 func createAdminUser(config config.Config, userService user.Service, groupService group.Service) {
