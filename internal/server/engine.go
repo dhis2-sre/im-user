@@ -12,7 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	redocMiddleware "github.com/go-openapi/runtime/middleware"
 	"log"
-	"net/http"
 	"strings"
 )
 
@@ -60,10 +59,7 @@ func GetEngine(environment di.Environment) *gin.Engine {
 }
 
 func redoc(router *gin.RouterGroup, basePath string) {
-	router.GET("/swagger.yaml", func(c *gin.Context) {
-		server := http.FileServer(http.Dir("./swagger/"))
-		server.ServeHTTP(c.Writer, c.Request)
-	})
+	router.StaticFile("/swagger.yaml", "./swagger/swagger.yaml")
 
 	redocOpts := redocMiddleware.RedocOpts{
 		BasePath: basePath,
