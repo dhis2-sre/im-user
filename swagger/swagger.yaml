@@ -1,0 +1,419 @@
+consumes:
+- application/json
+- multipart/form-data
+definitions:
+  ClusterConfiguration:
+    description: ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
+      ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
+      ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
+      ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
+      ClusterConfiguration ClusterConfiguration ClusterConfiguration cluster configuration
+    properties:
+      CreatedAt:
+        description: |-
+          created at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+      DeletedAt:
+        $ref: '#/definitions/DeletedAt'
+      GroupID:
+        format: uint64
+        type: integer
+      ID:
+        description: ID
+        format: uint64
+        type: integer
+      KubernetesConfiguration:
+        items:
+          format: uint8
+          type: integer
+        type: array
+      UpdatedAt:
+        description: |-
+          updated at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+    type: object
+    x-go-package: github.com/dhis2-sre/im-users/pkg/model
+  DateTime:
+    description: |-
+      DateTime is a time but it serializes to ISO8601 format with millis
+      It knows how to read 3 different variations of a RFC3339 date time.
+      Most APIs we encounter want either millisecond or second precision times.
+      This just tries to make it worry-free.
+    format: date-time
+    type: string
+    x-go-package: github.com/go-openapi/strfmt
+  DeletedAt:
+    $ref: '#/definitions/NullTime'
+    description: DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt
+      DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt
+      DeletedAt DeletedAt DeletedAt DeletedAt deleted at
+    properties:
+      Time:
+        description: |-
+          time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+      Valid:
+        description: valid
+        type: boolean
+    type: object
+    x-go-package: github.com/dhis2-sre/im-users/swagger/sdk/models
+  Group:
+    description: Group Group domain object defining a group
+    properties:
+      CreatedAt:
+        description: |-
+          created at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+      DeletedAt:
+        $ref: '#/definitions/DeletedAt'
+      Hostname:
+        description: hostname
+        type: string
+      ID:
+        description: ID
+        format: uint64
+        type: integer
+      Name:
+        description: name
+        type: string
+      UpdatedAt:
+        description: |-
+          updated at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+      Users:
+        description: users
+        items:
+          $ref: '#/definitions/User'
+        type: array
+      clusterConfiguration:
+        $ref: '#/definitions/ClusterConfiguration'
+    type: object
+    x-go-package: github.com/dhis2-sre/im-users/swagger/sdk/models
+  Model:
+    description: |-
+      Model a basic GoLang struct which includes the following fields: ID, CreatedAt, UpdatedAt, DeletedAt
+      It may be embedded into your model or you may build your own model without it
+      type User struct {
+      gorm.Model
+      }
+    properties:
+      CreatedAt:
+        description: |-
+          created at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+      DeletedAt:
+        $ref: '#/definitions/DeletedAt'
+      ID:
+        description: ID
+        format: uint64
+        type: integer
+      UpdatedAt:
+        description: |-
+          updated at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+    type: object
+    x-go-package: gorm.io/gorm
+  NullTime:
+    description: |-
+      NullTime implements the Scanner interface so
+      it can be used as a scan destination, similar to NullString.
+    properties:
+      Time:
+        description: |-
+          time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+      Valid:
+        description: valid
+        type: boolean
+    title: NullTime represents a time.Time that may be null.
+    type: object
+    x-go-package: database/sql
+  User:
+    description: User domain object defining a user
+    properties:
+      AdminGroups:
+        items:
+          $ref: '#/definitions/Group'
+        type: array
+      CreatedAt:
+        description: |-
+          created at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+      DeletedAt:
+        $ref: '#/definitions/DeletedAt'
+      Email:
+        type: string
+      Groups:
+        items:
+          $ref: '#/definitions/Group'
+        type: array
+      ID:
+        description: ID
+        format: uint64
+        type: integer
+      UpdatedAt:
+        description: |-
+          updated at
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+          Format: date-time
+        format: date-time
+        type: string
+    type: object
+    x-go-package: github.com/dhis2-sre/im-users/pkg/model
+info:
+  contact:
+    email: info@dhis2.org
+    url: https://github.com/dhis2-sre/im-users
+  description: User Service as part of the Instance Manager environment
+  license:
+    name: TODO
+  termsOfService: there are no TOS at this moment, use at your own risk we take no
+    responsibility
+  title: Instance Manager User Service.
+  version: 0.1.0
+paths:
+  /findbyid/{id}:
+    get:
+      description: Return a user by id
+      operationId: getUserById
+      parameters:
+      - format: uint64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
+      responses:
+        "200":
+          description: User
+          schema:
+            $ref: '#/definitions/User'
+        "403":
+          $ref: '#/responses/Error'
+        "404":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+  /groups/{id}:
+    get:
+      description: Return a group by id
+      operationId: getGroupById
+      parameters:
+      - format: uint64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
+      responses:
+        "200":
+          description: Group
+          schema:
+            $ref: '#/definitions/Group'
+        "403":
+          $ref: '#/responses/Error'
+        "404":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+responses:
+  Error:
+    description: ""
+swagger: "2.0"

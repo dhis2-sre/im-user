@@ -8,12 +8,11 @@ import (
 	"github.com/dhis2-sre/im-users/pkg/health"
 	"github.com/dhis2-sre/im-users/pkg/model"
 	"github.com/dhis2-sre/im-users/pkg/user"
-	"github.com/dhis2-sre/im-users/swagger/docs"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
+	redocMiddleware "github.com/go-openapi/runtime/middleware"
 	"log"
+	"net/http"
 	"strings"
 )
 
@@ -25,6 +24,9 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	r.Use(middleware.ErrorHandler())
 
 	router := r.Group(basePath)
+
+	redoc(router, basePath)
+
 	router.GET("/health", health.Health)
 
 	router.GET("/jwks", environment.TokenHandler.Jwks)
@@ -37,8 +39,6 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	basicAuthenticationRouter := router.Group("")
 	basicAuthenticationRouter.Use(environment.AuthenticationMiddleware.BasicAuthentication)
 	basicAuthenticationRouter.POST("/signin", environment.UserHandler.SignIn)
-	docs.SwaggerInfo.BasePath = basePath
-	basicAuthenticationRouter.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	tokenAuthenticationRouter := router.Group("")
 	tokenAuthenticationRouter.Use(environment.AuthenticationMiddleware.TokenAuthentication)
@@ -57,6 +57,22 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	createGroups(environment.Config, environment.GroupService)
 
 	return r
+}
+
+func redoc(router *gin.RouterGroup, basePath string) {
+	router.GET("/swagger.yaml", func(c *gin.Context) {
+		server := http.FileServer(http.Dir("./swagger/"))
+		server.ServeHTTP(c.Writer, c.Request)
+	})
+
+	redocOpts := redocMiddleware.RedocOpts{
+		BasePath: basePath,
+		SpecURL:  "/swagger.yaml",
+	}
+	router.GET("/docs", func(c *gin.Context) {
+		redocHandler := redocMiddleware.Redoc(redocOpts, nil)
+		redocHandler.ServeHTTP(c.Writer, c.Request)
+	})
 }
 
 func createGroups(config config.Config, groupService group.Service) {

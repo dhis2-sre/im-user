@@ -5,7 +5,6 @@ import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/internal/handler"
 	"github.com/dhis2-sre/im-users/pkg/model"
-	"github.com/dhis2-sre/im-users/pkg/model/dto"
 	"github.com/dhis2-sre/im-users/pkg/user"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -61,7 +60,7 @@ func (h Handler) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, dto.ToGroup(group))
+	c.JSON(http.StatusCreated, group)
 }
 
 // AddUserToGroup godoc
@@ -231,17 +230,13 @@ func (h Handler) NameToId(c *gin.Context) {
 }
 
 // FindById godoc
-// @Summary Group details by id
-// @Description Show group details by id
-// @Tags Public
-// @Accept json
-// @Produce json
-// @Success 200 {object} dto.Group
-// @Failure 403 {object} string
-// @Failure 404 {object} string
-// @Failure 415 {object} string
-// @Router /groups/{id} [get]
-// @Param id path uint true "Group id"
+// swagger:route GET /groups/{id} getGroupById
+// Return a group by id
+// responses:
+//   200: Group
+//   403: Error
+//   404: Error
+//   415: Error
 func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -257,5 +252,5 @@ func (h Handler) FindById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.ToGroup(group))
+	c.JSON(http.StatusOK, group)
 }

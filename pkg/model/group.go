@@ -9,6 +9,8 @@ import (
 
 const AdministratorGroupName = "administrators"
 
+// Group domain object defining a group
+// swagger:model
 type Group struct {
 	gorm.Model
 	Name                 string               `gorm:"unique;"`

@@ -2,40 +2,39 @@ package client
 
 import (
 	"context"
-	"github.com/dhis2-sre/im-users/swagger/client/client"
-	"github.com/dhis2-sre/im-users/swagger/client/client/public"
-	"github.com/dhis2-sre/im-users/swagger/client/models"
+	"github.com/dhis2-sre/im-users/swagger/sdk/client/operations"
+	"github.com/dhis2-sre/im-users/swagger/sdk/models"
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 )
 
 type Client interface {
-	FindUserById(id uint) (*models.DtoUser, error)
-	FindGroupById(id uint) (*models.DtoGroup, error)
+	FindUserById(id uint) (*models.User, error)
+	FindGroupById(id uint) (*models.Group, error)
 }
 
 func ProvideClient(host string, basePath string) Client {
 	transport := httptransport.New(host, basePath, nil)
-	userService := client.New(transport, strfmt.Default)
+	userService := operations.New(transport, strfmt.Default)
 	return &cli{userService}
 }
 
 type cli struct {
-	userService *client.InstanceManagerUserService
+	clientService operations.ClientService
 }
 
-func (c cli) FindUserById(id uint) (*models.DtoUser, error) {
-	params := &public.GetFindbyidIDParams{ID: int64(id), Context: context.Background()}
-	user, err := c.userService.Public.GetFindbyidID(params)
+func (c cli) FindUserById(id uint) (*models.User, error) {
+	params := &operations.GetUserByIDParams{ID: uint64(id), Context: context.Background()}
+	userByID, err := c.clientService.GetUserByID(params)
 	if err != nil {
 		return nil, err
 	}
-	return user.GetPayload(), nil
+	return userByID.GetPayload(), nil
 }
 
-func (c cli) FindGroupById(id uint) (*models.DtoGroup, error) {
-	params := &public.GetGroupsIDParams{ID: int64(id), Context: context.Background()}
-	group, err := c.userService.Public.GetGroupsID(params)
+func (c cli) FindGroupById(id uint) (*models.Group, error) {
+	params := &operations.GetGroupByIDParams{ID: uint64(id), Context: context.Background()}
+	group, err := c.clientService.GetGroupByID(params)
 	if err != nil {
 		return nil, err
 	}

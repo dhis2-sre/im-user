@@ -4,7 +4,6 @@ import (
 	"github.com/dhis2-sre/im-users/internal/apperror"
 	"github.com/dhis2-sre/im-users/internal/handler"
 	"github.com/dhis2-sre/im-users/pkg/config"
-	"github.com/dhis2-sre/im-users/pkg/model/dto"
 	"github.com/dhis2-sre/im-users/pkg/token"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -54,7 +53,7 @@ func (h *Handler) Signup(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, dto.ToUser(user))
+	c.JSON(http.StatusCreated, user)
 }
 
 // SignIn godoc
@@ -148,7 +147,7 @@ func (h Handler) Me(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.ToUser(userWithGroups))
+	c.JSON(http.StatusOK, userWithGroups)
 }
 
 // SignOut godoc
@@ -177,14 +176,13 @@ func (h Handler) SignOut(c *gin.Context) {
 }
 
 // FindById godoc
-// @Summary User details by id
-// @Description Show user details by id
-// @Tags Public
-// @Accept json
-// @Produce json
-// @Success 200 {object} dto.User
-// @Router /findbyid/{id} [get]
-// @Param id path uint true "User id"
+// swagger:route GET /findbyid/{id} getUserById
+// Return a user by id
+// responses:
+//   200: User
+//   403: Error
+//   404: Error
+//   415: Error
 func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -200,5 +198,5 @@ func (h Handler) FindById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.ToUser(userWithGroups))
+	c.JSON(http.StatusOK, userWithGroups)
 }

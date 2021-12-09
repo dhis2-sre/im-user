@@ -36,11 +36,14 @@ publish-helm:
         -F "chart=@im-users-$(version).tgz" \
         https://helm-charts.fitfit.dk/api/charts
 
-swagger-docs:
-	swag init --parseDependency --parseDepth 2 -g ./cmd/serve/main.go --output swagger/docs
+swagger-check-install:
+	which swagger || go get -u github.com/go-swagger/go-swagger/cmd/swagger
 
-swagger-client:
-	swagger generate client -f swagger/docs/swagger.yaml -t swagger/client
+swagger-docs: swagger-check-install
+	swagger generate spec -o ./swagger/swagger.yaml --scan-models
+
+swagger-client: swagger-check-install
+	swagger generate client -f ./swagger/swagger.yaml -t swagger/sdk
 
 swagger: swagger-docs swagger-client
 

@@ -5,6 +5,8 @@ import (
 	"sort"
 )
 
+// User domain object defining a user
+// swagger:model
 type User struct {
 	gorm.Model
 	Email       string  `gorm:"index;unique"`
