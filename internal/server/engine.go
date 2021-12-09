@@ -63,7 +63,7 @@ func redoc(router *gin.RouterGroup, basePath string) {
 
 	redocOpts := redocMiddleware.RedocOpts{
 		BasePath: basePath,
-		SpecURL:  "/swagger.yaml",
+		SpecURL:  basePath + "/swagger.yaml",
 	}
 	router.GET("/docs", func(c *gin.Context) {
 		redocHandler := redocMiddleware.Redoc(redocOpts, nil)
