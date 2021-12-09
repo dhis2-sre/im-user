@@ -11,5 +11,6 @@ FROM alpine:3.14
 RUN apk --no-cache -U upgrade
 WORKDIR /app
 COPY --from=build /app/im-users .
+COPY --from=build /src/swagger/swagger.yaml ./swagger/
 USER guest
 CMD ["/app/im-users"]
