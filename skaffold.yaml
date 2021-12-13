@@ -8,6 +8,7 @@ deploy:
     releases:
       - name: im-users-feature
         namespace: instance-manager-feature
+        createNamespace: true
         chartPath: helm/chart
         artifactOverrides:
           image: dhis2/im-users
@@ -20,6 +21,7 @@ deploy:
 
       - name: im-user-postgresql-feature
         namespace: instance-manager-feature
+        createNamespace: true
         remoteChart: postgresql
         #version: ???
         repo: https://charts.bitnami.com/bitnami
@@ -29,6 +31,7 @@ deploy:
 
       - name: im-user-redis-feature
         namespace: instance-manager-feature
+        createNamespace: true
         remoteChart: redis
         #version: ???
         repo: https://charts.bitnami.com/bitnami
