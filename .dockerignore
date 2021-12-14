@@ -1,1 +1,3 @@
 helm/
+skaffold.yaml
+Makefile
