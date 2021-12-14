@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "im-users.labels" . | nindent 4 }}
 data:
-  BASE_PATH: {{ .Values.basePath }}
+  BASE_PATH: {{ .Values.basePath | default "/" }}
 
   PORT: {{ .Values.containerPort | quote }}
 
