@@ -10,3 +10,7 @@ groups:
 database:
   host: im-user-postgresql-feature.instance-manager-feature.svc.cluster.local
   port: "5432"
+
+redis:
+  host: im-user-redis-feature-master.instance-manager-feature.svc.cluster.local
+  port: "6379"
