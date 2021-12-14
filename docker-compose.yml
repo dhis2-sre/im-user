@@ -28,7 +28,7 @@ services:
     <<: *common-dev-test
     ports:
       - "8080:8080"
-    command: reflex -r "Dockerfile|\.go|\.yml$$" -s -- sh -c "go run ./cmd/serve"
+    command: /bin/sh -c 'sleep 5 && reflex -r "Dockerfile|\.go|\.yml$$" -s -- sh -c "go run ./cmd/serve"'
 
   database:
     image: postgres:13-alpine
