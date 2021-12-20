@@ -84,7 +84,7 @@ func createGroups(config config.Config, groupService group.Service) {
 			}
 		}
 		if newGroup != nil {
-			log.Println(newGroup)
+			log.Println("Created:", newGroup.Name)
 		}
 	}
 }
