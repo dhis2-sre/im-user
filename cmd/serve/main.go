@@ -11,9 +11,17 @@
 //    Contact: <info@dhis2.org> https://github.com/dhis2-sre/im-users
 //
 //    Consumes:
-//    - application/json
-//    - multipart/form-data
+//      - application/json
+//      - multipart/form-data
 //
+//    SecurityDefinitions:
+//      basicAuth:
+//        type: basic
+//      oauth2:
+//        type: oauth2
+//        tokenUrl: /signin
+//        refreshUrl: /refresh
+//        flow: password
 // swagger:meta
 package main
 

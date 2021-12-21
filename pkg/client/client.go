@@ -11,6 +11,8 @@ import (
 type Client interface {
 	FindUserById(id uint) (*models.User, error)
 	FindGroupById(id uint) (*models.Group, error)
+	SignIn(username, password string) (*models.Tokens, error)
+	Me(token string) (*models.User, error)
 }
 
 func ProvideClient(host string, basePath string) Client {
@@ -39,4 +41,18 @@ func (c cli) FindGroupById(id uint) (*models.Group, error) {
 		return nil, err
 	}
 	return group.GetPayload(), nil
+}
+
+func (c cli) SignIn(username, password string) (*models.Tokens, error) {
+	clientAuthInfoWriter := httptransport.BasicAuth(username, password)
+	params := operations.NewSignInParamsWithContext(context.Background())
+	response, err := c.clientService.SignIn(params, clientAuthInfoWriter)
+	return response.Payload, err
+}
+
+func (c cli) Me(token string) (*models.User, error) {
+	clientAuthInfoWriter := httptransport.BearerToken(token)
+	params := operations.NewMeParams().WithDefaults()
+	response, err := c.clientService.Me(params, clientAuthInfoWriter)
+	return response.Payload, err
 }

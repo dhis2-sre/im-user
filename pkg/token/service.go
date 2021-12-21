@@ -44,12 +44,13 @@ func ProvideTokenService(
 	}
 }
 
+// Tokens domain object defining user tokens
+// swagger:model
 type Tokens struct {
-	AccessToken    string    `json:"access_token"`
-	TokenType      string    `json:"token_type"`
-	RefreshToken   string    `json:"refresh_token"`
-	ExpiresIn      uint      `json:"expires_in"`
-	RefreshTokenId uuid.UUID `json:"jti"`
+	AccessToken  string `json:"access_token"`
+	TokenType    string `json:"token_type"`
+	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    uint   `json:"expires_in"`
 }
 
 type RefreshTokenData struct {
@@ -93,11 +94,10 @@ func (t tokenService) GetTokens(user *model.User, previousRefreshTokenId string)
 	}
 
 	return &Tokens{
-		AccessToken:    accessToken,
-		TokenType:      "bearer",
-		RefreshToken:   refreshToken.SignedString,
-		ExpiresIn:      uint(t.accessTokenExpirationSeconds),
-		RefreshTokenId: refreshToken.TokenId,
+		AccessToken:  accessToken,
+		TokenType:    "bearer",
+		RefreshToken: refreshToken.SignedString,
+		ExpiresIn:    uint(t.accessTokenExpirationSeconds),
 	}, nil
 }
 

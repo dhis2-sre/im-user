@@ -15,31 +15,12 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Group Group Group domain object defining a group
+// Group Group domain object defining a group
 //
 // swagger:model Group
 type Group struct {
 
 	// created at
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"CreatedAt,omitempty"`
 
@@ -56,25 +37,6 @@ type Group struct {
 	Name string `json:"Name,omitempty"`
 
 	// updated at
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"UpdatedAt,omitempty"`
 

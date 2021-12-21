@@ -25,25 +25,6 @@ type Model struct {
 
 	// created at
 	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"CreatedAt,omitempty"`
 
 	// deleted at
@@ -53,25 +34,6 @@ type Model struct {
 	ID uint64 `json:"ID,omitempty"`
 
 	// updated at
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"UpdatedAt,omitempty"`
 }

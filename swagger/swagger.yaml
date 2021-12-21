@@ -3,34 +3,8 @@ consumes:
 - multipart/form-data
 definitions:
   ClusterConfiguration:
-    description: ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
-      ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
-      ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
-      ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration
-      ClusterConfiguration ClusterConfiguration ClusterConfiguration cluster configuration
     properties:
       CreatedAt:
-        description: |-
-          created at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
       DeletedAt:
@@ -39,7 +13,6 @@ definitions:
         format: uint64
         type: integer
       ID:
-        description: ID
         format: uint64
         type: integer
       KubernetesConfiguration:
@@ -48,147 +21,38 @@ definitions:
           type: integer
         type: array
       UpdatedAt:
-        description: |-
-          updated at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
     type: object
     x-go-package: github.com/dhis2-sre/im-users/pkg/model
-  DateTime:
-    description: |-
-      DateTime is a time but it serializes to ISO8601 format with millis
-      It knows how to read 3 different variations of a RFC3339 date time.
-      Most APIs we encounter want either millisecond or second precision times.
-      This just tries to make it worry-free.
-    format: date-time
-    type: string
-    x-go-package: github.com/go-openapi/strfmt
   DeletedAt:
     $ref: '#/definitions/NullTime'
-    description: DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt
-      DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt
-      DeletedAt DeletedAt DeletedAt DeletedAt deleted at
-    properties:
-      Time:
-        description: |-
-          time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-        format: date-time
-        type: string
-      Valid:
-        description: valid
-        type: boolean
-    type: object
-    x-go-package: github.com/dhis2-sre/im-users/swagger/sdk/models
   Group:
-    description: Group Group domain object defining a group
+    description: Group domain object defining a group
     properties:
       CreatedAt:
-        description: |-
-          created at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
       DeletedAt:
         $ref: '#/definitions/DeletedAt'
       Hostname:
-        description: hostname
         type: string
       ID:
-        description: ID
         format: uint64
         type: integer
       Name:
-        description: name
         type: string
       UpdatedAt:
-        description: |-
-          updated at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
       Users:
-        description: users
         items:
           $ref: '#/definitions/User'
         type: array
       clusterConfiguration:
         $ref: '#/definitions/ClusterConfiguration'
     type: object
-    x-go-package: github.com/dhis2-sre/im-users/swagger/sdk/models
+    x-go-package: github.com/dhis2-sre/im-users/pkg/model
   Model:
     description: |-
       Model a basic GoLang struct which includes the following fields: ID, CreatedAt, UpdatedAt, DeletedAt
@@ -198,57 +62,14 @@ definitions:
       }
     properties:
       CreatedAt:
-        description: |-
-          created at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
       DeletedAt:
         $ref: '#/definitions/DeletedAt'
       ID:
-        description: ID
         format: uint64
         type: integer
       UpdatedAt:
-        description: |-
-          updated at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
     type: object
@@ -259,35 +80,31 @@ definitions:
       it can be used as a scan destination, similar to NullString.
     properties:
       Time:
-        description: |-
-          time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
       Valid:
-        description: valid
         type: boolean
     title: NullTime represents a time.Time that may be null.
     type: object
     x-go-package: database/sql
+  Tokens:
+    description: Tokens domain object defining user tokens
+    properties:
+      access_token:
+        type: string
+        x-go-name: AccessToken
+      expires_in:
+        format: uint64
+        type: integer
+        x-go-name: ExpiresIn
+      refresh_token:
+        type: string
+        x-go-name: RefreshToken
+      token_type:
+        type: string
+        x-go-name: TokenType
+    type: object
+    x-go-package: github.com/dhis2-sre/im-users/pkg/token
   User:
     description: User domain object defining a user
     properties:
@@ -296,27 +113,6 @@ definitions:
           $ref: '#/definitions/Group'
         type: array
       CreatedAt:
-        description: |-
-          created at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
       DeletedAt:
@@ -328,31 +124,9 @@ definitions:
           $ref: '#/definitions/Group'
         type: array
       ID:
-        description: ID
         format: uint64
         type: integer
       UpdatedAt:
-        description: |-
-          updated at
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
-          Format: date-time
         format: date-time
         type: string
     type: object
@@ -413,7 +187,48 @@ paths:
           $ref: '#/responses/Error'
         "415":
           $ref: '#/responses/Error'
+  /me:
+    get:
+      description: Return user details
+      operationId: me
+      responses:
+        "200":
+          description: User
+          schema:
+            $ref: '#/definitions/User'
+        "403":
+          $ref: '#/responses/Error'
+        "404":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - oauth2: []
+  /signin:
+    post:
+      description: Return user tokens
+      operationId: signIn
+      responses:
+        "201":
+          description: Tokens
+          schema:
+            $ref: '#/definitions/Tokens'
+        "403":
+          $ref: '#/responses/Error'
+        "404":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - basic: []
 responses:
   Error:
     description: ""
+securityDefinitions:
+  basicAuth:
+    type: basic
+  oauth2:
+    flow: password
+    tokenUrl: /signin
+    type: oauth2
 swagger: "2.0"

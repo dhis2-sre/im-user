@@ -52,10 +52,11 @@ swagger-check-install:
 	which swagger || go get -u github.com/go-swagger/go-swagger/cmd/swagger
 
 swagger-docs: swagger-check-install
-	swagger generate spec -o ./swagger/swagger.yaml --scan-models
+	swagger generate spec -o swagger/swagger.yaml -x swagger/sdk --scan-models
+	swagger validate swagger/swagger.yaml
 
 swagger-client: swagger-check-install
-	swagger generate client -f ./swagger/swagger.yaml -t swagger/sdk
+	swagger generate client -f swagger/swagger.yaml -t swagger/sdk
 
 swagger: swagger-docs swagger-client
 

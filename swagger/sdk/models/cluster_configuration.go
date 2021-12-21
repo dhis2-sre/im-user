@@ -14,31 +14,12 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration ClusterConfiguration cluster configuration
+// ClusterConfiguration cluster configuration
 //
 // swagger:model ClusterConfiguration
 type ClusterConfiguration struct {
 
 	// created at
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
 	// Format: date-time
 	CreatedAt strfmt.DateTime `json:"CreatedAt,omitempty"`
 
@@ -55,25 +36,6 @@ type ClusterConfiguration struct {
 	KubernetesConfiguration []uint8 `json:"KubernetesConfiguration"`
 
 	// updated at
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
 	// Format: date-time
 	UpdatedAt strfmt.DateTime `json:"UpdatedAt,omitempty"`
 }

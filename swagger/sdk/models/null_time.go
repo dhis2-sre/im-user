@@ -24,25 +24,6 @@ type NullTime struct {
 
 	// time
 	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
-	// Format: date-time
 	Time strfmt.DateTime `json:"Time,omitempty"`
 
 	// valid

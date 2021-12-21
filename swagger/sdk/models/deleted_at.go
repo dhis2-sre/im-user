@@ -11,10 +11,9 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
-// DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt DeletedAt deleted at
+// DeletedAt deleted at
 //
 // swagger:model DeletedAt
 type DeletedAt struct {
@@ -47,28 +46,6 @@ func (m DeletedAt) MarshalJSON() ([]byte, error) {
 
 // Validate validates this deleted at
 func (m *DeletedAt) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.NullTime.Validate(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *DeletedAt) validateTime(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Time) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("Time", "body", "date-time", m.Time.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -76,6 +53,7 @@ func (m *DeletedAt) validateTime(formats strfmt.Registry) error {
 func (m *DeletedAt) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	// validation for a type composition with NullTime
 	if err := m.NullTime.ContextValidate(ctx, formats); err != nil {
 		res = append(res, err)
 	}

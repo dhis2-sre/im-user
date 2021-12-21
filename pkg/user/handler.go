@@ -57,15 +57,15 @@ func (h *Handler) Signup(c *gin.Context) {
 }
 
 // SignIn godoc
-// @Summary User sign in
-// @Description Classic basic http auth...
-// @Tags Public
-// @Accept json
-// @Produce json
-// @Success 201 {object} token.Tokens
-// @Failure 401 {object} string
-// @Router /signin [post]
-// @Security BasicAuthentication
+// swagger:route POST /signin signIn
+// Return user tokens
+// responses:
+//   201: Tokens
+//   403: Error
+//   404: Error
+//   415: Error
+// security:
+//   basic:
 func (h *Handler) SignIn(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
@@ -126,14 +126,15 @@ func (h Handler) RefreshToken(c *gin.Context) {
 }
 
 // Me godoc
-// @Summary User details
-// @Description Show user details
-// @Tags Restricted
-// @Accept json
-// @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Router /me [get]
-// @Security OAuth2Password
+// swagger:route GET /me me
+// Return user details
+// responses:
+//   200: User
+//   403: Error
+//   404: Error
+//   415: Error
+// security:
+//   oauth2:
 func (h Handler) Me(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
