@@ -12,6 +12,7 @@ type Repository interface {
 	AddClusterConfiguration(configuration *model.ClusterConfiguration) error
 	GetClusterConfiguration(groupId uint) (*model.ClusterConfiguration, error)
 	FindByName(name string) (*model.Group, error)
+	FindOrCreate(group *model.Group) (*model.Group, error)
 }
 
 func ProvideRepository(DB *gorm.DB) Repository {
@@ -30,6 +31,12 @@ func (r repository) FindByName(name string) (*model.Group, error) {
 
 func (r repository) Create(group *model.Group) error {
 	return r.db.Create(&group).Error
+}
+
+func (r repository) FindOrCreate(group *model.Group) (*model.Group, error) {
+	var g *model.Group
+	err := r.db.Where(model.Group{Name: group.Name}).Attrs(model.Group{Hostname: group.Hostname}).FirstOrCreate(&g).Error
+	return g, err
 }
 
 func (r repository) FindById(id uint) (*model.Group, error) {

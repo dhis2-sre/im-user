@@ -75,7 +75,7 @@ func createGroups(config config.Config, groupService group.Service) {
 	log.Println("Creating groups...")
 	groups := config.Groups
 	for _, g := range groups {
-		newGroup, err := groupService.Create(g.Name, g.Hostname)
+		newGroup, err := groupService.FindOrCreate(g.Name, g.Hostname)
 		if err != nil {
 			if strings.HasPrefix(err.Error(), "ERROR: duplicate key value violates unique constraint \"groups_name_key\" (SQLSTATE 23505)") {
 				log.Println("Group exists:", g.Name)
@@ -93,23 +93,17 @@ func createAdminUser(config config.Config, userService user.Service, groupServic
 	adminUserEmail := config.AdminUser.Email
 	adminUserPassword := config.AdminUser.Password
 
-	u, _ := userService.FindByEmail(adminUserEmail)
-	if u != nil && u.ID > 0 {
-		log.Println("Admin user exists")
-		return
-	}
-
-	adminUser, err := userService.Signup(adminUserEmail, adminUserPassword)
+	u, err := userService.FindOrCreate(adminUserEmail, adminUserPassword)
 	if err != nil {
-		log.Fatalf("Failed to create admin user: %s", err)
+		log.Fatalln(err)
 	}
 
-	g, err := groupService.Create(model.AdministratorGroupName, "")
+	g, err := groupService.FindOrCreate(model.AdministratorGroupName, "")
 	if err != nil {
 		log.Fatalf("Failed to create admin group: %s", err)
 	}
 
-	err = groupService.AddUser(g.ID, adminUser.ID)
+	err = groupService.AddUser(g.ID, u.ID)
 	if err != nil {
 		log.Fatalf("Failed to add user to admin group: %s", err)
 	}

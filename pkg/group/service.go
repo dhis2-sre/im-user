@@ -14,6 +14,7 @@ type Service interface {
 	AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error
 	GetClusterConfiguration(groupId uint) (*model.ClusterConfiguration, error)
 	FindByName(name string) (*model.Group, error)
+	FindOrCreate(name string, hostname string) (*model.Group, error)
 }
 
 func ProvideService(groupRepository Repository, userRepository user.Repository) Service {
@@ -45,6 +46,21 @@ func (s *service) Create(name string, hostname string) (*model.Group, error) {
 	}
 
 	return group, err
+}
+
+func (s *service) FindOrCreate(name string, hostname string) (*model.Group, error) {
+	group := &model.Group{
+		Name:     name,
+		Hostname: hostname,
+	}
+
+	g, err := s.groupRepository.FindOrCreate(group)
+
+	if err != nil {
+		return nil, apperror.NewBadRequest(err.Error())
+	}
+
+	return g, err
 }
 
 func (s *service) FindById(id uint) (*model.Group, error) {

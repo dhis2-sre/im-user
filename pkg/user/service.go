@@ -15,6 +15,7 @@ type Service interface {
 	SignIn(email string, password string) (*model.User, error)
 	FindById(id uint) (*model.User, error)
 	FindByEmail(email string) (*model.User, error)
+	FindOrCreate(email string, password string) (*model.User, error)
 }
 
 func ProvideService(repository Repository) Service {
@@ -116,4 +117,20 @@ func (s service) FindById(id uint) (*model.User, error) {
 
 func (s service) FindByEmail(email string) (*model.User, error) {
 	return s.repository.FindByEmail(email)
+}
+
+func (s service) FindOrCreate(email string, password string) (*model.User, error) {
+	hashedPassword, err := hashPassword(password)
+
+	if err != nil {
+		message := fmt.Sprintf("Password hashing failed: %s", err)
+		return nil, apperror.NewInternal(message)
+	}
+
+	user := &model.User{
+		Email:    email,
+		Password: hashedPassword,
+	}
+
+	return s.repository.FindOrCreate(user)
 }
