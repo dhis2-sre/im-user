@@ -57,7 +57,7 @@ func (h *Handler) Signup(c *gin.Context) {
 }
 
 // SignIn godoc
-// swagger:route POST /signin signIn
+// swagger:route POST /signin SignIn
 // Return user tokens
 // responses:
 //   201: Tokens
@@ -126,7 +126,7 @@ func (h Handler) RefreshToken(c *gin.Context) {
 }
 
 // Me godoc
-// swagger:route GET /me me
+// swagger:route GET /me Me
 // Return user details
 // responses:
 //   200: User
@@ -152,15 +152,17 @@ func (h Handler) Me(c *gin.Context) {
 }
 
 // SignOut godoc
-// @Summary Sign out user
-// @Description Delete refresh tokens...
-// @Tags Restricted
-// @Accept json
-// @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Failure 401 {object} map[string]interface{}
-// @Router /signout [get]
-// @Security OAuth2Password
+// swagger:route GET /signout SignOut
+//
+// Sign out user
+//
+// security:
+//   oauth2:
+//
+// responses:
+//   200:
+//   401: Error
+//   415: Error
 func (h Handler) SignOut(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
@@ -177,7 +179,7 @@ func (h Handler) SignOut(c *gin.Context) {
 }
 
 // FindById godoc
-// swagger:route GET /findbyid/{id} getUserById
+// swagger:route GET /findbyid/{id} FindUserById
 // Return a user by id
 // responses:
 //   200: User

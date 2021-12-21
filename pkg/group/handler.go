@@ -230,7 +230,7 @@ func (h Handler) NameToId(c *gin.Context) {
 }
 
 // FindById godoc
-// swagger:route GET /groups/{id} getGroupById
+// swagger:route GET /groups/{id} FindGroupById
 // Return a group by id
 // responses:
 //   200: Group

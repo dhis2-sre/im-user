@@ -30,34 +30,38 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	GetGroupByID(params *GetGroupByIDParams, opts ...ClientOption) (*GetGroupByIDOK, error)
+	FindGroupByID(params *FindGroupByIDParams, opts ...ClientOption) (*FindGroupByIDOK, error)
 
-	GetUserByID(params *GetUserByIDParams, opts ...ClientOption) (*GetUserByIDOK, error)
+	FindUserByID(params *FindUserByIDParams, opts ...ClientOption) (*FindUserByIDOK, error)
+
+	Jwks(params *JwksParams, opts ...ClientOption) (*JwksOK, error)
 
 	Me(params *MeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*MeOK, error)
 
 	SignIn(params *SignInParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignInCreated, error)
 
+	SignOut(params *SignOutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignOutOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
 /*
-  GetGroupByID Return a group by id
+  FindGroupByID Return a group by id
 */
-func (a *Client) GetGroupByID(params *GetGroupByIDParams, opts ...ClientOption) (*GetGroupByIDOK, error) {
+func (a *Client) FindGroupByID(params *FindGroupByIDParams, opts ...ClientOption) (*FindGroupByIDOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetGroupByIDParams()
+		params = NewFindGroupByIDParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "getGroupById",
+		ID:                 "FindGroupById",
 		Method:             "GET",
 		PathPattern:        "/groups/{id}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json", "multipart/form-data"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &GetGroupByIDReader{formats: a.formats},
+		Reader:             &FindGroupByIDReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -69,33 +73,33 @@ func (a *Client) GetGroupByID(params *GetGroupByIDParams, opts ...ClientOption) 
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetGroupByIDOK)
+	success, ok := result.(*FindGroupByIDOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for getGroupById: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for FindGroupById: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
 /*
-  GetUserByID Return a user by id
+  FindUserByID Return a user by id
 */
-func (a *Client) GetUserByID(params *GetUserByIDParams, opts ...ClientOption) (*GetUserByIDOK, error) {
+func (a *Client) FindUserByID(params *FindUserByIDParams, opts ...ClientOption) (*FindUserByIDOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewGetUserByIDParams()
+		params = NewFindUserByIDParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "getUserById",
+		ID:                 "FindUserById",
 		Method:             "GET",
 		PathPattern:        "/findbyid/{id}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json", "multipart/form-data"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &GetUserByIDReader{formats: a.formats},
+		Reader:             &FindUserByIDReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -107,13 +111,51 @@ func (a *Client) GetUserByID(params *GetUserByIDParams, opts ...ClientOption) (*
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*GetUserByIDOK)
+	success, ok := result.(*FindUserByIDOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for getUserById: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for FindUserById: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  Jwks Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
+*/
+func (a *Client) Jwks(params *JwksParams, opts ...ClientOption) (*JwksOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewJwksParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "Jwks",
+		Method:             "GET",
+		PathPattern:        "/jwks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json", "multipart/form-data"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &JwksReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*JwksOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for Jwks: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
@@ -126,7 +168,7 @@ func (a *Client) Me(params *MeParams, authInfo runtime.ClientAuthInfoWriter, opt
 		params = NewMeParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "me",
+		ID:                 "Me",
 		Method:             "GET",
 		PathPattern:        "/me",
 		ProducesMediaTypes: []string{"application/json"},
@@ -152,7 +194,7 @@ func (a *Client) Me(params *MeParams, authInfo runtime.ClientAuthInfoWriter, opt
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for me: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for Me: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
@@ -165,7 +207,7 @@ func (a *Client) SignIn(params *SignInParams, authInfo runtime.ClientAuthInfoWri
 		params = NewSignInParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "signIn",
+		ID:                 "SignIn",
 		Method:             "POST",
 		PathPattern:        "/signin",
 		ProducesMediaTypes: []string{"application/json"},
@@ -191,7 +233,46 @@ func (a *Client) SignIn(params *SignInParams, authInfo runtime.ClientAuthInfoWri
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for signIn: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for SignIn: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SignOut Sign out user
+*/
+func (a *Client) SignOut(params *SignOutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignOutOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSignOutParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "SignOut",
+		Method:             "GET",
+		PathPattern:        "/signout",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json", "multipart/form-data"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &SignOutReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SignOutOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for SignOut: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
