@@ -26,8 +26,8 @@ type cli struct {
 }
 
 func (c cli) FindUserById(id uint) (*models.User, error) {
-	params := &operations.GetUserByIDParams{ID: uint64(id), Context: context.Background()}
-	userByID, err := c.clientService.GetUserByID(params)
+	params := &operations.FindUserByIDParams{ID: uint64(id), Context: context.Background()}
+	userByID, err := c.clientService.FindUserByID(params)
 	if err != nil {
 		return nil, err
 	}
@@ -35,8 +35,8 @@ func (c cli) FindUserById(id uint) (*models.User, error) {
 }
 
 func (c cli) FindGroupById(id uint) (*models.Group, error) {
-	params := &operations.GetGroupByIDParams{ID: uint64(id), Context: context.Background()}
-	group, err := c.clientService.GetGroupByID(params)
+	params := &operations.FindGroupByIDParams{ID: uint64(id), Context: context.Background()}
+	group, err := c.clientService.FindGroupByID(params)
 	if err != nil {
 		return nil, err
 	}
