@@ -9,8 +9,8 @@ import (
 )
 
 type Client interface {
-	FindUserById(id uint) (*models.User, error)
-	FindGroupById(id uint) (*models.Group, error)
+	FindUserById(token string, id uint) (*models.User, error)
+	FindGroupById(token string, id uint) (*models.Group, error)
 	SignIn(username, password string) (*models.Tokens, error)
 	Me(token string) (*models.User, error)
 }
@@ -25,18 +25,20 @@ type cli struct {
 	clientService operations.ClientService
 }
 
-func (c cli) FindUserById(id uint) (*models.User, error) {
+func (c cli) FindUserById(token string, id uint) (*models.User, error) {
 	params := &operations.FindUserByIDParams{ID: uint64(id), Context: context.Background()}
-	userByID, err := c.clientService.FindUserByID(params)
+	clientAuthInfoWriter := httptransport.BearerToken(token)
+	userByID, err := c.clientService.FindUserByID(params, clientAuthInfoWriter)
 	if err != nil {
 		return nil, err
 	}
 	return userByID.GetPayload(), nil
 }
 
-func (c cli) FindGroupById(id uint) (*models.Group, error) {
+func (c cli) FindGroupById(token string, id uint) (*models.Group, error) {
 	params := &operations.FindGroupByIDParams{ID: uint64(id), Context: context.Background()}
-	group, err := c.clientService.FindGroupByID(params)
+	clientAuthInfoWriter := httptransport.BearerToken(token)
+	group, err := c.clientService.FindGroupByID(params, clientAuthInfoWriter)
 	if err != nil {
 		return nil, err
 	}

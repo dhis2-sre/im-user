@@ -620,6 +620,8 @@ paths:
           $ref: '#/responses/Error'
         "415":
           $ref: '#/responses/Error'
+      security:
+      - oauth2: []
   /groups/{id}:
     get:
       description: Return a group by id
@@ -642,6 +644,8 @@ paths:
           $ref: '#/responses/Error'
         "415":
           $ref: '#/responses/Error'
+      security:
+      - oauth2: []
   /jwks:
     get:
       description: Return a JWKS containing the public key which can be used to validate

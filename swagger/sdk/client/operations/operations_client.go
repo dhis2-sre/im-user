@@ -30,9 +30,9 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	FindGroupByID(params *FindGroupByIDParams, opts ...ClientOption) (*FindGroupByIDOK, error)
+	FindGroupByID(params *FindGroupByIDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*FindGroupByIDOK, error)
 
-	FindUserByID(params *FindUserByIDParams, opts ...ClientOption) (*FindUserByIDOK, error)
+	FindUserByID(params *FindUserByIDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*FindUserByIDOK, error)
 
 	Jwks(params *JwksParams, opts ...ClientOption) (*JwksOK, error)
 
@@ -48,7 +48,7 @@ type ClientService interface {
 /*
   FindGroupByID Return a group by id
 */
-func (a *Client) FindGroupByID(params *FindGroupByIDParams, opts ...ClientOption) (*FindGroupByIDOK, error) {
+func (a *Client) FindGroupByID(params *FindGroupByIDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*FindGroupByIDOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewFindGroupByIDParams()
@@ -62,6 +62,7 @@ func (a *Client) FindGroupByID(params *FindGroupByIDParams, opts ...ClientOption
 		Schemes:            []string{"http"},
 		Params:             params,
 		Reader:             &FindGroupByIDReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -86,7 +87,7 @@ func (a *Client) FindGroupByID(params *FindGroupByIDParams, opts ...ClientOption
 /*
   FindUserByID Return a user by id
 */
-func (a *Client) FindUserByID(params *FindUserByIDParams, opts ...ClientOption) (*FindUserByIDOK, error) {
+func (a *Client) FindUserByID(params *FindUserByIDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*FindUserByIDOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewFindUserByIDParams()
@@ -100,6 +101,7 @@ func (a *Client) FindUserByID(params *FindUserByIDParams, opts ...ClientOption) 
 		Schemes:            []string{"http"},
 		Params:             params,
 		Reader:             &FindUserByIDReader{formats: a.formats},
+		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}

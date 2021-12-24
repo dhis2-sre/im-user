@@ -22,7 +22,10 @@ func TestFindUserById(t *testing.T) {
 	host := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), parsedUrl.Port())
 	c := ProvideClient(host, environment.Config.BasePath)
 
-	u, err := c.FindUserById(1)
+	tokens, err := c.SignIn(environment.Config.AdminUser.Email, environment.Config.AdminUser.Password)
+	assert.NoError(t, err)
+
+	u, err := c.FindUserById(tokens.AccessToken, 1)
 	assert.NoError(t, err)
 
 	assert.Equal(t, uint64(1), u.ID)
@@ -40,7 +43,10 @@ func TestFindGroupById(t *testing.T) {
 	host := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), parsedUrl.Port())
 	c := ProvideClient(host, environment.Config.BasePath)
 
-	g, err := c.FindGroupById(1)
+	tokens, err := c.SignIn(environment.Config.AdminUser.Email, environment.Config.AdminUser.Password)
+	assert.NoError(t, err)
+
+	g, err := c.FindGroupById(tokens.AccessToken, 1)
 	assert.NoError(t, err)
 
 	assert.Equal(t, uint64(1), g.ID)

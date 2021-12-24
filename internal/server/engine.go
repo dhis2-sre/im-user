@@ -32,8 +32,6 @@ func GetEngine(environment di.Environment) *gin.Engine {
 
 	router.POST("/signup", environment.UserHandler.Signup)
 	router.POST("/refresh", environment.UserHandler.RefreshToken)
-	router.GET("/findbyid/:id", environment.UserHandler.FindById)
-	router.GET("/groups/:id", environment.GroupHandler.FindById)
 
 	basicAuthenticationRouter := router.Group("")
 	basicAuthenticationRouter.Use(environment.AuthenticationMiddleware.BasicAuthentication)
@@ -44,6 +42,8 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	tokenAuthenticationRouter.GET("/me", environment.UserHandler.Me)
 	tokenAuthenticationRouter.GET("/signout", environment.UserHandler.SignOut)
 	tokenAuthenticationRouter.GET("/groups-name-to-id/:name", environment.GroupHandler.NameToId)
+	tokenAuthenticationRouter.GET("/findbyid/:id", environment.UserHandler.FindById)
+	tokenAuthenticationRouter.GET("/groups/:id", environment.GroupHandler.FindById)
 
 	administratorRestrictedRouter := tokenAuthenticationRouter.Group("")
 	administratorRestrictedRouter.Use(environment.AuthorizationMiddleware.RequireAdministrator)

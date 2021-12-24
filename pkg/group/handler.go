@@ -237,6 +237,8 @@ func (h Handler) NameToId(c *gin.Context) {
 //   403: Error
 //   404: Error
 //   415: Error
+// security:
+//   oauth2:
 func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
