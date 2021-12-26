@@ -39,7 +39,8 @@ func ProvideConfig() Config {
 			Email:    requireEnv("ADMIN_USER_EMAIL"),
 			Password: requireEnv("ADMIN_USER_PASSWORD"),
 		},
-		DefaultUser: user{},
+		ServiceUsers: getServiceUsers(),
+		DefaultUser:  user{},
 	}
 }
 
@@ -60,6 +61,23 @@ func getGroups() []group {
 	return groups
 }
 
+func getServiceUsers() []user {
+	userEmails := requireEnvAsArray("SERVICE_USER_EMAILS")
+	userPasswords := requireEnvAsArray("SERVICE_USER_PASSWORDS")
+
+	if len(userEmails) != len(userPasswords) {
+		log.Fatalln("len(SERVICE_USER_EMAILS) != len(SERVICE_USER_PASSWORDS)")
+	}
+
+	users := make([]user, len(userEmails))
+	for i := 0; i < len(userEmails); i++ {
+		users[i].Email = userEmails[i]
+		users[i].Password = userPasswords[i]
+	}
+
+	return users
+}
+
 type Config struct {
 	BasePath       string
 	Groups         []group
@@ -67,6 +85,7 @@ type Config struct {
 	Postgresql     postgresql
 	Redis          redis
 	AdminUser      user
+	ServiceUsers   []user
 	DefaultUser    user
 }
 

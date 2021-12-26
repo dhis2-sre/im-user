@@ -51,9 +51,12 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	administratorRestrictedRouter.POST("/groups/:groupId/users/:userId", environment.GroupHandler.AddUserToGroup)
 	administratorRestrictedRouter.POST("/groups/:groupId/cluster-configuration", environment.GroupHandler.AddClusterConfiguration)
 
-	createAdminUser(environment.Config, environment.UserService, environment.GroupService)
-
-	createGroups(environment.Config, environment.GroupService)
+	config := environment.Config
+	groupService := environment.GroupService
+	userService := environment.UserService
+	createGroups(config, groupService)
+	createAdminUser(config, userService, groupService)
+	createServiceUsers(config, userService, groupService)
 
 	return r
 }
@@ -106,5 +109,34 @@ func createAdminUser(config config.Config, userService user.Service, groupServic
 	err = groupService.AddUser(g.ID, u.ID)
 	if err != nil {
 		log.Fatalf("Failed to add user to admin group: %s", err)
+	}
+}
+
+func createServiceUsers(config config.Config, userService user.Service, groupService group.Service) {
+	log.Println("Creating service users...")
+	g, err := groupService.FindOrCreate(model.AdministratorGroupName, "")
+	if err != nil {
+		log.Fatalf("Failed to create admin group: %s", err)
+	}
+
+	for _, serviceUser := range config.ServiceUsers {
+		email := serviceUser.Email
+		password := serviceUser.Password
+
+		u, err := userService.FindOrCreate(email, password)
+		if err != nil {
+			if strings.HasPrefix(err.Error(), "ERROR: duplicate key value violates unique constraint \"groups_name_key\" (SQLSTATE 23505)") {
+				log.Println("Group exists:", g.Name)
+			} else {
+				log.Fatalln(err)
+			}
+		}
+
+		err = groupService.AddUser(g.ID, u.ID)
+		if err != nil {
+			log.Fatalf("Failed to add user to admin group: %s", err)
+		}
+
+		log.Println("Created:", serviceUser.Email)
 	}
 }
