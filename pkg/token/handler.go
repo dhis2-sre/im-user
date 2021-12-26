@@ -2,8 +2,8 @@ package token
 
 import (
 	"crypto/rsa"
-	"github.com/dhis2-sre/im-users/pkg/config"
-	"github.com/dhis2-sre/im-users/pkg/token/helper"
+	"github.com/dhis2-sre/im-user/pkg/config"
+	"github.com/dhis2-sre/im-user/pkg/token/helper"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

@@ -1,10 +1,10 @@
 package user
 
 import (
-	"github.com/dhis2-sre/im-users/internal/apperror"
-	"github.com/dhis2-sre/im-users/internal/handler"
-	"github.com/dhis2-sre/im-users/pkg/config"
-	"github.com/dhis2-sre/im-users/pkg/token"
+	"github.com/dhis2-sre/im-user/internal/apperror"
+	"github.com/dhis2-sre/im-user/internal/handler"
+	"github.com/dhis2-sre/im-user/pkg/config"
+	"github.com/dhis2-sre/im-user/pkg/token"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"

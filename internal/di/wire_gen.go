@@ -6,12 +6,12 @@
 package di
 
 import (
-	"github.com/dhis2-sre/im-users/internal/middleware"
-	"github.com/dhis2-sre/im-users/pkg/config"
-	"github.com/dhis2-sre/im-users/pkg/group"
-	"github.com/dhis2-sre/im-users/pkg/storage"
-	"github.com/dhis2-sre/im-users/pkg/token"
-	"github.com/dhis2-sre/im-users/pkg/user"
+	"github.com/dhis2-sre/im-user/internal/middleware"
+	"github.com/dhis2-sre/im-user/pkg/config"
+	"github.com/dhis2-sre/im-user/pkg/group"
+	"github.com/dhis2-sre/im-user/pkg/storage"
+	"github.com/dhis2-sre/im-user/pkg/token"
+	"github.com/dhis2-sre/im-user/pkg/user"
 	"gorm.io/gorm"
 	"log"
 )

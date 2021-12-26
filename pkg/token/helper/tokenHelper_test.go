@@ -1,8 +1,8 @@
 package helper
 
 import (
-	"github.com/dhis2-sre/im-users/pkg/config"
-	"github.com/dhis2-sre/im-users/pkg/model"
+	"github.com/dhis2-sre/im-user/pkg/config"
+	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"

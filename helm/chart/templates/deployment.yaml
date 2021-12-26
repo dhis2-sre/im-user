@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "im-users.fullname" . }}
+  name: {{ include "im-user.fullname" . }}
   labels:
-    {{- include "im-users.labels" . | nindent 4 }}
+    {{- include "im-user.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "im-users.selectorLabels" . | nindent 6 }}
+      {{- include "im-user.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "im-users.selectorLabels" . | nindent 8 }}
+        {{- include "im-user.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "im-users.serviceAccountName" . }}
+      serviceAccountName: {{ include "im-user.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -49,9 +49,9 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
             - configMapRef:
-                name: {{ include "im-users.fullname" . }}
+                name: {{ include "im-user.fullname" . }}
             - secretRef:
-                name: {{ include "im-users.fullname" . }}
+                name: {{ include "im-user.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

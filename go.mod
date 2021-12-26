@@ -1,4 +1,4 @@
-module github.com/dhis2-sre/im-users
+module github.com/dhis2-sre/im-user
 
 go 1.16
 

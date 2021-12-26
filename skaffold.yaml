@@ -7,7 +7,7 @@ deploy:
   statusCheckDeadlineSeconds: 120
   helm:
     releases:
-      - name: im-users-{{ .ENVIRONMENT }}
+      - name: im-user-{{ .ENVIRONMENT }}
         namespace: instance-manager-{{ .ENVIRONMENT }}
         createNamespace: true
         chartPath: helm/chart

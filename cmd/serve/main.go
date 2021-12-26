@@ -8,7 +8,7 @@
 //
 //    Version: 0.1.0
 //    License: TODO
-//    Contact: <info@dhis2.org> https://github.com/dhis2-sre/im-users
+//    Contact: <info@dhis2.org> https://github.com/dhis2-sre/im-user
 //
 //    Consumes:
 //      - application/json
@@ -26,8 +26,8 @@
 package main
 
 import (
-	"github.com/dhis2-sre/im-users/internal/di"
-	"github.com/dhis2-sre/im-users/internal/server"
+	"github.com/dhis2-sre/im-user/internal/di"
+	"github.com/dhis2-sre/im-user/internal/server"
 	"log"
 )
 

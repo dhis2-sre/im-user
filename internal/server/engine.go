@@ -1,13 +1,13 @@
 package server
 
 import (
-	"github.com/dhis2-sre/im-users/internal/di"
-	"github.com/dhis2-sre/im-users/internal/middleware"
-	"github.com/dhis2-sre/im-users/pkg/config"
-	"github.com/dhis2-sre/im-users/pkg/group"
-	"github.com/dhis2-sre/im-users/pkg/health"
-	"github.com/dhis2-sre/im-users/pkg/model"
-	"github.com/dhis2-sre/im-users/pkg/user"
+	"github.com/dhis2-sre/im-user/internal/di"
+	"github.com/dhis2-sre/im-user/internal/middleware"
+	"github.com/dhis2-sre/im-user/pkg/config"
+	"github.com/dhis2-sre/im-user/pkg/group"
+	"github.com/dhis2-sre/im-user/pkg/health"
+	"github.com/dhis2-sre/im-user/pkg/model"
+	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	redocMiddleware "github.com/go-openapi/runtime/middleware"

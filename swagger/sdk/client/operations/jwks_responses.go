@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/dhis2-sre/im-users/swagger/sdk/models"
+	"github.com/dhis2-sre/im-user/swagger/sdk/models"
 )
 
 // JwksReader is a Reader for the Jwks structure.

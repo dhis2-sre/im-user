@@ -1,4 +1,4 @@
-# Default values for im-users.
+# Default values for im-user.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -35,7 +35,7 @@ refreshTokenExpirationInSeconds: 3600 # 1 hour
 replicaCount: 1
 
 image:
-  repository: dhis2/im-users
+  repository: dhis2/im-user
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""

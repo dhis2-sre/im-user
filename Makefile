@@ -7,7 +7,7 @@ keys:
 	openssl rsa -in ./rsa_private.pem -pubout -out ./rsa_public.pem
 
 binary:
-	go build -o im-users -ldflags "-s -w" ./cmd/serve
+	go build -o im-user -ldflags "-s -w" ./cmd/serve
 
 smoke-test:
 	docker compose up -d database redis
@@ -45,7 +45,7 @@ helm-chart:
 
 publish-helm:
 	@curl --user "$(CHART_AUTH_USER):$(CHART_AUTH_PASS)" \
-        -F "chart=@im-users-$(version).tgz" \
+        -F "chart=@im-user-$(version).tgz" \
         https://helm-charts.fitfit.dk/api/charts
 
 swagger-check-install:

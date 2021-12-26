@@ -2,9 +2,9 @@ package client
 
 import (
 	"fmt"
-	"github.com/dhis2-sre/im-users/internal/di"
-	"github.com/dhis2-sre/im-users/internal/server"
-	"github.com/dhis2-sre/im-users/pkg/model"
+	"github.com/dhis2-sre/im-user/internal/di"
+	"github.com/dhis2-sre/im-user/internal/server"
+	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/stretchr/testify/assert"
 	"net/http/httptest"
 	"net/url"

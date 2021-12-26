@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/dhis2-sre/im-users/internal/apperror"
+	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/gin-gonic/gin"
 )
 

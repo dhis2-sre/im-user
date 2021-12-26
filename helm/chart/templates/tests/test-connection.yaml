@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "im-users.fullname" . }}-test-connection"
+  name: "{{ include "im-user.fullname" . }}-test-connection"
   labels:
-    {{- include "im-users.labels" . | nindent 4 }}
+    {{- include "im-user.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "im-users.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "im-user.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

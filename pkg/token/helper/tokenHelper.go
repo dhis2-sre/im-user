@@ -4,7 +4,7 @@ import (
 	"crypto/rsa"
 	"errors"
 	"fmt"
-	"github.com/dhis2-sre/im-users/pkg/model"
+	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/gofrs/uuid"
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwk"

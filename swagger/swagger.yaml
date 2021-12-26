@@ -243,7 +243,7 @@ definitions:
         format: date-time
         type: string
     type: object
-    x-go-package: github.com/dhis2-sre/im-users/pkg/model
+    x-go-package: github.com/dhis2-sre/im-user/pkg/model
   DeletedAt:
     $ref: '#/definitions/NullTime'
   ExtKeyUsage:
@@ -294,7 +294,7 @@ definitions:
       clusterConfiguration:
         $ref: '#/definitions/ClusterConfiguration'
     type: object
-    x-go-package: github.com/dhis2-sre/im-users/pkg/model
+    x-go-package: github.com/dhis2-sre/im-user/pkg/model
   IP:
     description: |-
       Note that in this documentation, referring to an
@@ -509,7 +509,7 @@ definitions:
         type: string
         x-go-name: TokenType
     type: object
-    x-go-package: github.com/dhis2-sre/im-users/pkg/token
+    x-go-package: github.com/dhis2-sre/im-user/pkg/token
   URL:
     description: |-
       The general form represented is:
@@ -577,7 +577,7 @@ definitions:
         format: date-time
         type: string
     type: object
-    x-go-package: github.com/dhis2-sre/im-users/pkg/model
+    x-go-package: github.com/dhis2-sre/im-user/pkg/model
   Userinfo:
     description: |-
       The Userinfo type is an immutable encapsulation of username and
@@ -589,7 +589,7 @@ definitions:
 info:
   contact:
     email: info@dhis2.org
-    url: https://github.com/dhis2-sre/im-users
+    url: https://github.com/dhis2-sre/im-user
   description: User Service as part of the Instance Manager environment
   license:
     name: TODO
