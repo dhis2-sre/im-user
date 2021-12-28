@@ -50,18 +50,22 @@ func (m AuthenticationMiddleware) handleError(c *gin.Context, e error) {
 
 func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 	authorizationHeader := c.GetHeader("Authorization")
-	if strings.HasPrefix(authorizationHeader, "Bearer ") {
-		authorizationHeader = strings.TrimPrefix(authorizationHeader, "Bearer ")
-	}
+	authorizationHeader = strings.TrimPrefix(authorizationHeader, "Bearer ")
 
 	u, err := m.tokenService.ValidateAccessToken(authorizationHeader)
 	if err != nil {
 		unauthorized := apperror.NewUnauthorized("Provided token is invalid")
 		_ = c.Error(unauthorized)
+		c.Abort()
 		return
 	}
 
-	c.Set("user", u)
-
-	c.Next()
+	// Extra precaution to ensure that no errors has occurred, and it's safe to call c.Next()
+	if len(c.Errors.Errors()) > 0 {
+		c.Abort()
+		return
+	} else {
+		c.Set("user", u)
+		c.Next()
+	}
 }
