@@ -66,7 +66,7 @@ type FindUserByIDOK struct {
 }
 
 func (o *FindUserByIDOK) Error() string {
-	return fmt.Sprintf("[GET /findbyid/{id}][%d] findUserByIdOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdOK  %+v", 200, o.Payload)
 }
 func (o *FindUserByIDOK) GetPayload() *models.User {
 	return o.Payload
@@ -97,7 +97,7 @@ type FindUserByIDForbidden struct {
 }
 
 func (o *FindUserByIDForbidden) Error() string {
-	return fmt.Sprintf("[GET /findbyid/{id}][%d] findUserByIdForbidden ", 403)
+	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdForbidden ", 403)
 }
 
 func (o *FindUserByIDForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -118,7 +118,7 @@ type FindUserByIDNotFound struct {
 }
 
 func (o *FindUserByIDNotFound) Error() string {
-	return fmt.Sprintf("[GET /findbyid/{id}][%d] findUserByIdNotFound ", 404)
+	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdNotFound ", 404)
 }
 
 func (o *FindUserByIDNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -139,7 +139,7 @@ type FindUserByIDUnsupportedMediaType struct {
 }
 
 func (o *FindUserByIDUnsupportedMediaType) Error() string {
-	return fmt.Sprintf("[GET /findbyid/{id}][%d] findUserByIdUnsupportedMediaType ", 415)
+	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdUnsupportedMediaType ", 415)
 }
 
 func (o *FindUserByIDUnsupportedMediaType) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

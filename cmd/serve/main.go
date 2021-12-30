@@ -19,7 +19,7 @@
 //        type: basic
 //      oauth2:
 //        type: oauth2
-//        tokenUrl: /signin
+//        tokenUrl: /tokens
 //        refreshUrl: /refresh
 //        flow: password
 // swagger:meta

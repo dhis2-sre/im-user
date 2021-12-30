@@ -31,19 +31,20 @@ func GetEngine(environment di.Environment) *gin.Engine {
 
 	router.GET("/jwks", environment.TokenHandler.Jwks)
 
-	router.POST("/signup", environment.UserHandler.Signup)
+	router.POST("/users", environment.UserHandler.Signup)
 	router.POST("/refresh", environment.UserHandler.RefreshToken)
 
 	basicAuthenticationRouter := router.Group("")
 	basicAuthenticationRouter.Use(environment.AuthenticationMiddleware.BasicAuthentication)
-	basicAuthenticationRouter.POST("/signin", environment.UserHandler.SignIn)
+	basicAuthenticationRouter.POST("/tokens", environment.UserHandler.SignIn)
 
 	tokenAuthenticationRouter := router.Group("")
 	tokenAuthenticationRouter.Use(environment.AuthenticationMiddleware.TokenAuthentication)
 	tokenAuthenticationRouter.GET("/me", environment.UserHandler.Me)
-	tokenAuthenticationRouter.GET("/signout", environment.UserHandler.SignOut)
+	tokenAuthenticationRouter.DELETE("/users", environment.UserHandler.SignOut)
+	tokenAuthenticationRouter.GET("/users/:id", environment.UserHandler.FindById)
+
 	tokenAuthenticationRouter.GET("/groups-name-to-id/:name", environment.GroupHandler.NameToId)
-	tokenAuthenticationRouter.GET("/findbyid/:id", environment.UserHandler.FindById)
 	tokenAuthenticationRouter.GET("/groups/:id", environment.GroupHandler.FindById)
 
 	administratorRestrictedRouter := tokenAuthenticationRouter.Group("")
@@ -54,8 +55,8 @@ func GetEngine(environment di.Environment) *gin.Engine {
 
 	groupService := environment.GroupService
 	userService := environment.UserService
-	createGroups(c, groupService)
 	createAdminUser(c, userService, groupService)
+	createGroups(c, groupService)
 	createServiceUsers(c, userService, groupService)
 
 	return r
@@ -125,11 +126,7 @@ func createServiceUsers(config config.Config, userService user.Service, groupSer
 
 		u, err := userService.FindOrCreate(email, password)
 		if err != nil {
-			if strings.HasPrefix(err.Error(), "ERROR: duplicate key value violates unique constraint \"groups_name_key\" (SQLSTATE 23505)") {
-				log.Println("Group exists:", g.Name)
-			} else {
-				log.Fatalln(err)
-			}
+			log.Fatalln(err)
 		}
 
 		err = groupService.AddUser(g.ID, u.ID)

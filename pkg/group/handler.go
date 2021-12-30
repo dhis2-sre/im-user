@@ -33,19 +33,19 @@ type CreateGroupRequest struct {
 	Hostname string `json:"hostname" binding:"required"`
 }
 
-// Create godoc
-// @Summary Create group
-// @Description Posting name and hostname...
-// @Tags Administrative
-// @Accept json
-// @Produce json
-// @Success 201 {object} dto.Group
-// @Failure 400 {object} map[string]interface{}
-// @Failure 403 {object} map[string]interface{}
-// @Failure 415 {object} map[string]interface{}
-// @Router /groups [post]
-// @Param createGroupRequest body CreateGroupRequest true "Create group request"
-// @Security OAuth2Password
+// Create group
+// swagger:route POST /groups groupCreate
+//
+// Create group
+//
+// security:
+//   oauth2:
+//
+// responses:
+//   201: Group
+//   400: Error
+//   403: Error
+//   415: Error
 func (h Handler) Create(c *gin.Context) {
 	var request CreateGroupRequest
 
@@ -63,20 +63,19 @@ func (h Handler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, group)
 }
 
-// AddUserToGroup godoc
-// @Summary Add user to group
-// @Description Add user to group
-// @Tags Administrative
-// @Accept json
-// @Produce json
-// @Success 201 {string} string
-// @Failure 400 {object} map[string]interface{}
-// @Failure 403 {object} map[string]interface{}
-// @Failure 415 {object} map[string]interface{}
-// @Router /users/{userId}/groups/{groupId} [post]
-// @Param userId path string true "User id"
-// @Param groupId path string true "Group id"
-// @Security OAuth2Password
+// AddUserToGroup group
+// swagger:route POST /groups/{groupId}/users/{userId} groupAddUserToGroup
+//
+// Add user to group
+//
+// security:
+//   oauth2:
+//
+// responses:
+//   201: Group
+//   400: Error
+//   403: Error
+//   415: Error
 func (h Handler) AddUserToGroup(c *gin.Context) {
 	userIdString := c.Param("userId")
 	groupIdString := c.Param("groupId")
@@ -106,26 +105,25 @@ func (h Handler) AddUserToGroup(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-type createClusterConfigurationRequest struct {
+type CreateClusterConfigurationRequest struct {
 	KubernetesConfiguration *multipart.FileHeader `form:"kubernetesConfiguration" binding:"required"`
 }
 
-// AddClusterConfiguration godoc
-// @Summary Add cluster configuration to a group
-// @Description Add cluster configuration to a group...
-// @Tags Administrative
-// @Accept multipart/form-data
-// @Produce json
-// @Success 201 {object} map[string]interface{} //model.Group
-// @Failure 400 {object} map[string]interface{}
-// @Failure 403 {object} map[string]interface{}
-// @Failure 415 {object} map[string]interface{}
-// @Router /groups/{groupId}/cluster-configuration [post]
-// @Param groupId path string true "Group ID"
-// @Param kubernetesConfiguration formData file true "SOPS encrypted Kubernetes configuration file"
-// @Security OAuth2Password
+// AddClusterConfiguration group
+// swagger:route POST /groups/{groupId}/cluster-configuration groupAddClusterConfigurationToGroup
+//
+// Add cluster configuration to group
+//
+// security:
+//   oauth2:
+//
+// responses:
+//   201: Group
+//   400: Error
+//   403: Error
+//   415: Error
 func (h Handler) AddClusterConfiguration(c *gin.Context) {
-	var request createClusterConfigurationRequest
+	var request CreateClusterConfigurationRequest
 	if err := handler.DataBinder(c, &request); err != nil {
 		_ = c.Error(err)
 		return
@@ -177,20 +175,20 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 	return bytes, nil
 }
 
-// NameToId godoc
-// @Summary Group id by group name
-// @Description Return group id given group name
-// @Tags Restricted
-// @Accept json
-// @Produce json
-// @Success 200 {object} uint
-// @Failure 401 {object} string
-// @Failure 403 {object} string
-// @Failure 404 {object} string
-// @Failure 415 {object} string
-// @Router /groups-name-to-id/{name} [get]
-// @Param name path string true "Group name"
-// @Security OAuth2Password
+// NameToId group
+// swagger:route GET /groups-name-to-id/{name} groupNameToId
+//
+// Find group id by name
+//
+// Security:
+//  oauth2:
+//
+// responses:
+//   200:
+//   401: Error
+//   403: Error
+//   404: Error
+//   415: Error
 func (h Handler) NameToId(c *gin.Context) {
 	name := c.Param("name")
 
@@ -229,14 +227,17 @@ func (h Handler) NameToId(c *gin.Context) {
 	c.JSON(http.StatusOK, group.ID)
 }
 
-// FindById godoc
-// swagger:route GET /groups/{id} FindGroupById
+// FindById group
+// swagger:route GET /groups/{id} findGroupById
+//
 // Return a group by id
+//
 // responses:
 //   200: Group
 //   403: Error
 //   404: Error
 //   415: Error
+//
 // security:
 //   oauth2:
 func (h Handler) FindById(c *gin.Context) {

@@ -26,7 +26,9 @@ type Handler struct {
 
 // Jwks godoc
 // swagger:route GET /jwks Jwks
+//
 // Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
+//
 // responses:
 //   200: Jwks
 //   415: Error

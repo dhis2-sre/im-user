@@ -56,7 +56,7 @@ type SignOutOK struct {
 }
 
 func (o *SignOutOK) Error() string {
-	return fmt.Sprintf("[GET /signout][%d] signOutOK ", 200)
+	return fmt.Sprintf("[DELETE /users][%d] signOutOK ", 200)
 }
 
 func (o *SignOutOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -77,7 +77,7 @@ type SignOutUnauthorized struct {
 }
 
 func (o *SignOutUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /signout][%d] signOutUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /users][%d] signOutUnauthorized ", 401)
 }
 
 func (o *SignOutUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -98,7 +98,7 @@ type SignOutUnsupportedMediaType struct {
 }
 
 func (o *SignOutUnsupportedMediaType) Error() string {
-	return fmt.Sprintf("[GET /signout][%d] signOutUnsupportedMediaType ", 415)
+	return fmt.Sprintf("[DELETE /users][%d] signOutUnsupportedMediaType ", 415)
 }
 
 func (o *SignOutUnsupportedMediaType) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

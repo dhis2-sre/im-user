@@ -244,6 +244,16 @@ definitions:
         type: string
     type: object
     x-go-package: github.com/dhis2-sre/im-user/pkg/model
+  CreateGroupRequest:
+    properties:
+      hostname:
+        type: string
+        x-go-name: Hostname
+      name:
+        type: string
+        x-go-name: Name
+    type: object
+    x-go-package: github.com/dhis2-sre/im-user/pkg/group
   DeletedAt:
     $ref: '#/definitions/NullTime'
   ExtKeyUsage:
@@ -488,10 +498,27 @@ definitions:
     format: int64
     type: integer
     x-go-package: crypto/x509
+  RefreshTokenRequest:
+    properties:
+      refreshToken:
+        type: string
+        x-go-name: RefreshToken
+    type: object
+    x-go-package: github.com/dhis2-sre/im-user/pkg/user
   SignatureAlgorithm:
     format: int64
     type: integer
     x-go-package: crypto/x509
+  SignupRequest:
+    properties:
+      email:
+        type: string
+        x-go-name: Email
+      password:
+        type: string
+        x-go-name: Password
+    type: object
+    x-go-package: github.com/dhis2-sre/im-user/pkg/user
   Tokens:
     description: Tokens domain object defining user tokens
     properties:
@@ -598,22 +625,46 @@ info:
   title: Instance Manager User Service.
   version: 0.1.0
 paths:
-  /findbyid/{id}:
+  /groups:
+    post:
+      description: Create group
+      operationId: groupCreate
+      parameters:
+      - description: Refresh token request body parameter
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGroupRequest'
+      responses:
+        "201":
+          description: Group
+          schema:
+            $ref: '#/definitions/Group'
+        "400":
+          $ref: '#/responses/Error'
+        "403":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - oauth2: []
+  /groups-name-to-id/{name}:
     get:
-      description: Return a user by id
-      operationId: FindUserById
+      description: Find group id by name
+      operationId: groupNameToId
       parameters:
       - format: uint64
         in: path
-        name: id
+        name: name
         required: true
         type: integer
-        x-go-name: ID
+        x-go-name: Name
       responses:
         "200":
-          description: User
-          schema:
-            $ref: '#/definitions/User'
+          description: ""
+        "401":
+          $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
         "404":
@@ -622,10 +673,69 @@ paths:
           $ref: '#/responses/Error'
       security:
       - oauth2: []
+  /groups/{groupId}/cluster-configuration:
+    post:
+      description: Add cluster configuration to group
+      operationId: groupAddClusterConfigurationToGroup
+      parameters:
+      - format: uint64
+        in: path
+        name: groupId
+        required: true
+        type: integer
+        x-go-name: GroupID
+      - description: SOPS encrypted Kubernetes configuration file
+        in: formData
+        name: Body
+        required: true
+        type: file
+      responses:
+        "201":
+          description: Group
+          schema:
+            $ref: '#/definitions/Group'
+        "400":
+          $ref: '#/responses/Error'
+        "403":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - oauth2: []
+  /groups/{groupId}/users/{userId}:
+    post:
+      description: Add user to group
+      operationId: groupAddUserToGroup
+      parameters:
+      - format: uint64
+        in: path
+        name: groupId
+        required: true
+        type: integer
+        x-go-name: GroupID
+      - format: uint64
+        in: path
+        name: userId
+        required: true
+        type: integer
+        x-go-name: UserID
+      responses:
+        "201":
+          description: Group
+          schema:
+            $ref: '#/definitions/Group'
+        "400":
+          $ref: '#/responses/Error'
+        "403":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - oauth2: []
   /groups/{id}:
     get:
       description: Return a group by id
-      operationId: FindGroupById
+      operationId: findGroupById
       parameters:
       - format: uint64
         in: path
@@ -661,7 +771,7 @@ paths:
   /me:
     get:
       description: Return user details
-      operationId: Me
+      operationId: me
       responses:
         "200":
           description: User
@@ -675,10 +785,30 @@ paths:
           $ref: '#/responses/Error'
       security:
       - oauth2: []
-  /signin:
+  /refresh:
+    post:
+      description: Refresh user tokens
+      operationId: refreshToken
+      parameters:
+      - description: Refresh token request body parameter
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/RefreshTokenRequest'
+      responses:
+        "201":
+          description: User
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+  /tokens:
     post:
       description: Return user tokens
-      operationId: SignIn
+      operationId: signIn
       responses:
         "201":
           description: Tokens
@@ -691,15 +821,58 @@ paths:
         "415":
           $ref: '#/responses/Error'
       security:
-      - basic: []
-  /signout:
-    get:
+      - basicAuth: []
+  /users:
+    delete:
       description: Sign out user
-      operationId: SignOut
+      operationId: signOut
       responses:
         "200":
           description: ""
         "401":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - oauth2: []
+    post:
+      description: Signup user
+      operationId: signup
+      parameters:
+      - description: Signup request body parameter
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/SignupRequest'
+      responses:
+        "201":
+          description: User
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+  /users/{id}:
+    get:
+      description: Return a user by id
+      operationId: findUserById
+      parameters:
+      - format: uint64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
+      responses:
+        "200":
+          description: User
+          schema:
+            $ref: '#/definitions/User'
+        "403":
+          $ref: '#/responses/Error'
+        "404":
           $ref: '#/responses/Error'
         "415":
           $ref: '#/responses/Error'
@@ -717,6 +890,6 @@ securityDefinitions:
     type: basic
   oauth2:
     flow: password
-    tokenUrl: /signin
+    tokenUrl: /tokens
     type: oauth2
 swagger: "2.0"

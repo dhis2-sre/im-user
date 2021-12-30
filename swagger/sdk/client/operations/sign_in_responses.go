@@ -66,7 +66,7 @@ type SignInCreated struct {
 }
 
 func (o *SignInCreated) Error() string {
-	return fmt.Sprintf("[POST /signin][%d] signInCreated  %+v", 201, o.Payload)
+	return fmt.Sprintf("[POST /tokens][%d] signInCreated  %+v", 201, o.Payload)
 }
 func (o *SignInCreated) GetPayload() *models.Tokens {
 	return o.Payload
@@ -97,7 +97,7 @@ type SignInForbidden struct {
 }
 
 func (o *SignInForbidden) Error() string {
-	return fmt.Sprintf("[POST /signin][%d] signInForbidden ", 403)
+	return fmt.Sprintf("[POST /tokens][%d] signInForbidden ", 403)
 }
 
 func (o *SignInForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -118,7 +118,7 @@ type SignInNotFound struct {
 }
 
 func (o *SignInNotFound) Error() string {
-	return fmt.Sprintf("[POST /signin][%d] signInNotFound ", 404)
+	return fmt.Sprintf("[POST /tokens][%d] signInNotFound ", 404)
 }
 
 func (o *SignInNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -139,7 +139,7 @@ type SignInUnsupportedMediaType struct {
 }
 
 func (o *SignInUnsupportedMediaType) Error() string {
-	return fmt.Sprintf("[POST /signin][%d] signInUnsupportedMediaType ", 415)
+	return fmt.Sprintf("[POST /tokens][%d] signInUnsupportedMediaType ", 415)
 }
 
 func (o *SignInUnsupportedMediaType) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

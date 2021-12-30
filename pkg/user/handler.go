@@ -29,16 +29,15 @@ type SignupRequest struct {
 	Password string `json:"password" binding:"required,gte=16,lte=128"`
 }
 
-// Signup godoc
-// @Summary User sign in
-// @Description Posting username (email) and password... And user is returned
-// @Tags Public
-// @Accept json
-// @Produce json
-// @Success 201 {object} dto.User
-// @Failure 400 {object} map[string]interface{}
-// @Router /signup [post]
-// @Param signupRequest body SignupRequest true "Email and Password json object"
+// Signup user
+// swagger:route POST /users signup
+//
+// Signup user
+//
+// responses:
+//   201: User
+//   400: Error
+//   415: Error
 func (h *Handler) Signup(c *gin.Context) {
 	var request SignupRequest
 
@@ -56,16 +55,19 @@ func (h *Handler) Signup(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
-// SignIn godoc
-// swagger:route POST /signin SignIn
+// SignIn user
+// swagger:route POST /tokens signIn
+//
 // Return user tokens
+//
+// security:
+//   basicAuth:
+//
 // responses:
 //   201: Tokens
 //   403: Error
 //   404: Error
 //   415: Error
-// security:
-//   basic:
 func (h *Handler) SignIn(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
@@ -86,16 +88,15 @@ type RefreshTokenRequest struct {
 	RefreshToken string `json:"refreshToken" binding:"required"`
 }
 
-// RefreshToken godoc
-// @Summary Refresh tokens
-// @Description Post a refresh token and this endpoint will return a fresh set of tokens
-// @Tags Public
-// @Accept json
-// @Produce json
-// @Success 201 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Router /refresh [post]
-// @Param refreshTokenRequest body RefreshTokenRequest true "Refresh token request"
+// RefreshToken user
+// swagger:route POST /refresh refreshToken
+//
+// Refresh user tokens
+//
+// responses:
+//   201: User
+//   400: Error
+//   415: Error
 func (h Handler) RefreshToken(c *gin.Context) {
 	var request RefreshTokenRequest
 
@@ -125,16 +126,19 @@ func (h Handler) RefreshToken(c *gin.Context) {
 	c.JSON(http.StatusCreated, tokens)
 }
 
-// Me godoc
-// swagger:route GET /me Me
+// Me user
+// swagger:route GET /me me
+//
 // Return user details
+//
+// security:
+//   oauth2:
+//
 // responses:
 //   200: User
 //   403: Error
 //   404: Error
 //   415: Error
-// security:
-//   oauth2:
 func (h Handler) Me(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
@@ -151,8 +155,8 @@ func (h Handler) Me(c *gin.Context) {
 	c.JSON(http.StatusOK, userWithGroups)
 }
 
-// SignOut godoc
-// swagger:route GET /signout SignOut
+// SignOut user
+// swagger:route DELETE /users signOut
 //
 // Sign out user
 //
@@ -175,19 +179,22 @@ func (h Handler) SignOut(c *gin.Context) {
 		return
 	}
 
-	c.String(http.StatusOK, "Signed out successfully")
+	c.Status(http.StatusOK)
 }
 
-// FindById godoc
-// swagger:route GET /findbyid/{id} FindUserById
+// FindById user
+// swagger:route GET /users/{id} findUserById
+//
 // Return a user by id
+//
+// security:
+//   oauth2:
+//
 // responses:
 //   200: User
 //   403: Error
 //   404: Error
 //   415: Error
-// security:
-//   oauth2:
 func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
