@@ -16,7 +16,8 @@ import (
 )
 
 func GetEngine(environment di.Environment) *gin.Engine {
-	basePath := environment.Config.BasePath
+	c := environment.Config
+	basePath := c.BasePath
 
 	r := gin.Default()
 	r.Use(cors.Default())
@@ -51,12 +52,11 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	administratorRestrictedRouter.POST("/groups/:groupId/users/:userId", environment.GroupHandler.AddUserToGroup)
 	administratorRestrictedRouter.POST("/groups/:groupId/cluster-configuration", environment.GroupHandler.AddClusterConfiguration)
 
-	config := environment.Config
 	groupService := environment.GroupService
 	userService := environment.UserService
-	createGroups(config, groupService)
-	createAdminUser(config, userService, groupService)
-	createServiceUsers(config, userService, groupService)
+	createGroups(c, groupService)
+	createAdminUser(c, userService, groupService)
+	createServiceUsers(c, userService, groupService)
 
 	return r
 }
