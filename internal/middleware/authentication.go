@@ -24,7 +24,6 @@ type AuthenticationMiddleware struct {
 // BasicAuthentication Inspiration: https://www.pandurang-waghulde.com/custom-http-basic-authentication-using-gin/
 func (m AuthenticationMiddleware) BasicAuthentication(c *gin.Context) {
 	username, password, ok := c.Request.BasicAuth()
-
 	if !ok {
 		unauthorized := apperror.NewUnauthorized("Invalid Authorization header format")
 		m.handleError(c, unauthorized)
