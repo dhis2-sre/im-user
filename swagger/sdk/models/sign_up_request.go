@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SignupRequest signup request
+// SignUpRequest sign up request
 //
-// swagger:model SignupRequest
-type SignupRequest struct {
+// swagger:model SignUpRequest
+type SignUpRequest struct {
 
 	// email
 	Email string `json:"email,omitempty"`
@@ -24,18 +24,18 @@ type SignupRequest struct {
 	Password string `json:"password,omitempty"`
 }
 
-// Validate validates this signup request
-func (m *SignupRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this sign up request
+func (m *SignUpRequest) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this signup request based on context it is used
-func (m *SignupRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this sign up request based on context it is used
+func (m *SignUpRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *SignupRequest) MarshalBinary() ([]byte, error) {
+func (m *SignUpRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -43,8 +43,8 @@ func (m *SignupRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *SignupRequest) UnmarshalBinary(b []byte) error {
-	var res SignupRequest
+func (m *SignUpRequest) UnmarshalBinary(b []byte) error {
+	var res SignUpRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

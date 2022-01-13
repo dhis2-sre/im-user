@@ -24,7 +24,7 @@ type Handler struct {
 	tokenService token.Service
 }
 
-type SignupRequest struct {
+type SignUpRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,gte=16,lte=128"`
 }
@@ -39,7 +39,7 @@ type SignupRequest struct {
 //   400: Error
 //   415: Error
 func (h *Handler) SignUp(c *gin.Context) {
-	var request SignupRequest
+	var request SignUpRequest
 
 	if err := handler.DataBinder(c, &request); err != nil {
 		_ = c.Error(err)

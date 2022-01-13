@@ -505,11 +505,7 @@ definitions:
         x-go-name: RefreshToken
     type: object
     x-go-package: github.com/dhis2-sre/im-user/pkg/user
-  SignatureAlgorithm:
-    format: int64
-    type: integer
-    x-go-package: crypto/x509
-  SignupRequest:
+  SignUpRequest:
     properties:
       email:
         type: string
@@ -519,6 +515,10 @@ definitions:
         x-go-name: Password
     type: object
     x-go-package: github.com/dhis2-sre/im-user/pkg/user
+  SignatureAlgorithm:
+    format: int64
+    type: integer
+    x-go-package: crypto/x509
   Tokens:
     description: Tokens domain object defining user tokens
     properties:
@@ -838,6 +838,13 @@ paths:
     post:
       description: SignUp user
       operationId: signUp
+      parameters:
+      - description: SignUp request body parameter
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/SignUpRequest'
       responses:
         "201":
           description: User
