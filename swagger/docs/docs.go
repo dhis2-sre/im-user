@@ -26,12 +26,12 @@ type Jwks struct {
 	Key jwk.Key
 }
 
-// swagger:parameters signup
+// swagger:parameters signUp
 type _ struct {
-	// Signup request body parameter
+	// SignUp request body parameter
 	// in: body
 	// required: true
-	Body user.SignupRequest
+	Body user.SignUpRequest
 }
 
 // swagger:parameters refreshToken
