@@ -29,16 +29,16 @@ type SignupRequest struct {
 	Password string `json:"password" binding:"required,gte=16,lte=128"`
 }
 
-// Signup user
-// swagger:route POST /users signup
+// SignUp user
+// swagger:route POST /users signUp
 //
-// Signup user
+// SignUp user
 //
 // responses:
 //   201: User
 //   400: Error
 //   415: Error
-func (h *Handler) Signup(c *gin.Context) {
+func (h *Handler) SignUp(c *gin.Context) {
 	var request SignupRequest
 
 	if err := handler.DataBinder(c, &request); err != nil {
@@ -46,7 +46,7 @@ func (h *Handler) Signup(c *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.Signup(request.Email, request.Password)
+	user, err := h.userService.SignUp(request.Email, request.Password)
 	if err != nil {
 		_ = c.Error(err)
 		return

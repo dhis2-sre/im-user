@@ -31,7 +31,7 @@ func GetEngine(environment di.Environment) *gin.Engine {
 
 	router.GET("/jwks", environment.TokenHandler.Jwks)
 
-	router.POST("/users", environment.UserHandler.Signup)
+	router.POST("/users", environment.UserHandler.SignUp)
 	router.POST("/refresh", environment.UserHandler.RefreshToken)
 
 	basicAuthenticationRouter := router.Group("")

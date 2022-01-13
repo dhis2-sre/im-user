@@ -11,7 +11,7 @@ import (
 )
 
 type Service interface {
-	Signup(email string, password string) (*model.User, error)
+	SignUp(email string, password string) (*model.User, error)
 	SignIn(email string, password string) (*model.User, error)
 	FindById(id uint) (*model.User, error)
 	FindByEmail(email string) (*model.User, error)
@@ -26,7 +26,7 @@ type service struct {
 	repository Repository
 }
 
-func (s service) Signup(email string, password string) (*model.User, error) {
+func (s service) SignUp(email string, password string) (*model.User, error) {
 	hashedPassword, err := hashPassword(password)
 
 	if err != nil {
