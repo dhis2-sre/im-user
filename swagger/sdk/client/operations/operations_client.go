@@ -52,7 +52,7 @@ type ClientService interface {
 
 	SignOut(params *SignOutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignOutOK, error)
 
-	Signup(params *SignupParams, opts ...ClientOption) (*SignupCreated, error)
+	SignUp(params *SignUpParams, opts ...ClientOption) (*SignUpCreated, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -485,22 +485,22 @@ func (a *Client) SignOut(params *SignOutParams, authInfo runtime.ClientAuthInfoW
 }
 
 /*
-  Signup Signup user
+  SignUp SignUp user
 */
-func (a *Client) Signup(params *SignupParams, opts ...ClientOption) (*SignupCreated, error) {
+func (a *Client) SignUp(params *SignUpParams, opts ...ClientOption) (*SignUpCreated, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewSignupParams()
+		params = NewSignUpParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "signup",
+		ID:                 "signUp",
 		Method:             "POST",
 		PathPattern:        "/users",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json", "multipart/form-data"},
 		Schemes:            []string{"http"},
 		Params:             params,
-		Reader:             &SignupReader{formats: a.formats},
+		Reader:             &SignUpReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
 	}
@@ -512,13 +512,13 @@ func (a *Client) Signup(params *SignupParams, opts ...ClientOption) (*SignupCrea
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*SignupCreated)
+	success, ok := result.(*SignUpCreated)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for signup: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	msg := fmt.Sprintf("unexpected success response for signUp: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

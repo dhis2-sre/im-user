@@ -836,15 +836,8 @@ paths:
       security:
       - oauth2: []
     post:
-      description: Signup user
-      operationId: signup
-      parameters:
-      - description: Signup request body parameter
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/SignupRequest'
+      description: SignUp user
+      operationId: signUp
       responses:
         "201":
           description: User
