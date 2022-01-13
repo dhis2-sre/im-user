@@ -20,6 +20,7 @@ func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
 	u, err := handler.GetUserFromContext(c)
 	if err != nil {
 		_ = c.Error(err)
+		c.Abort()
 		return
 	}
 
@@ -29,8 +30,15 @@ func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
 		log.Printf("User tried to access administrator restricted endpoint: %+v\n", u)
 		unauthorized := apperror.NewUnauthorized("Administrator access denied")
 		_ = c.Error(unauthorized)
+		c.Abort()
 		return
 	}
 
-	c.Next()
+	// Extra precaution to ensure that no errors has occurred, and it's safe to call c.Next()
+	if len(c.Errors.Errors()) > 0 {
+		c.Abort()
+		return
+	} else {
+		c.Next()
+	}
 }
