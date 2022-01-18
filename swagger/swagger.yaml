@@ -505,6 +505,13 @@ definitions:
         x-go-name: RefreshToken
     type: object
     x-go-package: github.com/dhis2-sre/im-user/pkg/user
+  Response:
+    properties:
+      status:
+        type: string
+        x-go-name: Status
+    type: object
+    x-go-package: github.com/dhis2-sre/im-user/pkg/health
   SignUpRequest:
     properties:
       email:
@@ -756,6 +763,13 @@ paths:
           $ref: '#/responses/Error'
       security:
       - oauth2: []
+  /health:
+    get:
+      description: Service health status
+      operationId: health
+      responses:
+        "200":
+          $ref: '#/responses/Response'
   /jwks:
     get:
       description: Return a JWKS containing the public key which can be used to validate
@@ -885,6 +899,10 @@ responses:
     description: ""
     schema:
       $ref: '#/definitions/Key'
+  Response:
+    description: ""
+    schema:
+      $ref: '#/definitions/Response'
 securityDefinitions:
   basicAuth:
     type: basic
