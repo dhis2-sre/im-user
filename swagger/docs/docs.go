@@ -3,7 +3,6 @@ package docs
 import (
 	"github.com/dhis2-sre/im-user/pkg/group"
 	"github.com/dhis2-sre/im-user/pkg/user"
-	"github.com/lestrrat-go/jwx/jwk"
 )
 
 // swagger:parameters findUserById findGroupById
@@ -18,12 +17,6 @@ type Error struct {
 	// The error message
 	//in: body
 	Message string
-}
-
-// swagger:response
-type Jwks struct {
-	//in: body
-	Key jwk.Key
 }
 
 // swagger:parameters signUp
