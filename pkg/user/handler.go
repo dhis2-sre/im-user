@@ -94,7 +94,7 @@ type RefreshTokenRequest struct {
 // Refresh user tokens
 //
 // responses:
-//   201: User
+//   201: Tokens
 //   400: Error
 //   415: Error
 func (h Handler) RefreshToken(c *gin.Context) {

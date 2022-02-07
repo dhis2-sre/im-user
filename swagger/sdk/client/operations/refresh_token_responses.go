@@ -53,22 +53,22 @@ func NewRefreshTokenCreated() *RefreshTokenCreated {
 
 /* RefreshTokenCreated describes a response with status code 201, with default header values.
 
-User
+Tokens
 */
 type RefreshTokenCreated struct {
-	Payload *models.User
+	Payload *models.Tokens
 }
 
 func (o *RefreshTokenCreated) Error() string {
 	return fmt.Sprintf("[POST /refresh][%d] refreshTokenCreated  %+v", 201, o.Payload)
 }
-func (o *RefreshTokenCreated) GetPayload() *models.User {
+func (o *RefreshTokenCreated) GetPayload() *models.Tokens {
 	return o.Payload
 }
 
 func (o *RefreshTokenCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.User)
+	o.Payload = new(models.Tokens)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
