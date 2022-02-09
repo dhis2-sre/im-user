@@ -1,3 +1,10 @@
+# Requirements
+
+The following applications are needed by the scripts
+
+* [httpie](https://github.com/httpie/httpie)
+* [jq](https://github.com/stedolan/jq)
+
 # Getting started
 
 This service can be started locally or in a cluster.
@@ -20,8 +27,8 @@ at [http://localhost:8080/docs](http://localhost:8080/docs).
 For the sake of simplicity the user scripts relies on a few environment variables. So in order to interact with the
 application the environment needs to be configured.
 
-An example of such configuration can be found in `.env.example`. It's recommended that you make a copy and populate it with your own
-credentials.
+An example of such configuration can be found in `.env.example`. It's recommended that you make a copy and populate it
+with your own credentials.
 
 ```sh
 cp .env.example .env
