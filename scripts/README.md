@@ -1,3 +1,9 @@
+# Prerequisites
+
+It's highly recommended deploying this application on a Kubernetes cluster.
+
+A small project which can assists with the creation of a cluster can be found [here](https://github.com/dhis2-sre/im-cluster).
+
 # Requirements
 
 The following applications are needed by the scripts
