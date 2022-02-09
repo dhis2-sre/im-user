@@ -86,6 +86,37 @@ The details of the current user can be retrieved by running the `me.sh` script.
 ./me.sh
 ```
 
+## Groups
+
+For the user to actually be able to do anything it needs to be part of a group. Only administrative users can create and
+add other users to groups.
+
+The credentials for the initially created administrator can be found in `helm/data/secrets/*/values.yaml`.
+
+### Create group
+
+A group can be created using the `createGroup.sh` script.
+
+Run the below command to create a group called "test-group" with hostname "im.c.127.0.0.1.nip.io"
+
+```sh
+./createGroup.sh test-group im.c.127.0.0.1.nip.io
+```
+
+### Cluster configuration
+
+WIP
+
+### Add user to group
+
+A user can be added to a given group using the `addUserToGroup.sh` script.
+
+Run the below command to add the user with id "123" to the group called "test-group"
+
+```sh
+./addUserToGroup.sh 123 test-group
+```
+
 # General
 
 All scripts rely on the environment variable $ACCESS_TOKEN being exported.
