@@ -4,7 +4,7 @@ build:
   artifacts:
     - image: dhis2/im-users
 deploy:
-  statusCheckDeadlineSeconds: 120
+  statusCheckDeadlineSeconds: 180
   helm:
     releases:
       - name: im-user-{{ .ENVIRONMENT }}
