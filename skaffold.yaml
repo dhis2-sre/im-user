@@ -24,8 +24,8 @@ deploy:
         namespace: instance-manager-{{ .ENVIRONMENT }}
         createNamespace: true
         remoteChart: postgresql
-        version: 11.0.4
         repo: https://charts.bitnami.com/bitnami
+        version: 11.0.4
         useHelmSecrets: true
         valuesFiles:
           - helm/data/secrets/{{ .ENVIRONMENT }}/postgresql.yaml
@@ -34,8 +34,8 @@ deploy:
         namespace: instance-manager-{{ .ENVIRONMENT }}
         createNamespace: true
         remoteChart: redis
-        version: 16.4.0
         repo: https://charts.bitnami.com/bitnami
+        version: 16.4.0
         setValues:
           architecture: standalone
           auth:
