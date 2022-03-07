@@ -7,19 +7,6 @@ deploy:
   statusCheckDeadlineSeconds: 240
   helm:
     releases:
-      - name: im-user-{{ .ENVIRONMENT }}
-        namespace: instance-manager-{{ .ENVIRONMENT }}
-        createNamespace: true
-        chartPath: helm/chart
-        artifactOverrides:
-          image: dhis2/im-users
-        imageStrategy:
-          helm: { }
-        useHelmSecrets: true
-        valuesFiles:
-          - helm/data/secrets/{{ .ENVIRONMENT }}/values.yaml
-          - helm/data/values/{{ .ENVIRONMENT }}/values.yaml
-
       - name: im-user-postgresql-{{ .ENVIRONMENT }}
         namespace: instance-manager-{{ .ENVIRONMENT }}
         createNamespace: true
@@ -40,3 +27,16 @@ deploy:
           architecture: standalone
           auth:
             enabled: false
+
+      - name: im-user-{{ .ENVIRONMENT }}
+        namespace: instance-manager-{{ .ENVIRONMENT }}
+        createNamespace: true
+        chartPath: helm/chart
+        artifactOverrides:
+          image: dhis2/im-users
+        imageStrategy:
+          helm: { }
+        useHelmSecrets: true
+        valuesFiles:
+          - helm/data/secrets/{{ .ENVIRONMENT }}/values.yaml
+          - helm/data/values/{{ .ENVIRONMENT }}/values.yaml
