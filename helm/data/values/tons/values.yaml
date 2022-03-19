@@ -1,0 +1,22 @@
+image:
+  pullPolicy: Always
+
+groups:
+  names: whoami,play
+  hostnames: whoami.im.tons.test.c.dhis2.org,play.im.tons.test.c.dhis2.org
+
+database:
+  host: im-user-postgresql-tons.instance-manager-tons.svc
+  port: "5432"
+
+redis:
+  host: im-user-redis-tons-master.instance-manager-tons.svc
+  port: "6379"
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 96Mi
+  requests:
+    cpu: 100m
+    memory: 32Mi
