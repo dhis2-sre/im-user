@@ -197,7 +197,7 @@ func (h Handler) SignOut(c *gin.Context) {
 //   415: Error
 func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
 		badRequest := apperror.NewBadRequest("Error parsing id")
 		_ = c.Error(badRequest)
