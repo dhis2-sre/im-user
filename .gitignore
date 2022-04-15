@@ -1,3 +1,5 @@
 .idea
 im-user
 .env
+# decrypted secret files
+*.dec
