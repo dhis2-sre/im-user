@@ -13,4 +13,4 @@ WORKDIR /app
 COPY --from=build /app/im-user .
 COPY --from=build /src/swagger/swagger.yaml ./swagger/
 USER guest
-CMD ["/app/im-user"]
+ENTRYPOINT ["/app/im-user"]
