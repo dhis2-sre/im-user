@@ -9,6 +9,9 @@ keys:
 binary:
 	go build -o im-user -ldflags "-s -w" ./cmd/serve
 
+check:
+	pre-commit run --all-files --show-diff-on-failure
+
 smoke-test:
 	docker compose up -d database redis
 	sleep 3
@@ -16,6 +19,11 @@ smoke-test:
 
 docker-image:
 	IMAGE_TAG=$(tag) docker compose build prod
+
+init:
+	direnv allow
+	pip install pre-commit
+	pre-commit install --install-hooks --overwrite
 
 push-docker-image:
 	IMAGE_TAG=$(tag) docker compose push prod
