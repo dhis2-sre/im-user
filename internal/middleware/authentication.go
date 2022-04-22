@@ -1,12 +1,13 @@
 package middleware
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/pkg/token"
 	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strings"
 )
 
 func ProvideAuthentication(userService user.Service, tokenService token.Service) AuthenticationMiddleware {

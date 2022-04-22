@@ -1,10 +1,11 @@
 package group
 
 import (
+	"strconv"
+
 	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/user"
-	"strconv"
 )
 
 type Service interface {

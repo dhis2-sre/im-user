@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+
 	"github.com/dhis2-sre/im-user/swagger/sdk/client/operations"
 	"github.com/dhis2-sre/im-user/swagger/sdk/models"
 	httptransport "github.com/go-openapi/runtime/client"

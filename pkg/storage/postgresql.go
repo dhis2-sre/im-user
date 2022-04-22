@@ -2,6 +2,7 @@ package storage
 
 import (
 	"fmt"
+
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"gorm.io/driver/postgres"

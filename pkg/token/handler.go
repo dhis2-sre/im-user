@@ -2,11 +2,12 @@ package token
 
 import (
 	"crypto/rsa"
+	"log"
+	"net/http"
+
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/token/helper"
 	"github.com/gin-gonic/gin"
-	"log"
-	"net/http"
 )
 
 func ProvideHandler(config config.Config) Handler {

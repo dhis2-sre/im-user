@@ -4,14 +4,15 @@ import (
 	"crypto/rsa"
 	"errors"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/gofrs/uuid"
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwk"
 	"github.com/lestrrat-go/jwx/jwt"
 	"gorm.io/gorm"
-	"log"
-	"time"
 )
 
 func CreateJwks(publicKey *rsa.PublicKey) (jwk.Key, error) {

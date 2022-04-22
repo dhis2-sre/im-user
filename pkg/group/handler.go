@@ -2,15 +2,16 @@ package group
 
 import (
 	"fmt"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
+	"strconv"
+
 	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-gonic/gin"
-	"io/ioutil"
-	"mime/multipart"
-	"net/http"
-	"strconv"
 )
 
 func ProvideHandler(

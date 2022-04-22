@@ -1,8 +1,11 @@
-//+build wireinject
+//go:build wireinject
+// +build wireinject
 
 package di
 
 import (
+	"log"
+
 	"github.com/dhis2-sre/im-user/internal/middleware"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/group"
@@ -11,7 +14,6 @@ import (
 	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/google/wire"
 	"gorm.io/gorm"
-	"log"
 )
 
 type Environment struct {
