@@ -22,10 +22,10 @@ import (
 // swagger:model Key
 type Key struct {
 
-	// algorithm
+	// Algorithm returns `alg` of a JWK
 	Algorithm string `json:"Algorithm,omitempty"`
 
-	// key ID
+	// KeyID returns `kid` of a JWK
 	KeyID string `json:"KeyID,omitempty"`
 
 	// key ops
@@ -34,7 +34,7 @@ type Key struct {
 	// key type
 	KeyType KeyType `json:"KeyType,omitempty"`
 
-	// key usage
+	// KeyUsage returns `use` of a JWK
 	KeyUsage string `json:"KeyUsage,omitempty"`
 
 	// PrivateParams returns the non-standard elements in the source structure
@@ -42,16 +42,16 @@ type Key struct {
 	// Use `AsMap()` to get a copy of the entire header, or use `Iterate()` instead
 	PrivateParams map[string]interface{} `json:"PrivateParams,omitempty"`
 
-	// x509 cert chain
+	// X509CertChain returns `x5c` of a JWK
 	X509CertChain []*Certificate `json:"X509CertChain"`
 
-	// x509 cert thumbprint
+	// X509CertThumbprint returns `x5t` of a JWK
 	X509CertThumbprint string `json:"X509CertThumbprint,omitempty"`
 
-	// x509 cert thumbprint s256
+	// X509CertThumbprintS256 returns `x5t#S256` of a JWK
 	X509CertThumbprintS256 string `json:"X509CertThumbprintS256,omitempty"`
 
-	// x509 URL
+	// X509URL returns `x58` of a JWK
 	X509URL string `json:"X509URL,omitempty"`
 }
 

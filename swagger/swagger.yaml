@@ -361,14 +361,17 @@ definitions:
       to perform more specific tasks with each key
     properties:
       Algorithm:
+        description: Algorithm returns `alg` of a JWK
         type: string
       KeyID:
+        description: KeyID returns `kid` of a JWK
         type: string
       KeyOps:
         $ref: '#/definitions/KeyOperationList'
       KeyType:
         $ref: '#/definitions/KeyType'
       KeyUsage:
+        description: KeyUsage returns `use` of a JWK
         type: string
       PrivateParams:
         additionalProperties:
@@ -379,14 +382,18 @@ definitions:
           Use `AsMap()` to get a copy of the entire header, or use `Iterate()` instead
         type: object
       X509CertChain:
+        description: X509CertChain returns `x5c` of a JWK
         items:
           $ref: '#/definitions/Certificate'
         type: array
       X509CertThumbprint:
+        description: X509CertThumbprint returns `x5t` of a JWK
         type: string
       X509CertThumbprintS256:
+        description: X509CertThumbprintS256 returns `x5t#S256` of a JWK
         type: string
       X509URL:
+        description: X509URL returns `x58` of a JWK
         type: string
     type: object
     x-go-package: github.com/lestrrat-go/jwx/jwk
