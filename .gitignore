@@ -3,3 +3,4 @@ im-user
 .env
 # decrypted secret files
 *.dec
+*.pem
