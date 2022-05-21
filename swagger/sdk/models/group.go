@@ -30,9 +30,6 @@ type Group struct {
 	// hostname
 	Hostname string `json:"Hostname,omitempty"`
 
-	// ID
-	ID uint64 `json:"ID,omitempty"`
-
 	// name
 	Name string `json:"Name,omitempty"`
 

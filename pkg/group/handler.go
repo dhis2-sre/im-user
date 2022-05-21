@@ -64,7 +64,7 @@ func (h Handler) Create(c *gin.Context) {
 }
 
 // AddUserToGroup group
-// swagger:route POST /groups/{groupId}/users/{userId} groupAddUserToGroup
+// swagger:route POST /groups/{groupName}/users/{userId} addUserToGroup
 //
 // Add user to group
 //
@@ -78,7 +78,7 @@ func (h Handler) Create(c *gin.Context) {
 //   415: Error
 func (h Handler) AddUserToGroup(c *gin.Context) {
 	userIdString := c.Param("userId")
-	groupIdString := c.Param("groupId")
+	groupName := c.Param("groupName")
 
 	userId, err := strconv.ParseUint(userIdString, 10, 64)
 	if err != nil {
@@ -88,15 +88,7 @@ func (h Handler) AddUserToGroup(c *gin.Context) {
 		return
 	}
 
-	groupId, err := strconv.ParseUint(groupIdString, 10, 64)
-	if err != nil {
-		message := fmt.Sprintf("Failed to parse groupId: %s", err)
-		badRequest := apperror.NewBadRequest(message)
-		_ = c.Error(badRequest)
-		return
-	}
-
-	err = h.groupService.AddUser(uint(groupId), uint(userId))
+	err = h.groupService.AddUser(groupName, uint(userId))
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -110,7 +102,7 @@ type CreateClusterConfigurationRequest struct {
 }
 
 // AddClusterConfiguration group
-// swagger:route POST /groups/{groupId}/cluster-configuration groupAddClusterConfigurationToGroup
+// swagger:route POST /groups/{name}/cluster-configuration addClusterConfigurationToGroup
 //
 // Add cluster configuration to group
 //
@@ -129,10 +121,9 @@ func (h Handler) AddClusterConfiguration(c *gin.Context) {
 		return
 	}
 
-	groupIdString := c.Param("groupId")
-	groupId, err := strconv.ParseUint(groupIdString, 10, 64)
-	if err != nil {
-		badRequest := apperror.NewBadRequest(err.Error())
+	groupName := c.Param("name")
+	if groupName == "" {
+		badRequest := apperror.NewBadRequest("group name missing")
 		_ = c.Error(badRequest)
 		return
 	}
@@ -144,7 +135,7 @@ func (h Handler) AddClusterConfiguration(c *gin.Context) {
 	}
 
 	clusterConfiguration := &model.ClusterConfiguration{
-		GroupID:                 uint(groupId),
+		GroupName:               groupName,
 		KubernetesConfiguration: kubernetesConfiguration,
 	}
 
@@ -175,62 +166,10 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 	return bytes, nil
 }
 
-// NameToId group
-// swagger:route GET /groups-name-to-id/{name} groupNameToId
+// Find group
+// swagger:route GET /groups/{name} findGroupByName
 //
-// Find group id by name
-//
-// Security:
-//  oauth2:
-//
-// responses:
-//   200:
-//   401: Error
-//   403: Error
-//   404: Error
-//   415: Error
-func (h Handler) NameToId(c *gin.Context) {
-	name := c.Param("name")
-
-	/*
-		u, err := handler.GetUserFromContext(c)
-		if err != nil {
-			_ = c.Error(err)
-			return
-		}
-
-		userWithGroups, err := h.userService.FindById(u.ID)
-		if err != nil {
-			notFound := apperror.NewNotFound("user", strconv.Itoa(int(u.ID)))
-			_ = c.Error(notFound)
-			return
-		}
-	*/
-	group, err := h.groupService.FindByName(name)
-	if err != nil {
-		notFound := apperror.NewNotFound("group", name)
-		_ = c.Error(notFound)
-		return
-	}
-
-	// No authorization checks will be done here, if someone knows the name of the group they can have the id too
-	/*
-		instance := &model.Instance{GroupID: group.ID}
-		canRead := g.instanceAuthorizer.CanRead(userWithGroups, instance)
-
-		if !canRead {
-			unauthorized := apperrors.NewUnauthorized("Read access denied")
-			handler.HandleError(c, unauthorized)
-			return
-		}
-	*/
-	c.JSON(http.StatusOK, group.ID)
-}
-
-// FindById group
-// swagger:route GET /groups/{id} findGroupById
-//
-// Return a group by id
+// Return a group by name
 //
 // responses:
 //   200: Group
@@ -240,16 +179,10 @@ func (h Handler) NameToId(c *gin.Context) {
 //
 // security:
 //   oauth2:
-func (h Handler) FindById(c *gin.Context) {
-	idParam := c.Param("id")
-	id, err := strconv.ParseUint(idParam, 10, 64)
-	if err != nil {
-		badRequest := apperror.NewBadRequest("Error parsing id")
-		_ = c.Error(badRequest)
-		return
-	}
+func (h Handler) Find(c *gin.Context) {
+	name := c.Param("name")
 
-	group, err := h.groupService.FindById(uint(id))
+	group, err := h.groupService.Find(name)
 	if err != nil {
 		_ = c.Error(err)
 		return

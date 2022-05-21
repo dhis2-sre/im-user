@@ -7,11 +7,10 @@ import (
 
 type Repository interface {
 	Create(group *model.Group) error
-	FindById(id uint) (*model.Group, error)
 	AddUser(group *model.Group, user *model.User) error
 	AddClusterConfiguration(configuration *model.ClusterConfiguration) error
-	GetClusterConfiguration(groupId uint) (*model.ClusterConfiguration, error)
-	FindByName(name string) (*model.Group, error)
+	GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
+	Find(name string) (*model.Group, error)
 	FindOrCreate(group *model.Group) (*model.Group, error)
 }
 
@@ -23,9 +22,12 @@ type repository struct {
 	db *gorm.DB
 }
 
-func (r repository) FindByName(name string) (*model.Group, error) {
+func (r repository) Find(name string) (*model.Group, error) {
 	var group *model.Group
-	err := r.db.Where("name = ?", name).First(&group).Error
+	err := r.db.
+		//		Preload("ClusterConfiguration").
+		Where("name = ?", name).
+		First(&group).Error
 	return group, err
 }
 
@@ -39,14 +41,6 @@ func (r repository) FindOrCreate(group *model.Group) (*model.Group, error) {
 	return g, err
 }
 
-func (r repository) FindById(id uint) (*model.Group, error) {
-	var group *model.Group
-	err := r.db.
-		Preload("ClusterConfiguration").
-		First(&group, id).Error
-	return group, err
-}
-
 func (r repository) AddUser(group *model.Group, user *model.User) error {
 	return r.db.Model(&group).Association("Users").Append([]*model.User{user})
 }
@@ -55,10 +49,10 @@ func (r repository) AddClusterConfiguration(configuration *model.ClusterConfigur
 	return r.db.Create(&configuration).Error
 }
 
-func (r repository) GetClusterConfiguration(groupId uint) (*model.ClusterConfiguration, error) {
+func (r repository) GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error) {
 	var configuration *model.ClusterConfiguration
 	err := r.db.
-		Where("group_id = ?", groupId).
+		Where("group_name = ?", groupName).
 		First(&configuration).Error
 	return configuration, err
 }

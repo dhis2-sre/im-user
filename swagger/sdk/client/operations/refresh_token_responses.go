@@ -53,7 +53,7 @@ func NewRefreshTokenCreated() *RefreshTokenCreated {
 
 /* RefreshTokenCreated describes a response with status code 201, with default header values.
 
-Tokens
+RefreshTokenCreated refresh token created
 */
 type RefreshTokenCreated struct {
 	Payload *models.Tokens

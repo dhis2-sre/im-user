@@ -15,20 +15,6 @@ type User struct {
 	AdminGroups []Group `gorm:"many2many:user_groups;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
-func (u *User) IsMemberOfById(groupId uint) bool {
-	groups := u.Groups
-
-	sort.Slice(groups, func(i, j int) bool {
-		return groups[i].ID <= groups[j].ID
-	})
-
-	index := sort.Search(len(groups), func(i int) bool {
-		return groups[i].ID >= groupId
-	})
-
-	return index < len(groups) && groups[index].ID == groupId
-}
-
 func (u *User) IsMemberOf(groupName string) bool {
 	return u.contains(groupName, u.Groups)
 }

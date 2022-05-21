@@ -32,7 +32,7 @@ func TestFindUserById(t *testing.T) {
 	assert.Equal(t, environment.Config.AdminUser.Email, u.Email)
 }
 
-func TestFindGroupById(t *testing.T) {
+func TestFindGroupByName(t *testing.T) {
 	environment := di.GetEnvironment()
 	r := server.GetEngine(environment)
 	ts := httptest.NewServer(r)
@@ -46,10 +46,9 @@ func TestFindGroupById(t *testing.T) {
 	tokens, err := c.SignIn(environment.Config.AdminUser.Email, environment.Config.AdminUser.Password)
 	assert.NoError(t, err)
 
-	g, err := c.FindGroupById(tokens.AccessToken, 1)
+	g, err := c.FindGroupByName(tokens.AccessToken, model.AdministratorGroupName)
 	assert.NoError(t, err)
 
-	assert.Equal(t, uint64(1), g.ID)
 	assert.Equal(t, model.AdministratorGroupName, g.Name)
 }
 

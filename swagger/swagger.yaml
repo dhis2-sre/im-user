@@ -228,9 +228,8 @@ definitions:
         type: string
       DeletedAt:
         $ref: '#/definitions/DeletedAt'
-      GroupID:
-        format: uint64
-        type: integer
+      GroupName:
+        type: string
       ID:
         format: uint64
         type: integer
@@ -244,16 +243,6 @@ definitions:
         type: string
     type: object
     x-go-package: github.com/dhis2-sre/im-user/pkg/model
-  CreateGroupRequest:
-    properties:
-      hostname:
-        type: string
-        x-go-name: Hostname
-      name:
-        type: string
-        x-go-name: Name
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/group
   DeletedAt:
     $ref: '#/definitions/NullTime'
   ExtKeyUsage:
@@ -289,9 +278,6 @@ definitions:
         $ref: '#/definitions/DeletedAt'
       Hostname:
         type: string
-      ID:
-        format: uint64
-        type: integer
       Name:
         type: string
       UpdatedAt:
@@ -361,14 +347,17 @@ definitions:
       to perform more specific tasks with each key
     properties:
       Algorithm:
+        description: Algorithm returns `alg` of a JWK
         type: string
       KeyID:
+        description: KeyID returns `kid` of a JWK
         type: string
       KeyOps:
         $ref: '#/definitions/KeyOperationList'
       KeyType:
         $ref: '#/definitions/KeyType'
       KeyUsage:
+        description: KeyUsage returns `use` of a JWK
         type: string
       PrivateParams:
         additionalProperties:
@@ -379,14 +368,18 @@ definitions:
           Use `AsMap()` to get a copy of the entire header, or use `Iterate()` instead
         type: object
       X509CertChain:
+        description: X509CertChain returns `x5c` of a JWK
         items:
           $ref: '#/definitions/Certificate'
         type: array
       X509CertThumbprint:
+        description: X509CertThumbprint returns `x5t` of a JWK
         type: string
       X509CertThumbprintS256:
+        description: X509CertThumbprintS256 returns `x5t#S256` of a JWK
         type: string
       X509URL:
+        description: X509URL returns `x58` of a JWK
         type: string
     type: object
     x-go-package: github.com/lestrrat-go/jwx/jwk
@@ -498,13 +491,6 @@ definitions:
     format: int64
     type: integer
     x-go-package: crypto/x509
-  RefreshTokenRequest:
-    properties:
-      refreshToken:
-        type: string
-        x-go-name: RefreshToken
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/user
   Response:
     properties:
       status:
@@ -512,16 +498,6 @@ definitions:
         x-go-name: Status
     type: object
     x-go-package: github.com/dhis2-sre/im-user/pkg/health
-  SignUpRequest:
-    properties:
-      email:
-        type: string
-        x-go-name: Email
-      password:
-        type: string
-        x-go-name: Password
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/user
   SignatureAlgorithm:
     format: int64
     type: integer
@@ -636,13 +612,6 @@ paths:
     post:
       description: Create group
       operationId: groupCreate
-      parameters:
-      - description: Refresh token request body parameter
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateGroupRequest'
       responses:
         "201":
           description: Group
@@ -656,70 +625,16 @@ paths:
           $ref: '#/responses/Error'
       security:
       - oauth2: []
-  /groups-name-to-id/{name}:
-    get:
-      description: Find group id by name
-      operationId: groupNameToId
-      parameters:
-      - format: uint64
-        in: path
-        name: name
-        required: true
-        type: integer
-        x-go-name: Name
-      responses:
-        "200":
-          description: ""
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "404":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /groups/{groupId}/cluster-configuration:
-    post:
-      description: Add cluster configuration to group
-      operationId: groupAddClusterConfigurationToGroup
-      parameters:
-      - format: uint64
-        in: path
-        name: groupId
-        required: true
-        type: integer
-        x-go-name: GroupID
-      - description: SOPS encrypted Kubernetes configuration file
-        in: formData
-        name: Body
-        required: true
-        type: file
-      responses:
-        "201":
-          description: Group
-          schema:
-            $ref: '#/definitions/Group'
-        "400":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /groups/{groupId}/users/{userId}:
+  /groups/{groupName}/users/{userId}:
     post:
       description: Add user to group
-      operationId: groupAddUserToGroup
+      operationId: addUserToGroup
       parameters:
-      - format: uint64
-        in: path
-        name: groupId
+      - in: path
+        name: groupName
         required: true
-        type: integer
-        x-go-name: GroupID
+        type: string
+        x-go-name: GroupName
       - format: uint64
         in: path
         name: userId
@@ -739,17 +654,16 @@ paths:
           $ref: '#/responses/Error'
       security:
       - oauth2: []
-  /groups/{id}:
+  /groups/{name}:
     get:
-      description: Return a group by id
-      operationId: findGroupById
+      description: Return a group by name
+      operationId: findGroupByName
       parameters:
-      - format: uint64
-        in: path
-        name: id
+      - in: path
+        name: name
         required: true
-        type: integer
-        x-go-name: ID
+        type: string
+        x-go-name: Name
       responses:
         "200":
           description: Group
@@ -758,6 +672,29 @@ paths:
         "403":
           $ref: '#/responses/Error'
         "404":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - oauth2: []
+  /groups/{name}/cluster-configuration:
+    post:
+      description: Add cluster configuration to group
+      operationId: addClusterConfigurationToGroup
+      parameters:
+      - in: path
+        name: name
+        required: true
+        type: string
+        x-go-name: Name
+      responses:
+        "201":
+          description: Group
+          schema:
+            $ref: '#/definitions/Group'
+        "400":
+          $ref: '#/responses/Error'
+        "403":
           $ref: '#/responses/Error'
         "415":
           $ref: '#/responses/Error'
@@ -803,18 +740,9 @@ paths:
     post:
       description: Refresh user tokens
       operationId: refreshToken
-      parameters:
-      - description: Refresh token request body parameter
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/RefreshTokenRequest'
       responses:
         "201":
-          description: Tokens
-          schema:
-            $ref: '#/definitions/Tokens'
+          $ref: '#/responses/Tokens'
         "400":
           $ref: '#/responses/Error'
         "415":
@@ -825,9 +753,7 @@ paths:
       operationId: signIn
       responses:
         "201":
-          description: Tokens
-          schema:
-            $ref: '#/definitions/Tokens'
+          $ref: '#/responses/Tokens'
         "403":
           $ref: '#/responses/Error'
         "404":
@@ -852,13 +778,6 @@ paths:
     post:
       description: SignUp user
       operationId: signUp
-      parameters:
-      - description: SignUp request body parameter
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/SignUpRequest'
       responses:
         "201":
           description: User
@@ -903,6 +822,10 @@ responses:
     description: ""
     schema:
       $ref: '#/definitions/Response'
+  Tokens:
+    description: ""
+    schema:
+      $ref: '#/definitions/Tokens'
 securityDefinitions:
   basicAuth:
     type: basic
