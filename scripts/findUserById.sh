@@ -2,6 +2,6 @@
 
 set -euo pipefail
 
-USER_ID="$1"
+USER_ID=$1
 
 $HTTP "$INSTANCE_HOST/users/$USER_ID" "Authorization: Bearer $ACCESS_TOKEN"

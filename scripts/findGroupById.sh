@@ -2,6 +2,6 @@
 
 set -euo pipefail
 
-GROUP_ID="$1"
+GROUP_NAME=$1
 
-$HTTP "$INSTANCE_HOST/groups/$GROUP_ID" "Authorization: Bearer $ACCESS_TOKEN"
+$HTTP "$INSTANCE_HOST/groups/$GROUP_NAME" "Authorization: Bearer $ACCESS_TOKEN"

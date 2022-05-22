@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-GROUP_NAME="$1"
-GROUP_HOSTNAME="$2"
+GROUP_NAME=$1
+GROUP_HOSTNAME=$2
 
 echo "{
   \"name\": \"$GROUP_NAME\",
