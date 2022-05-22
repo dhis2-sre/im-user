@@ -2,10 +2,11 @@ package token
 
 import (
 	"fmt"
-	"github.com/dhis2-sre/im-user/internal/apperror"
-	"github.com/go-redis/redis"
 	"log"
 	"time"
+
+	"github.com/dhis2-sre/im-user/internal/apperror"
+	"github.com/go-redis/redis"
 )
 
 type Repository interface {

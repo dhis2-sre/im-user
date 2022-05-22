@@ -2,13 +2,14 @@ package client
 
 import (
 	"fmt"
+	"net/http/httptest"
+	"net/url"
+	"testing"
+
 	"github.com/dhis2-sre/im-user/internal/di"
 	"github.com/dhis2-sre/im-user/internal/server"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/stretchr/testify/assert"
-	"net/http/httptest"
-	"net/url"
-	"testing"
 )
 
 func TestFindUserById(t *testing.T) {

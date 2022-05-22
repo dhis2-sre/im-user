@@ -1,11 +1,12 @@
 package middleware
 
 import (
+	"log"
+
 	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 func ProvideAuthorization(userService user.Service) AuthorizationMiddleware {

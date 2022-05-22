@@ -1,0 +1,22 @@
+image:
+  pullPolicy: Always
+
+groups:
+  names: whoami,play
+  hostnames: whoami.im.ivo.test.c.dhis2.org,play.im.ivo.test.c.dhis2.org
+
+database:
+  host: im-user-postgresql-ivo.instance-manager-ivo.svc
+  port: "5432"
+
+redis:
+  host: im-user-redis-ivo-master.instance-manager-ivo.svc
+  port: "6379"
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 96Mi
+  requests:
+    cpu: 100m
+    memory: 32Mi

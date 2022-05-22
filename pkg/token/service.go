@@ -3,12 +3,13 @@ package token
 import (
 	"crypto/rsa"
 	"fmt"
+	"log"
+
 	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/token/helper"
 	"github.com/gofrs/uuid"
-	"log"
 )
 
 type Service interface {

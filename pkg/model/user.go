@@ -1,8 +1,9 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"sort"
+
+	"gorm.io/gorm"
 )
 
 // User domain object defining a user

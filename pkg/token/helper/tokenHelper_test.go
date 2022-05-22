@@ -1,12 +1,13 @@
 package helper
 
 import (
-	"github.com/dhis2-sre/im-user/pkg/config"
-	"github.com/dhis2-sre/im-user/pkg/model"
-	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/dhis2-sre/im-user/pkg/config"
+	"github.com/dhis2-sre/im-user/pkg/model"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGenerateAccessToken(t *testing.T) {

@@ -1,6 +1,9 @@
 package server
 
 import (
+	"log"
+	"strings"
+
 	"github.com/dhis2-sre/im-user/internal/di"
 	"github.com/dhis2-sre/im-user/internal/middleware"
 	"github.com/dhis2-sre/im-user/pkg/config"
@@ -11,8 +14,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	redocMiddleware "github.com/go-openapi/runtime/middleware"
-	"log"
-	"strings"
 )
 
 func GetEngine(environment di.Environment) *gin.Engine {

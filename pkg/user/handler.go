@@ -1,13 +1,14 @@
 package user
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/token"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 func ProvideHandler(config config.Config, userService Service, tokenService token.Service) Handler {
