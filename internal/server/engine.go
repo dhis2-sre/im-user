@@ -45,14 +45,13 @@ func GetEngine(environment di.Environment) *gin.Engine {
 	tokenAuthenticationRouter.DELETE("/users", environment.UserHandler.SignOut)
 	tokenAuthenticationRouter.GET("/users/:id", environment.UserHandler.FindById)
 
-	tokenAuthenticationRouter.GET("/groups-name-to-id/:name", environment.GroupHandler.NameToId)
-	tokenAuthenticationRouter.GET("/groups/:id", environment.GroupHandler.FindById)
+	tokenAuthenticationRouter.GET("/groups/:name", environment.GroupHandler.Find)
 
 	administratorRestrictedRouter := tokenAuthenticationRouter.Group("")
 	administratorRestrictedRouter.Use(environment.AuthorizationMiddleware.RequireAdministrator)
 	administratorRestrictedRouter.POST("/groups", environment.GroupHandler.Create)
-	administratorRestrictedRouter.POST("/groups/:groupId/users/:userId", environment.GroupHandler.AddUserToGroup)
-	administratorRestrictedRouter.POST("/groups/:groupId/cluster-configuration", environment.GroupHandler.AddClusterConfiguration)
+	administratorRestrictedRouter.POST("/groups/:groupName/users/:userId", environment.GroupHandler.AddUserToGroup)
+	administratorRestrictedRouter.POST("/groups/:groupName/cluster-configuration", environment.GroupHandler.AddClusterConfiguration)
 
 	groupService := environment.GroupService
 	userService := environment.UserService
@@ -108,7 +107,7 @@ func createAdminUser(config config.Config, userService user.Service, groupServic
 		log.Fatalf("Failed to create admin group: %s", err)
 	}
 
-	err = groupService.AddUser(g.ID, u.ID)
+	err = groupService.AddUser(g.Name, u.ID)
 	if err != nil {
 		log.Fatalf("Failed to add user to admin group: %s", err)
 	}
@@ -130,7 +129,7 @@ func createServiceUsers(config config.Config, userService user.Service, groupSer
 			log.Fatalln(err)
 		}
 
-		err = groupService.AddUser(g.ID, u.ID)
+		err = groupService.AddUser(g.Name, u.ID)
 		if err != nil {
 			log.Fatalf("Failed to add user to admin group: %s", err)
 		}

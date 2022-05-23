@@ -14,8 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
-	"github.com/dhis2-sre/im-user/swagger/sdk/models"
 )
 
 // NewRefreshTokenParams creates a new RefreshTokenParams object,
@@ -60,13 +58,6 @@ func NewRefreshTokenParamsWithHTTPClient(client *http.Client) *RefreshTokenParam
    Typically these are written to a http.Request.
 */
 type RefreshTokenParams struct {
-
-	/* Body.
-
-	   Refresh token request body parameter
-	*/
-	Body *models.RefreshTokenRequest
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -120,17 +111,6 @@ func (o *RefreshTokenParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithBody adds the body to the refresh token params
-func (o *RefreshTokenParams) WithBody(body *models.RefreshTokenRequest) *RefreshTokenParams {
-	o.SetBody(body)
-	return o
-}
-
-// SetBody adds the body to the refresh token params
-func (o *RefreshTokenParams) SetBody(body *models.RefreshTokenRequest) {
-	o.Body = body
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *RefreshTokenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -138,11 +118,6 @@ func (o *RefreshTokenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		return err
 	}
 	var res []error
-	if o.Body != nil {
-		if err := r.SetBodyParam(o.Body); err != nil {
-			return err
-		}
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

@@ -11,7 +11,7 @@ import (
 
 type Client interface {
 	FindUserById(token string, id uint) (*models.User, error)
-	FindGroupById(token string, id uint) (*models.Group, error)
+	FindGroupByName(token string, name string) (*models.Group, error)
 	SignIn(username, password string) (*models.Tokens, error)
 	Me(token string) (*models.User, error)
 }
@@ -36,10 +36,10 @@ func (c cli) FindUserById(token string, id uint) (*models.User, error) {
 	return userByID.GetPayload(), nil
 }
 
-func (c cli) FindGroupById(token string, id uint) (*models.Group, error) {
-	params := &operations.FindGroupByIDParams{ID: uint64(id), Context: context.Background()}
+func (c cli) FindGroupByName(token string, name string) (*models.Group, error) {
+	params := &operations.FindGroupByNameParams{Name: name, Context: context.Background()}
 	clientAuthInfoWriter := httptransport.BearerToken(token)
-	group, err := c.clientService.FindGroupByID(params, clientAuthInfoWriter)
+	group, err := c.clientService.FindGroupByName(params, clientAuthInfoWriter)
 	if err != nil {
 		return nil, err
 	}

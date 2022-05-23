@@ -1,8 +1,6 @@
 package token
 
-import (
-	"github.com/lestrrat-go/jwx/jwk"
-)
+import "github.com/lestrrat-go/jwx/jwk"
 
 // swagger:response Error
 type _ struct {

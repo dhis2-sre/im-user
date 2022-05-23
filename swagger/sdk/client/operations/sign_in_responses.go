@@ -59,7 +59,7 @@ func NewSignInCreated() *SignInCreated {
 
 /* SignInCreated describes a response with status code 201, with default header values.
 
-Tokens
+SignInCreated sign in created
 */
 type SignInCreated struct {
 	Payload *models.Tokens

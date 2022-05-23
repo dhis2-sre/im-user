@@ -14,8 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
-	"github.com/dhis2-sre/im-user/swagger/sdk/models"
 )
 
 // NewSignUpParams creates a new SignUpParams object,
@@ -60,13 +58,6 @@ func NewSignUpParamsWithHTTPClient(client *http.Client) *SignUpParams {
    Typically these are written to a http.Request.
 */
 type SignUpParams struct {
-
-	/* Body.
-
-	   SignUp request body parameter
-	*/
-	Body *models.SignUpRequest
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -120,17 +111,6 @@ func (o *SignUpParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithBody adds the body to the sign up params
-func (o *SignUpParams) WithBody(body *models.SignUpRequest) *SignUpParams {
-	o.SetBody(body)
-	return o
-}
-
-// SetBody adds the body to the sign up params
-func (o *SignUpParams) SetBody(body *models.SignUpRequest) {
-	o.Body = body
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *SignUpParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -138,11 +118,6 @@ func (o *SignUpParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regist
 		return err
 	}
 	var res []error
-	if o.Body != nil {
-		if err := r.SetBodyParam(o.Body); err != nil {
-			return err
-		}
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

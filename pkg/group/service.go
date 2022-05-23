@@ -10,11 +10,10 @@ import (
 
 type Service interface {
 	Create(name string, hostname string) (*model.Group, error)
-	FindById(id uint) (*model.Group, error)
-	AddUser(groupId uint, userId uint) error
+	AddUser(groupName string, userId uint) error
 	AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error
-	GetClusterConfiguration(groupId uint) (*model.ClusterConfiguration, error)
-	FindByName(name string) (*model.Group, error)
+	GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
+	Find(name string) (*model.Group, error)
 	FindOrCreate(name string, hostname string) (*model.Group, error)
 }
 
@@ -30,8 +29,8 @@ type service struct {
 	userRepository  user.Repository
 }
 
-func (s *service) FindByName(name string) (*model.Group, error) {
-	return s.groupRepository.FindByName(name)
+func (s *service) Find(name string) (*model.Group, error) {
+	return s.groupRepository.Find(name)
 }
 
 func (s *service) Create(name string, hostname string) (*model.Group, error) {
@@ -64,14 +63,10 @@ func (s *service) FindOrCreate(name string, hostname string) (*model.Group, erro
 	return g, err
 }
 
-func (s *service) FindById(id uint) (*model.Group, error) {
-	return s.groupRepository.FindById(id)
-}
-
-func (s *service) AddUser(groupId uint, userId uint) error {
-	group, err := s.FindById(groupId)
+func (s *service) AddUser(groupName string, userId uint) error {
+	group, err := s.Find(groupName)
 	if err != nil {
-		return apperror.NewNotFound("group", strconv.Itoa(int(groupId)))
+		return apperror.NewNotFound("group", groupName)
 	}
 
 	u, err := s.userRepository.FindById(userId)
@@ -86,6 +81,6 @@ func (s *service) AddClusterConfiguration(clusterConfiguration *model.ClusterCon
 	return s.groupRepository.AddClusterConfiguration(clusterConfiguration)
 }
 
-func (s *service) GetClusterConfiguration(groupId uint) (*model.ClusterConfiguration, error) {
-	return s.groupRepository.GetClusterConfiguration(groupId)
+func (s *service) GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error) {
+	return s.groupRepository.GetClusterConfiguration(groupName)
 }
