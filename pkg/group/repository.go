@@ -25,7 +25,7 @@ type repository struct {
 func (r repository) Find(name string) (*model.Group, error) {
 	var group *model.Group
 	err := r.db.
-		//		Preload("ClusterConfiguration").
+		Preload("ClusterConfiguration").
 		Where("name = ?", name).
 		First(&group).Error
 	return group, err
