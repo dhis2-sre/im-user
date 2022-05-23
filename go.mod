@@ -13,7 +13,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/google/wire v0.5.0
-	github.com/lestrrat-go/jwx v1.2.24
+	github.com/lestrrat-go/jwx v1.2.25
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f
 	gorm.io/driver/postgres v1.3.5
