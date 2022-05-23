@@ -11,6 +11,18 @@ The following applications are needed by the scripts
 * [httpie](https://github.com/httpie/httpie)
 * [jq](https://github.com/stedolan/jq)
 
+# Quick Start
+
+```sh
+./signUp.sh
+export ACCESS_TOKEN="" && eval $(./signIn.sh) && echo $ACCESS_TOKEN
+USER_ID=$(./me.sh | jq -r '.ID')
+export ACCESS_TOKEN="" && eval $(./signInAdmin.sh) && echo $ACCESS_TOKEN
+./addUserToGroup.sh $USER_ID whoami
+export ACCESS_TOKEN="" && eval $(./signIn.sh) && echo $ACCESS_TOKEN
+./me.sh
+```
+
 # Getting started
 
 This service can be started locally or in a cluster.
