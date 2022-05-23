@@ -167,7 +167,7 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 	return bytes, nil
 }
 
-// Find group
+// Find group by name
 // swagger:route GET /groups/{name} findGroupByName
 //
 // Return a group by name
