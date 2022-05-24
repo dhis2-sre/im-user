@@ -1,8 +1,6 @@
 package model
 
 import (
-	"sort"
-
 	"gorm.io/gorm"
 )
 
@@ -25,15 +23,12 @@ func (u *User) IsAdminOf(groupName string) bool {
 }
 
 func (u *User) contains(groupName string, groups []Group) bool {
-	sort.Slice(groups, func(i, j int) bool {
-		return groups[i].Name <= groups[j].Name
-	})
-
-	index := sort.Search(len(groups), func(i int) bool {
-		return groups[i].Name >= groupName
-	})
-
-	return index < len(groups) && groups[index].Name == groupName
+	for _, group := range groups {
+		if groupName == group.Name {
+			return true
+		}
+	}
+	return false
 }
 
 func (u *User) IsAdministrator() bool {
