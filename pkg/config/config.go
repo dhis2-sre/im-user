@@ -166,7 +166,7 @@ type group struct {
 func requireEnv(key string) string {
 	value, exists := os.LookupEnv(key)
 	if !exists {
-		log.Fatalf("Can't find environment varialbe: %s\n", key)
+		log.Fatalf("Can't find environment variable: %s\n", key)
 	}
 	return value
 }
@@ -174,7 +174,7 @@ func requireEnv(key string) string {
 func requireEnvAsArray(key string) []string {
 	value, exists := os.LookupEnv(key)
 	if !exists {
-		log.Fatalf("Can't find environment varialbe: %s\n", key)
+		log.Fatalf("Can't find environment variable: %s\n", key)
 	}
 	return strings.Split(value, ",")
 }
