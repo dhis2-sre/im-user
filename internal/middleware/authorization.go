@@ -1,9 +1,11 @@
 package middleware
 
 import (
+	"errors"
 	"log"
+	"net/http"
 
-	"github.com/dhis2-sre/im-user/internal/apperror"
+	"github.com/dhis2-sre/im-user/internal/errdef"
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-gonic/gin"
@@ -20,18 +22,22 @@ type AuthorizationMiddleware struct {
 func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
 	u, err := handler.GetUserFromContext(c)
 	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
 		return
 	}
 
-	userWithGroups, _ := m.userService.FindById(u.ID)
+	userWithGroups, err := m.userService.FindById(u.ID)
+	if err != nil {
+		if errdef.IsNotFound(err) {
+			c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
+		} else {
+			c.Error(err) // nolint:errcheck
+		}
+		return
+	}
 
 	if !userWithGroups.IsAdministrator() {
 		log.Printf("User tried to access administrator restricted endpoint: %+v\n", u)
-		unauthorized := apperror.NewUnauthorized("Administrator access denied")
-		_ = c.Error(unauthorized)
-		c.Abort()
+		c.AbortWithError(http.StatusUnauthorized, errors.New("administrator access denied")) // nolint:errcheck
 		return
 	}
 

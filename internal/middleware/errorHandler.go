@@ -1,25 +1,24 @@
 package middleware
 
 import (
-	"github.com/dhis2-sre/im-user/internal/apperror"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 func ErrorHandler() gin.HandlerFunc {
-	return errorHandlerT(gin.ErrorTypeAny)
-}
-
-func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
-		detectedErrors := c.Errors.ByType(errType)
 
-		if len(detectedErrors) > 0 {
-			// TODO: Handle more than one error
-			err := detectedErrors[0].Err
-			c.String(apperror.ToHttpStatusCode(err), err.Error())
-			c.Abort()
+		err := c.Errors.Last()
+		if err == nil {
 			return
 		}
+		if c.Writer.Status() != http.StatusOK {
+			c.Writer.WriteString(err.Error()) // nolint:errcheck
+			return
+		}
+
+		c.String(http.StatusInternalServerError, err.Error())
 	}
 }

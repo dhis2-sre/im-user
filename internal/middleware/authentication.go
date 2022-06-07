@@ -1,10 +1,10 @@
 package middleware
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
-	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/pkg/token"
 	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-gonic/gin"
@@ -26,15 +26,13 @@ type AuthenticationMiddleware struct {
 func (m AuthenticationMiddleware) BasicAuthentication(c *gin.Context) {
 	username, password, ok := c.Request.BasicAuth()
 	if !ok {
-		unauthorized := apperror.NewUnauthorized("Invalid Authorization header format")
-		m.handleError(c, unauthorized)
+		m.handleError(c, errors.New("invalid Authorization header format"))
 		return
 	}
 
 	u, err := m.userService.SignIn(username, password)
 	if err != nil {
-		unauthorized := apperror.NewUnauthorized("Invalid credentials")
-		m.handleError(c, unauthorized)
+		m.handleError(c, errors.New("invalid credentials"))
 		return
 	}
 
@@ -54,9 +52,7 @@ func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 
 	u, err := m.tokenService.ValidateAccessToken(authorizationHeader)
 	if err != nil {
-		unauthorized := apperror.NewUnauthorized("Provided token is invalid")
-		_ = c.Error(unauthorized)
-		c.Abort()
+		c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
 		return
 	}
 

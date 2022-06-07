@@ -13,6 +13,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/google/wire v0.5.0
+	github.com/jackc/pgconn v1.12.1
 	github.com/lestrrat-go/jwx v1.2.25
 	github.com/stretchr/testify v1.7.2
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f
@@ -38,7 +39,6 @@ require (
 	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.12.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgproto3/v2 v2.3.0 // indirect

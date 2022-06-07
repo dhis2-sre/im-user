@@ -1,13 +1,14 @@
 package group
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"strconv"
 
-	"github.com/dhis2-sre/im-user/internal/apperror"
+	"github.com/dhis2-sre/im-user/internal/errdef"
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/user"
@@ -52,13 +53,12 @@ func (h Handler) Create(c *gin.Context) {
 	var request CreateGroupRequest
 
 	if err := handler.DataBinder(c, &request); err != nil {
-		_ = c.Error(err)
 		return
 	}
 
 	group, err := h.groupService.Create(request.Name, request.Hostname)
 	if err != nil {
-		_ = c.Error(err)
+		c.Error(err) // nolint:errcheck
 		return
 	}
 
@@ -85,15 +85,17 @@ func (h Handler) AddUserToGroup(c *gin.Context) {
 
 	userId, err := strconv.ParseUint(userIdString, 10, 64)
 	if err != nil {
-		message := fmt.Sprintf("Failed to parse userId: %s", err)
-		badRequest := apperror.NewBadRequest(message)
-		_ = c.Error(badRequest)
+		c.AbortWithError(http.StatusBadRequest, fmt.Errorf("failed to parse userId: %s", err)) // nolint:errcheck
 		return
 	}
 
 	err = h.groupService.AddUser(groupName, uint(userId))
 	if err != nil {
-		_ = c.Error(err)
+		if errdef.IsNotFound(err) {
+			c.AbortWithError(http.StatusNotFound, err) // nolint:errcheck
+		} else {
+			c.Error(err) // nolint:errcheck
+		}
 		return
 	}
 
@@ -121,20 +123,18 @@ type CreateClusterConfigurationRequest struct {
 func (h Handler) AddClusterConfiguration(c *gin.Context) {
 	var request CreateClusterConfigurationRequest
 	if err := handler.DataBinder(c, &request); err != nil {
-		_ = c.Error(err)
 		return
 	}
 
 	groupName := c.Param("name")
 	if groupName == "" {
-		badRequest := apperror.NewBadRequest("group name missing")
-		_ = c.Error(badRequest)
+		c.AbortWithError(http.StatusBadRequest, errors.New("group name is missing")) // nolint:errcheck
 		return
 	}
 
 	kubernetesConfiguration, err := h.getBytes(request.KubernetesConfiguration)
 	if err != nil {
-		_ = c.Error(err)
+		c.Error(err) // nolint:errcheck
 		return
 	}
 
@@ -145,7 +145,7 @@ func (h Handler) AddClusterConfiguration(c *gin.Context) {
 
 	err = h.groupService.AddClusterConfiguration(clusterConfiguration)
 	if err != nil {
-		_ = c.Error(err)
+		c.Error(err) // nolint:errcheck
 		return
 	}
 
@@ -189,7 +189,7 @@ func (h Handler) Find(c *gin.Context) {
 
 	group, err := h.groupService.Find(name)
 	if err != nil {
-		_ = c.Error(err)
+		c.Error(err) // nolint:errcheck
 		return
 	}
 

@@ -1,7 +1,12 @@
 package user
 
 import (
+	"errors"
+	"fmt"
+
+	"github.com/dhis2-sre/im-user/internal/errdef"
 	"github.com/dhis2-sre/im-user/pkg/model"
+	"github.com/jackc/pgconn"
 	"gorm.io/gorm"
 )
 
@@ -20,8 +25,24 @@ type userRepository struct {
 	db *gorm.DB
 }
 
+type duplicateError struct{ error }
+
+func (e duplicateError) Duplicate() {}
+
+func (e duplicateError) Unwrap() error {
+	return e.error
+}
+
 func (r userRepository) Create(u *model.User) error {
-	return r.db.Create(&u).Error
+	err := r.db.Create(&u).Error
+
+	var perr *pgconn.PgError
+	const uniqueKeyConstraint = "23505"
+	if errors.As(err, &perr) && perr.Code == uniqueKeyConstraint {
+		return duplicateError{error: fmt.Errorf("user already exists: %v", err)}
+	}
+
+	return err
 }
 
 func (r userRepository) FindByEmail(email string) (*model.User, error) {
@@ -41,5 +62,12 @@ func (r userRepository) FindById(id uint) (*model.User, error) {
 	err := r.db.
 		Preload("Groups").
 		First(&u, id).Error
-	return u, err
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return u, errdef.NotFound(fmt.Errorf("failed to find user with id %d: %v", id, err))
+		}
+		return u, fmt.Errorf("failed to find user with id %d: %v", id, err)
+	}
+
+	return u, nil
 }
