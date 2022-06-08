@@ -1,6 +1,6 @@
 groups:
   names: whoami,dev,play,qa,meta-packages
-  hostnames: whoami.im.prod.c.dhis2.org,dev.im.prod.c.dhis2.org,play.im.prod.c.dhis2.org,qa.im.prod.c.dhis2.org,meta-packages.im.prod.c.dhis2.org
+  hostnames: whoami.im.prod.test.c.dhis2.org,dev.im.prod.test.c.dhis2.org,play.im.prod.test.c.dhis2.org,qa.im.prod.test.c.dhis2.org,meta-packages.im.prod.test.c.dhis2.org
 
 database:
   host: im-user-postgresql-prod.instance-manager-prod.svc.cluster.local
