@@ -35,6 +35,12 @@ func (o *AddUserToGroupReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return nil, result
+	case 401:
+		result := NewAddUserToGroupUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
 		result := NewAddUserToGroupForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -101,6 +107,27 @@ func (o *AddUserToGroupBadRequest) Error() string {
 }
 
 func (o *AddUserToGroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewAddUserToGroupUnauthorized creates a AddUserToGroupUnauthorized with default headers values
+func NewAddUserToGroupUnauthorized() *AddUserToGroupUnauthorized {
+	return &AddUserToGroupUnauthorized{}
+}
+
+/* AddUserToGroupUnauthorized describes a response with status code 401, with default header values.
+
+AddUserToGroupUnauthorized add user to group unauthorized
+*/
+type AddUserToGroupUnauthorized struct {
+}
+
+func (o *AddUserToGroupUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /groups/{groupName}/users/{userId}][%d] addUserToGroupUnauthorized ", 401)
+}
+
+func (o *AddUserToGroupUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

@@ -45,6 +45,7 @@ type CreateGroupRequest struct {
 // responses:
 //   201: Group
 //   400: Error
+//   401: Error
 //   403: Error
 //   415: Error
 func (h Handler) Create(c *gin.Context) {
@@ -75,6 +76,7 @@ func (h Handler) Create(c *gin.Context) {
 // responses:
 //   201: Group
 //   400: Error
+//   401: Error
 //   403: Error
 //   415: Error
 func (h Handler) AddUserToGroup(c *gin.Context) {
@@ -112,6 +114,7 @@ type CreateClusterConfigurationRequest struct {
 //
 // responses:
 //   201: Group
+//   401: Error
 //   400: Error
 //   403: Error
 //   415: Error
@@ -174,6 +177,7 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 //
 // responses:
 //   200: Group
+//   401: Error
 //   403: Error
 //   404: Error
 //   415: Error

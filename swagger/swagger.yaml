@@ -619,6 +619,8 @@ paths:
             $ref: '#/definitions/Group'
         "400":
           $ref: '#/responses/Error'
+        "401":
+          $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
         "415":
@@ -648,6 +650,8 @@ paths:
             $ref: '#/definitions/Group'
         "400":
           $ref: '#/responses/Error'
+        "401":
+          $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
         "415":
@@ -669,6 +673,8 @@ paths:
           description: Group
           schema:
             $ref: '#/definitions/Group'
+        "401":
+          $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
         "404":
@@ -693,6 +699,8 @@ paths:
           schema:
             $ref: '#/definitions/Group'
         "400":
+          $ref: '#/responses/Error'
+        "401":
           $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
@@ -728,6 +736,8 @@ paths:
           description: User
           schema:
             $ref: '#/definitions/User'
+        "401":
+          $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
         "404":
@@ -754,6 +764,8 @@ paths:
       responses:
         "201":
           $ref: '#/responses/Tokens'
+        "401":
+          $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
         "404":
@@ -803,6 +815,8 @@ paths:
           description: User
           schema:
             $ref: '#/definitions/User'
+        "401":
+          $ref: '#/responses/Error'
         "403":
           $ref: '#/responses/Error'
         "404":

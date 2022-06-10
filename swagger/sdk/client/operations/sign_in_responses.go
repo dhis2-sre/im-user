@@ -29,6 +29,12 @@ func (o *SignInReader) ReadResponse(response runtime.ClientResponse, consumer ru
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewSignInUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
 		result := NewSignInForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -80,6 +86,27 @@ func (o *SignInCreated) readResponse(response runtime.ClientResponse, consumer r
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewSignInUnauthorized creates a SignInUnauthorized with default headers values
+func NewSignInUnauthorized() *SignInUnauthorized {
+	return &SignInUnauthorized{}
+}
+
+/* SignInUnauthorized describes a response with status code 401, with default header values.
+
+SignInUnauthorized sign in unauthorized
+*/
+type SignInUnauthorized struct {
+}
+
+func (o *SignInUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /tokens][%d] signInUnauthorized ", 401)
+}
+
+func (o *SignInUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

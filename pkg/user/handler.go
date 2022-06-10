@@ -66,6 +66,7 @@ func (h *Handler) SignUp(c *gin.Context) {
 //
 // responses:
 //   201: Tokens
+//   401: Error
 //   403: Error
 //   404: Error
 //   415: Error
@@ -137,6 +138,7 @@ func (h Handler) RefreshToken(c *gin.Context) {
 //
 // responses:
 //   200: User
+//   401: Error
 //   403: Error
 //   404: Error
 //   415: Error
@@ -193,6 +195,7 @@ func (h Handler) SignOut(c *gin.Context) {
 //
 // responses:
 //   200: User
+//   401: Error
 //   403: Error
 //   404: Error
 //   415: Error

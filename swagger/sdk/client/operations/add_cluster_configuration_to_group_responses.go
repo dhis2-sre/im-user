@@ -35,6 +35,12 @@ func (o *AddClusterConfigurationToGroupReader) ReadResponse(response runtime.Cli
 			return nil, err
 		}
 		return nil, result
+	case 401:
+		result := NewAddClusterConfigurationToGroupUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
 		result := NewAddClusterConfigurationToGroupForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -101,6 +107,27 @@ func (o *AddClusterConfigurationToGroupBadRequest) Error() string {
 }
 
 func (o *AddClusterConfigurationToGroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewAddClusterConfigurationToGroupUnauthorized creates a AddClusterConfigurationToGroupUnauthorized with default headers values
+func NewAddClusterConfigurationToGroupUnauthorized() *AddClusterConfigurationToGroupUnauthorized {
+	return &AddClusterConfigurationToGroupUnauthorized{}
+}
+
+/* AddClusterConfigurationToGroupUnauthorized describes a response with status code 401, with default header values.
+
+AddClusterConfigurationToGroupUnauthorized add cluster configuration to group unauthorized
+*/
+type AddClusterConfigurationToGroupUnauthorized struct {
+}
+
+func (o *AddClusterConfigurationToGroupUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /groups/{name}/cluster-configuration][%d] addClusterConfigurationToGroupUnauthorized ", 401)
+}
+
+func (o *AddClusterConfigurationToGroupUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

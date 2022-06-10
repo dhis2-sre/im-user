@@ -35,6 +35,12 @@ func (o *GroupCreateReader) ReadResponse(response runtime.ClientResponse, consum
 			return nil, err
 		}
 		return nil, result
+	case 401:
+		result := NewGroupCreateUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
 		result := NewGroupCreateForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -101,6 +107,27 @@ func (o *GroupCreateBadRequest) Error() string {
 }
 
 func (o *GroupCreateBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	return nil
+}
+
+// NewGroupCreateUnauthorized creates a GroupCreateUnauthorized with default headers values
+func NewGroupCreateUnauthorized() *GroupCreateUnauthorized {
+	return &GroupCreateUnauthorized{}
+}
+
+/* GroupCreateUnauthorized describes a response with status code 401, with default header values.
+
+GroupCreateUnauthorized group create unauthorized
+*/
+type GroupCreateUnauthorized struct {
+}
+
+func (o *GroupCreateUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] groupCreateUnauthorized ", 401)
+}
+
+func (o *GroupCreateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

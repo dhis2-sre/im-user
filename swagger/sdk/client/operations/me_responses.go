@@ -29,6 +29,12 @@ func (o *MeReader) ReadResponse(response runtime.ClientResponse, consumer runtim
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewMeUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
 		result := NewMeForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -80,6 +86,27 @@ func (o *MeOK) readResponse(response runtime.ClientResponse, consumer runtime.Co
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewMeUnauthorized creates a MeUnauthorized with default headers values
+func NewMeUnauthorized() *MeUnauthorized {
+	return &MeUnauthorized{}
+}
+
+/* MeUnauthorized describes a response with status code 401, with default header values.
+
+MeUnauthorized me unauthorized
+*/
+type MeUnauthorized struct {
+}
+
+func (o *MeUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /me][%d] meUnauthorized ", 401)
+}
+
+func (o *MeUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

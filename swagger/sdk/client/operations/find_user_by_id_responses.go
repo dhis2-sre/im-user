@@ -29,6 +29,12 @@ func (o *FindUserByIDReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return result, nil
+	case 401:
+		result := NewFindUserByIDUnauthorized()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 403:
 		result := NewFindUserByIDForbidden()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -80,6 +86,27 @@ func (o *FindUserByIDOK) readResponse(response runtime.ClientResponse, consumer 
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewFindUserByIDUnauthorized creates a FindUserByIDUnauthorized with default headers values
+func NewFindUserByIDUnauthorized() *FindUserByIDUnauthorized {
+	return &FindUserByIDUnauthorized{}
+}
+
+/* FindUserByIDUnauthorized describes a response with status code 401, with default header values.
+
+FindUserByIDUnauthorized find user by Id unauthorized
+*/
+type FindUserByIDUnauthorized struct {
+}
+
+func (o *FindUserByIDUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdUnauthorized ", 401)
+}
+
+func (o *FindUserByIDUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }
