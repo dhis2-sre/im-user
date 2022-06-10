@@ -50,6 +50,9 @@ func (c cli) SignIn(username, password string) (*models.Tokens, error) {
 	clientAuthInfoWriter := httptransport.BasicAuth(username, password)
 	params := operations.NewSignInParamsWithContext(context.Background())
 	response, err := c.clientService.SignIn(params, clientAuthInfoWriter)
+	if err != nil {
+		return nil, err
+	}
 	return response.Payload, err
 }
 
@@ -57,5 +60,8 @@ func (c cli) Me(token string) (*models.User, error) {
 	clientAuthInfoWriter := httptransport.BearerToken(token)
 	params := operations.NewMeParams().WithDefaults()
 	response, err := c.clientService.Me(params, clientAuthInfoWriter)
+	if err != nil {
+		return nil, err
+	}
 	return response.Payload, err
 }
