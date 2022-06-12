@@ -6,12 +6,12 @@ groups:
   hostnames: whoami.im.dev.test.c.dhis2.org,play.im.dev.test.c.dhis2.org
 
 database:
-  host: im-user-postgresql-dev.instance-manager-dev.svc.cluster.local
+  host: im-user-postgresql-dev.instance-manager-dev.svc
   port: "5432"
 
 redis:
-    host: im-user-redis-dev-master.instance-manager-dev.svc.cluster.local
-    port: "6379"
+  host: im-user-redis-dev-master.instance-manager-dev.svc
+  port: "6379"
 
 resources:
   limits:
