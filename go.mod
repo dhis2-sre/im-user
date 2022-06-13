@@ -12,7 +12,6 @@ require (
 	github.com/go-openapi/validate v0.22.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofrs/uuid v4.2.0+incompatible
-	github.com/google/wire v0.5.0
 	github.com/jackc/pgconn v1.12.1
 	github.com/lestrrat-go/jwx v1.2.25
 	github.com/stretchr/testify v1.7.2

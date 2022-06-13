@@ -26,16 +26,48 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"os"
 
-	"github.com/dhis2-sre/im-user/internal/di"
+	"github.com/dhis2-sre/im-user/internal/middleware"
 	"github.com/dhis2-sre/im-user/internal/server"
+	"github.com/dhis2-sre/im-user/pkg/config"
+	"github.com/dhis2-sre/im-user/pkg/group"
+	"github.com/dhis2-sre/im-user/pkg/storage"
+	"github.com/dhis2-sre/im-user/pkg/token"
+	"github.com/dhis2-sre/im-user/pkg/user"
 )
 
 func main() {
-	environment := di.GetEnvironment()
-	r := server.GetEngine(environment)
-	if err := r.Run(); err != nil {
-		log.Fatal(err)
+	if err := run(); err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err) // nolint:errcheck
+		os.Exit(1)
 	}
+}
+
+func run() error {
+	cfg := config.New()
+
+	client := storage.ProvideRedis(cfg)
+	repository := token.ProvideTokenRepository(client)
+	tokenSvc := token.ProvideTokenService(cfg, repository)
+	tokenHandler := token.ProvideHandler(cfg)
+
+	db, err := storage.ProvideDatabase(cfg)
+	if err != nil {
+		return err
+	}
+	usrRepository := user.ProvideRepository(db)
+	usrSvc := user.ProvideService(usrRepository)
+	usrHandler := user.ProvideHandler(cfg, usrSvc, tokenSvc)
+
+	groupRepository := group.ProvideRepository(db)
+	groupSvc := group.ProvideService(groupRepository, usrRepository)
+	groupHandler := group.ProvideHandler(groupSvc, usrSvc)
+
+	authenticationMiddleware := middleware.ProvideAuthentication(usrSvc, tokenSvc)
+	authorizationMiddleware := middleware.ProvideAuthorization(usrSvc)
+
+	r := server.GetEngine(cfg, tokenHandler, usrHandler, groupHandler, authenticationMiddleware, authorizationMiddleware, usrSvc, groupSvc)
+	return r.Run()
 }

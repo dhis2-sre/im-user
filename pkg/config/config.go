@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func ProvideConfig() Config {
+func New() Config {
 	return Config{
 		BasePath: requireEnv("BASE_PATH"),
 		Groups:   getGroups(),
