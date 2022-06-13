@@ -1,11 +1,11 @@
 package token
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"time"
 
-	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/go-redis/redis"
 )
 
@@ -28,8 +28,7 @@ type redisTokenRepository struct {
 func (r redisTokenRepository) SetRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error {
 	key := fmt.Sprintf("%d:%s", userId, tokenId)
 	if err := r.Redis.Set(key, 0, expiresIn).Err(); err != nil {
-		message := fmt.Sprintf("Could not SET refresh token to redis for userId/tokenId: %d/%s: %s", userId, tokenId, err)
-		return apperror.NewInternal(message)
+		return fmt.Errorf("could not SET refresh token to redis for userId/tokenId: %d/%s: %s", userId, tokenId, err)
 	}
 	return nil
 }
@@ -40,13 +39,12 @@ func (r redisTokenRepository) DeleteRefreshToken(userId uint, previousTokenId st
 	result := r.Redis.Del(key)
 
 	if err := result.Err(); err != nil {
-		message := fmt.Sprintf("Could not delete refresh token to redis for userId/tokenId: %d/%s: %s", userId, previousTokenId, err)
-		return apperror.NewInternal(message)
+		return fmt.Errorf("could not delete refresh token to redis for userId/tokenId: %d/%s: %s", userId, previousTokenId, err)
 	}
 
 	if result.Val() < 1 {
 		log.Printf("Refresh token to redis for userId/tokenId: %d/%s does not exist\n", userId, previousTokenId)
-		return apperror.NewUnauthorized("Invalid refresh token")
+		return errors.New("invalid refresh token")
 	}
 
 	return nil
@@ -66,13 +64,11 @@ func (r redisTokenRepository) DeleteRefreshTokens(userId uint) error {
 	}
 
 	if err := iterator.Err(); err != nil {
-		message := fmt.Sprintf("Failed to delete refresh token: %s\n", iterator.Val())
-		return apperror.NewInternal(message)
+		return fmt.Errorf("failed to delete refresh token: %s", iterator.Val())
 	}
 
 	if failCount > 0 {
-		message := fmt.Sprintf("Failed to delete refresh token: %s", iterator.Val())
-		return apperror.NewInternal(message)
+		return fmt.Errorf("failed to delete refresh token: %s", iterator.Val())
 	}
 
 	return nil

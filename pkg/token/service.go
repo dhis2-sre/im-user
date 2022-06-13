@@ -2,10 +2,10 @@ package token
 
 import (
 	"crypto/rsa"
+	"errors"
 	"fmt"
 	"log"
 
-	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/token/helper"
@@ -72,26 +72,22 @@ type tokenService struct {
 func (t tokenService) GetTokens(user *model.User, previousRefreshTokenId string) (*Tokens, error) {
 	if previousRefreshTokenId != "" {
 		if err := t.tokenRepository.DeleteRefreshToken(user.ID, previousRefreshTokenId); err != nil {
-			message := fmt.Sprintf("Could not delete previous refreshToken for user.Id: %d, tokenId: %s\n", user.ID, previousRefreshTokenId)
-			return nil, apperror.NewInternal(message)
+			return nil, fmt.Errorf("could not delete previous refreshToken for user.Id: %d, tokenId: %s", user.ID, previousRefreshTokenId)
 		}
 	}
 
 	accessToken, err := helper.GenerateAccessToken(user, t.privateKey, t.accessTokenExpirationSeconds)
 	if err != nil {
-		message := fmt.Sprintf("Error generating accessToken for user: %+v\nError: %s", user, err)
-		return nil, apperror.NewInternal(message)
+		return nil, fmt.Errorf("error generating accessToken for user: %+v\nError: %s", user, err)
 	}
 
 	refreshToken, err := helper.GenerateRefreshToken(user, t.refreshTokenSecretKey, t.refreshTokenExpirationSeconds)
 	if err != nil {
-		message := fmt.Sprintf("Error generating refreshToken for user: %+v\nError: %s", user, err)
-		return nil, apperror.NewInternal(message)
+		return nil, fmt.Errorf("error generating refreshToken for user: %+v\nError: %s", user, err)
 	}
 
 	if err := t.tokenRepository.SetRefreshToken(user.ID, refreshToken.TokenId.String(), refreshToken.ExpiresIn); err != nil {
-		message := fmt.Sprintf("Error storing token: %d\nError: %s", user.ID, err)
-		return nil, apperror.NewInternal(message)
+		return nil, fmt.Errorf("error storing token: %d\nError: %s", user.ID, err)
 	}
 
 	return &Tokens{
@@ -106,7 +102,7 @@ func (t tokenService) ValidateAccessToken(tokenString string) (*model.User, erro
 	tokenClaims, err := helper.ValidateAccessToken(tokenString, t.publicKey)
 	if err != nil {
 		log.Printf("Unable to verify token: %s\n", err)
-		return nil, apperror.NewUnauthorized("Unable to verify token")
+		return nil, errors.New("unable to verify token")
 	}
 
 	return tokenClaims.User, nil
@@ -114,16 +110,15 @@ func (t tokenService) ValidateAccessToken(tokenString string) (*model.User, erro
 
 func (t tokenService) ValidateRefreshToken(tokenString string) (*RefreshTokenData, error) {
 	claims, err := helper.ValidateRefreshToken(tokenString, t.refreshTokenSecretKey)
-
 	if err != nil {
 		log.Printf("Unable to validate token: %s\n%s\n", tokenString, err)
-		return nil, apperror.NewUnauthorized("Unable to verify refresh token")
+		return nil, errors.New("unable to verify refresh token")
 	}
 
 	tokenId, err := uuid.FromString(claims.ID)
 	if err != nil {
 		log.Printf("Couldn't parse token id: %s\n%s\n", claims.ID, err)
-		return nil, apperror.NewUnauthorized("Unable to verify refresh token")
+		return nil, errors.New("unable to verify refresh token")
 	}
 
 	return &RefreshTokenData{

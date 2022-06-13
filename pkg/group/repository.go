@@ -1,6 +1,10 @@
 package group
 
 import (
+	"errors"
+	"fmt"
+
+	"github.com/dhis2-sre/im-user/internal/errdef"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"gorm.io/gorm"
 )
@@ -28,7 +32,14 @@ func (r repository) Find(name string) (*model.Group, error) {
 		Preload("ClusterConfiguration").
 		Where("name = ?", name).
 		First(&group).Error
-	return group, err
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return group, errdef.NotFound(fmt.Errorf("failed to find group %q: %v", name, err))
+		}
+		return group, fmt.Errorf("failed to find group %q: %v", name, err)
+	}
+
+	return group, nil
 }
 
 func (r repository) Create(group *model.Group) error {

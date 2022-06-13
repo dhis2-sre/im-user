@@ -1,10 +1,11 @@
 package user
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
-	"github.com/dhis2-sre/im-user/internal/apperror"
+	"github.com/dhis2-sre/im-user/internal/errdef"
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/token"
@@ -30,6 +31,10 @@ type SignUpRequest struct {
 	Password string `json:"password" binding:"required,gte=16,lte=128"`
 }
 
+type duplicate interface {
+	Duplicate()
+}
+
 // SignUp user
 // swagger:route POST /users signUp
 //
@@ -43,13 +48,17 @@ func (h *Handler) SignUp(c *gin.Context) {
 	var request SignUpRequest
 
 	if err := handler.DataBinder(c, &request); err != nil {
-		_ = c.Error(err)
 		return
 	}
 
 	user, err := h.userService.SignUp(request.Email, request.Password)
 	if err != nil {
-		_ = c.Error(err)
+		var dp duplicate
+		if errors.As(err, &dp) {
+			c.AbortWithError(http.StatusBadRequest, err) // nolint:errcheck
+		} else {
+			c.Error(err) // nolint:errcheck
+		}
 		return
 	}
 
@@ -73,7 +82,6 @@ func (h *Handler) SignUp(c *gin.Context) {
 func (h *Handler) SignIn(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
-		_ = c.Error(err)
 		return
 	}
 
@@ -103,19 +111,22 @@ func (h Handler) RefreshToken(c *gin.Context) {
 	var request RefreshTokenRequest
 
 	if err := handler.DataBinder(c, &request); err != nil {
-		_ = c.Error(err)
 		return
 	}
 
 	refreshToken, err := h.tokenService.ValidateRefreshToken(request.RefreshToken)
 	if err != nil {
-		_ = c.Error(err)
+		c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
 		return
 	}
 
 	user, err := h.userService.FindById(refreshToken.UserId)
 	if err != nil {
-		_ = c.Error(err)
+		if errdef.IsNotFound(err) {
+			c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
+		} else {
+			c.Error(err) // nolint:errcheck
+		}
 		return
 	}
 
@@ -145,7 +156,6 @@ func (h Handler) RefreshToken(c *gin.Context) {
 func (h Handler) Me(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
-		_ = c.Error(err)
 		return
 	}
 
@@ -173,7 +183,6 @@ func (h Handler) Me(c *gin.Context) {
 func (h Handler) SignOut(c *gin.Context) {
 	user, err := handler.GetUserFromContext(c)
 	if err != nil {
-		_ = c.Error(err)
 		return
 	}
 
@@ -203,14 +212,13 @@ func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
-		badRequest := apperror.NewBadRequest("Error parsing id")
-		_ = c.Error(badRequest)
+		c.AbortWithError(http.StatusBadRequest, errors.New("error parsing id")) // nolint:errcheck
 		return
 	}
 
 	userWithGroups, err := h.userService.FindById(uint(id))
 	if err != nil {
-		_ = c.Error(err)
+		c.Error(err) // nolint:errcheck
 		return
 	}
 

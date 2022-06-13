@@ -2,7 +2,6 @@ package server
 
 import (
 	"log"
-	"strings"
 
 	"github.com/dhis2-sre/im-user/internal/di"
 	"github.com/dhis2-sre/im-user/internal/middleware"
@@ -81,11 +80,7 @@ func createGroups(config config.Config, groupService group.Service) {
 	for _, g := range groups {
 		newGroup, err := groupService.FindOrCreate(g.Name, g.Hostname)
 		if err != nil {
-			if strings.HasPrefix(err.Error(), "ERROR: duplicate key value violates unique constraint \"groups_name_key\" (SQLSTATE 23505)") {
-				log.Println("Group exists:", g.Name)
-			} else {
-				log.Fatalln(err)
-			}
+			log.Fatalln(err)
 		}
 		if newGroup != nil {
 			log.Println("Created:", newGroup.Name)

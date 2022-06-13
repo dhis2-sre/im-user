@@ -3,10 +3,10 @@ package user
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"strings"
 
-	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"golang.org/x/crypto/scrypt"
 )
@@ -29,10 +29,8 @@ type service struct {
 
 func (s service) SignUp(email string, password string) (*model.User, error) {
 	hashedPassword, err := hashPassword(password)
-
 	if err != nil {
-		message := fmt.Sprintf("Password hashing failed: %s", err)
-		return nil, apperror.NewInternal(message)
+		return nil, fmt.Errorf("password hashing failed: %s", err)
 	}
 
 	user := &model.User{
@@ -41,13 +39,8 @@ func (s service) SignUp(email string, password string) (*model.User, error) {
 	}
 
 	err = s.repository.Create(user)
-
-	if err != nil && err.Error() == "ERROR: duplicate key value violates unique constraint \"users_email_key\" (SQLSTATE 23505)" {
-		return nil, apperror.NewBadRequest(err.Error())
-	}
-
 	if err != nil {
-		return nil, apperror.NewInternal(err.Error())
+		return nil, err
 	}
 
 	return user, nil
@@ -77,17 +70,16 @@ func (s service) SignIn(email string, password string) (*model.User, error) {
 
 	user, err := s.repository.FindByEmail(email)
 	if err != nil {
-		return nil, apperror.NewUnauthorized(unauthorizedMessage)
+		return nil, errors.New(unauthorizedMessage)
 	}
 
 	match, err := comparePasswords(user.Password, password)
 	if err != nil {
-		message := fmt.Sprintf("Password hashing failed: %s", err)
-		return nil, apperror.NewInternal(message)
+		return nil, fmt.Errorf("password hashing failed: %s", err)
 	}
 
 	if !match {
-		return nil, apperror.NewUnauthorized(unauthorizedMessage)
+		return nil, errors.New(unauthorizedMessage)
 	}
 
 	return user, nil
@@ -122,10 +114,8 @@ func (s service) FindByEmail(email string) (*model.User, error) {
 
 func (s service) FindOrCreate(email string, password string) (*model.User, error) {
 	hashedPassword, err := hashPassword(password)
-
 	if err != nil {
-		message := fmt.Sprintf("Password hashing failed: %s", err)
-		return nil, apperror.NewInternal(message)
+		return nil, fmt.Errorf("password hashing failed: %s", err)
 	}
 
 	user := &model.User{

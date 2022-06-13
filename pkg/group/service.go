@@ -1,9 +1,6 @@
 package group
 
 import (
-	"strconv"
-
-	"github.com/dhis2-sre/im-user/internal/apperror"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/user"
 )
@@ -40,9 +37,8 @@ func (s *service) Create(name string, hostname string) (*model.Group, error) {
 	}
 
 	err := s.groupRepository.Create(group)
-
 	if err != nil {
-		return nil, apperror.NewBadRequest(err.Error())
+		return nil, err
 	}
 
 	return group, err
@@ -55,9 +51,8 @@ func (s *service) FindOrCreate(name string, hostname string) (*model.Group, erro
 	}
 
 	g, err := s.groupRepository.FindOrCreate(group)
-
 	if err != nil {
-		return nil, apperror.NewBadRequest(err.Error())
+		return nil, err
 	}
 
 	return g, err
@@ -66,12 +61,12 @@ func (s *service) FindOrCreate(name string, hostname string) (*model.Group, erro
 func (s *service) AddUser(groupName string, userId uint) error {
 	group, err := s.Find(groupName)
 	if err != nil {
-		return apperror.NewNotFound("group", groupName)
+		return err
 	}
 
 	u, err := s.userRepository.FindById(userId)
 	if err != nil {
-		return apperror.NewNotFound("user", strconv.Itoa(int(userId)))
+		return err
 	}
 
 	return s.groupRepository.AddUser(group, u)
