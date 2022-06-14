@@ -16,7 +16,7 @@ func TestGenerateAccessToken(t *testing.T) {
 		Password: "pass",
 	}
 
-	c := config.ProvideConfig()
+	c := config.New()
 
 	key, err := c.Authentication.Keys.GetPrivateKey()
 	assert.NoError(t, err)
@@ -38,7 +38,7 @@ func TestValidateAccessToken(t *testing.T) {
 		Password: "pass",
 	}
 
-	c := config.ProvideConfig()
+	c := config.New()
 
 	privateKey, err := c.Authentication.Keys.GetPrivateKey()
 	assert.NoError(t, err)
