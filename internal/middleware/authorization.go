@@ -28,16 +28,16 @@ func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
 	userWithGroups, err := m.userService.FindById(u.ID)
 	if err != nil {
 		if errdef.IsNotFound(err) {
-			c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
+			_ = c.AbortWithError(http.StatusUnauthorized, err)
 		} else {
-			c.Error(err) // nolint:errcheck
+			_ = c.Error(err)
 		}
 		return
 	}
 
 	if !userWithGroups.IsAdministrator() {
 		log.Printf("User tried to access administrator restricted endpoint: %+v\n", u)
-		c.AbortWithError(http.StatusUnauthorized, errors.New("administrator access denied")) // nolint:errcheck
+		_ = c.AbortWithError(http.StatusUnauthorized, errors.New("administrator access denied"))
 		return
 	}
 

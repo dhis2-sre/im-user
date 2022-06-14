@@ -13,7 +13,7 @@ func GetUserFromContext(c *gin.Context) (*model.User, error) {
 
 	if !exists {
 		err := fmt.Errorf("unable to extract user from request context for unknown reason: %+v", c)
-		c.AbortWithError(http.StatusInternalServerError, err) // nolint:errcheck
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return nil, err
 	}
 

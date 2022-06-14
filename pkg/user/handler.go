@@ -55,9 +55,9 @@ func (h *Handler) SignUp(c *gin.Context) {
 	if err != nil {
 		var dp duplicate
 		if errors.As(err, &dp) {
-			c.AbortWithError(http.StatusBadRequest, err) // nolint:errcheck
+			_ = c.AbortWithError(http.StatusBadRequest, err)
 		} else {
-			c.Error(err) // nolint:errcheck
+			_ = c.Error(err)
 		}
 		return
 	}
@@ -116,16 +116,16 @@ func (h Handler) RefreshToken(c *gin.Context) {
 
 	refreshToken, err := h.tokenService.ValidateRefreshToken(request.RefreshToken)
 	if err != nil {
-		c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
+		_ = c.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
 
 	user, err := h.userService.FindById(refreshToken.UserId)
 	if err != nil {
 		if errdef.IsNotFound(err) {
-			c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
+			_ = c.AbortWithError(http.StatusUnauthorized, err)
 		} else {
-			c.Error(err) // nolint:errcheck
+			_ = c.Error(err)
 		}
 		return
 	}
@@ -212,13 +212,13 @@ func (h Handler) FindById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, errors.New("error parsing id")) // nolint:errcheck
+		_ = c.AbortWithError(http.StatusBadRequest, errors.New("error parsing id"))
 		return
 	}
 
 	userWithGroups, err := h.userService.FindById(uint(id))
 	if err != nil {
-		c.Error(err) // nolint:errcheck
+		_ = c.Error(err)
 		return
 	}
 

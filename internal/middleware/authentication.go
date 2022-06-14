@@ -52,7 +52,7 @@ func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 
 	u, err := m.tokenService.ValidateAccessToken(authorizationHeader)
 	if err != nil {
-		c.AbortWithError(http.StatusUnauthorized, err) // nolint:errcheck
+		_ = c.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
 

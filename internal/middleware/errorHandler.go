@@ -15,7 +15,7 @@ func ErrorHandler() gin.HandlerFunc {
 			return
 		}
 		if c.Writer.Status() != http.StatusOK {
-			c.Writer.WriteString(err.Error()) // nolint:errcheck
+			_, _ = c.Writer.WriteString(err.Error())
 			return
 		}
 

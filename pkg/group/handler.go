@@ -58,7 +58,7 @@ func (h Handler) Create(c *gin.Context) {
 
 	group, err := h.groupService.Create(request.Name, request.Hostname)
 	if err != nil {
-		c.Error(err) // nolint:errcheck
+		_ = c.Error(err)
 		return
 	}
 
@@ -85,16 +85,16 @@ func (h Handler) AddUserToGroup(c *gin.Context) {
 
 	userId, err := strconv.ParseUint(userIdString, 10, 64)
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, fmt.Errorf("failed to parse userId: %s", err)) // nolint:errcheck
+		_ = c.AbortWithError(http.StatusBadRequest, fmt.Errorf("failed to parse userId: %s", err))
 		return
 	}
 
 	err = h.groupService.AddUser(groupName, uint(userId))
 	if err != nil {
 		if errdef.IsNotFound(err) {
-			c.AbortWithError(http.StatusNotFound, err) // nolint:errcheck
+			_ = c.AbortWithError(http.StatusNotFound, err)
 		} else {
-			c.Error(err) // nolint:errcheck
+			_ = c.Error(err)
 		}
 		return
 	}
@@ -128,13 +128,13 @@ func (h Handler) AddClusterConfiguration(c *gin.Context) {
 
 	groupName := c.Param("name")
 	if groupName == "" {
-		c.AbortWithError(http.StatusBadRequest, errors.New("group name is missing")) // nolint:errcheck
+		_ = c.AbortWithError(http.StatusBadRequest, errors.New("group name is missing"))
 		return
 	}
 
 	kubernetesConfiguration, err := h.getBytes(request.KubernetesConfiguration)
 	if err != nil {
-		c.Error(err) // nolint:errcheck
+		_ = c.Error(err)
 		return
 	}
 
@@ -145,7 +145,7 @@ func (h Handler) AddClusterConfiguration(c *gin.Context) {
 
 	err = h.groupService.AddClusterConfiguration(clusterConfiguration)
 	if err != nil {
-		c.Error(err) // nolint:errcheck
+		_ = c.Error(err)
 		return
 	}
 
@@ -189,7 +189,7 @@ func (h Handler) Find(c *gin.Context) {
 
 	group, err := h.groupService.Find(name)
 	if err != nil {
-		c.Error(err) // nolint:errcheck
+		_ = c.Error(err)
 		return
 	}
 

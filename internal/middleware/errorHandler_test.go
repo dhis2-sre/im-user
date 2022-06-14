@@ -38,7 +38,7 @@ func TestErrorHandler(t *testing.T) {
 		r.Use(middleware.ErrorHandler())
 
 		r.GET("/", func(ctx *gin.Context) {
-			ctx.AbortWithError(http.StatusUnsupportedMediaType, errors.New("not supported")) // nolint:errcheck
+			_ = ctx.AbortWithError(http.StatusUnsupportedMediaType, errors.New("not supported"))
 		})
 
 		w := httptest.NewRecorder()
@@ -56,7 +56,7 @@ func TestErrorHandler(t *testing.T) {
 		r.Use(middleware.ErrorHandler())
 
 		r.GET("/", func(ctx *gin.Context) {
-			ctx.Error(errors.New("something went wrong")) // nolint:errcheck
+			_ = ctx.Error(errors.New("something went wrong"))
 		})
 
 		w := httptest.NewRecorder()
