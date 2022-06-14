@@ -15,14 +15,14 @@ type Repository interface {
 	DeleteRefreshTokens(userId uint) error
 }
 
-func ProvideTokenRepository(redisClient *redis.Client) Repository {
+type redisTokenRepository struct {
+	Redis *redis.Client
+}
+
+func NewRepository(redisClient *redis.Client) *redisTokenRepository {
 	return &redisTokenRepository{
 		Redis: redisClient,
 	}
-}
-
-type redisTokenRepository struct {
-	Redis *redis.Client
 }
 
 func (r redisTokenRepository) SetRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error {

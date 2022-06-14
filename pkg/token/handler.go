@@ -10,7 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProvideHandler(config config.Config) Handler {
+type Handler struct {
+	publicKey *rsa.PublicKey
+}
+
+func NewHandler(config config.Config) Handler {
 	publicKey, err := config.Authentication.Keys.GetPublicKey()
 	if err != nil {
 		log.Fatalln(err)
@@ -19,10 +23,6 @@ func ProvideHandler(config config.Config) Handler {
 	return Handler{
 		publicKey,
 	}
-}
-
-type Handler struct {
-	publicKey *rsa.PublicKey
 }
 
 // Jwks godoc

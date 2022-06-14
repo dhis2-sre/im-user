@@ -29,7 +29,7 @@ func TestFindUserById(t *testing.T) {
 	parsedUrl, err := url.Parse(ts.URL)
 	assert.NoError(t, err)
 	host := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), parsedUrl.Port())
-	c := ProvideClient(host, cfg.BasePath)
+	c := New(host, cfg.BasePath)
 
 	tokens, err := c.SignIn(cfg.AdminUser.Email, cfg.AdminUser.Password)
 	assert.NoError(t, err)
@@ -51,7 +51,7 @@ func TestFindGroupByName(t *testing.T) {
 	parsedUrl, err := url.Parse(ts.URL)
 	assert.NoError(t, err)
 	host := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), parsedUrl.Port())
-	c := ProvideClient(host, cfg.BasePath)
+	c := New(host, cfg.BasePath)
 
 	tokens, err := c.SignIn(cfg.AdminUser.Email, cfg.AdminUser.Password)
 	assert.NoError(t, err)
@@ -72,7 +72,7 @@ func TestSignIn(t *testing.T) {
 	parsedUrl, err := url.Parse(ts.URL)
 	assert.NoError(t, err)
 	host := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), parsedUrl.Port())
-	c := ProvideClient(host, cfg.BasePath)
+	c := New(host, cfg.BasePath)
 
 	tokens, err := c.SignIn(cfg.AdminUser.Email, cfg.AdminUser.Password)
 	assert.NoError(t, err)
@@ -92,7 +92,7 @@ func TestMe(t *testing.T) {
 	parsedUrl, err := url.Parse(ts.URL)
 	assert.NoError(t, err)
 	host := fmt.Sprintf("%s:%s", parsedUrl.Hostname(), parsedUrl.Port())
-	c := ProvideClient(host, cfg.BasePath)
+	c := New(host, cfg.BasePath)
 
 	tokens, err := c.SignIn(cfg.AdminUser.Email, cfg.AdminUser.Password)
 	assert.NoError(t, err)
@@ -105,24 +105,24 @@ func TestMe(t *testing.T) {
 }
 
 func engine(t *testing.T, cfg config.Config) *gin.Engine {
-	client := storage.ProvideRedis(cfg)
-	repository := token.ProvideTokenRepository(client)
-	tokenSvc := token.ProvideTokenService(cfg, repository)
-	tokenHandler := token.ProvideHandler(cfg)
+	client := storage.NewRedis(cfg)
+	repository := token.NewRepository(client)
+	tokenSvc := token.NewService(cfg, repository)
+	tokenHandler := token.NewHandler(cfg)
 
-	db, err := storage.ProvideDatabase(cfg)
+	db, err := storage.NewDatabase(cfg)
 	require.NoError(t, err)
 
-	usrRepository := user.ProvideRepository(db)
-	usrSvc := user.ProvideService(usrRepository)
-	usrHandler := user.ProvideHandler(cfg, usrSvc, tokenSvc)
+	usrRepository := user.NewRepository(db)
+	usrSvc := user.NewService(usrRepository)
+	usrHandler := user.NewHandler(cfg, usrSvc, tokenSvc)
 
-	groupRepository := group.ProvideRepository(db)
-	groupSvc := group.ProvideService(groupRepository, usrRepository)
-	groupHandler := group.ProvideHandler(groupSvc, usrSvc)
+	groupRepository := group.NewRepository(db)
+	groupSvc := group.NewService(groupRepository, usrRepository)
+	groupHandler := group.NewHandler(groupSvc, usrSvc)
 
-	authenticationMiddleware := middleware.ProvideAuthentication(usrSvc, tokenSvc)
-	authorizationMiddleware := middleware.ProvideAuthorization(usrSvc)
+	authenticationMiddleware := middleware.NewAuthentication(usrSvc, tokenSvc)
+	authorizationMiddleware := middleware.NewAuthorization(usrSvc)
 
 	return server.GetEngine(cfg, tokenHandler, usrHandler, groupHandler, authenticationMiddleware, authorizationMiddleware, usrSvc, groupSvc)
 }

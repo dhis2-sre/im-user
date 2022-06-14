@@ -14,16 +14,16 @@ type Service interface {
 	FindOrCreate(name string, hostname string) (*model.Group, error)
 }
 
-func ProvideService(groupRepository Repository, userRepository user.Repository) Service {
+type service struct {
+	groupRepository Repository
+	userRepository  user.Repository
+}
+
+func NewService(groupRepository Repository, userRepository user.Repository) *service {
 	return &service{
 		groupRepository,
 		userRepository,
 	}
-}
-
-type service struct {
-	groupRepository Repository
-	userRepository  user.Repository
 }
 
 func (s *service) Find(name string) (*model.Group, error) {

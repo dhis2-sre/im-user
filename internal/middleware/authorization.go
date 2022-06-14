@@ -11,12 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProvideAuthorization(userService user.Service) AuthorizationMiddleware {
-	return AuthorizationMiddleware{userService}
-}
-
 type AuthorizationMiddleware struct {
 	userService user.Service
+}
+
+func NewAuthorization(userService user.Service) AuthorizationMiddleware {
+	return AuthorizationMiddleware{userService}
 }
 
 func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {

@@ -7,7 +7,7 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func ProvideRedis(c config.Config) *redis.Client {
+func NewRedis(c config.Config) *redis.Client {
 	host := c.Redis.Host
 	port := c.Redis.Port
 

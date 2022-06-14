@@ -15,7 +15,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProvideHandler(
+type Handler struct {
+	groupService Service
+	userService  user.Service
+}
+
+func NewHandler(
 	groupService Service,
 	userService user.Service,
 ) Handler {
@@ -23,11 +28,6 @@ func ProvideHandler(
 		groupService,
 		userService,
 	}
-}
-
-type Handler struct {
-	groupService Service
-	userService  user.Service
 }
 
 type CreateGroupRequest struct {

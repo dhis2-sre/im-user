@@ -17,12 +17,12 @@ type Repository interface {
 	FindOrCreate(email *model.User) (*model.User, error)
 }
 
-func ProvideRepository(DB *gorm.DB) Repository {
-	return &userRepository{db: DB}
-}
-
 type userRepository struct {
 	db *gorm.DB
+}
+
+func NewRepository(DB *gorm.DB) *userRepository {
+	return &userRepository{db: DB}
 }
 
 type duplicateError struct{ error }

@@ -10,16 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProvideAuthentication(userService user.Service, tokenService token.Service) AuthenticationMiddleware {
+type AuthenticationMiddleware struct {
+	userService  user.Service
+	tokenService token.Service
+}
+
+func NewAuthentication(userService user.Service, tokenService token.Service) AuthenticationMiddleware {
 	return AuthenticationMiddleware{
 		userService,
 		tokenService,
 	}
-}
-
-type AuthenticationMiddleware struct {
-	userService  user.Service
-	tokenService token.Service
 }
 
 // BasicAuthentication Inspiration: https://www.pandurang-waghulde.com/custom-http-basic-authentication-using-gin/

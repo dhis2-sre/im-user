@@ -12,18 +12,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ProvideHandler(config config.Config, userService Service, tokenService token.Service) Handler {
+type Handler struct {
+	config       config.Config
+	userService  Service
+	tokenService token.Service
+}
+
+func NewHandler(config config.Config, userService Service, tokenService token.Service) Handler {
 	return Handler{
 		config,
 		userService,
 		tokenService,
 	}
-}
-
-type Handler struct {
-	config       config.Config
-	userService  Service
-	tokenService token.Service
 }
 
 type SignUpRequest struct {

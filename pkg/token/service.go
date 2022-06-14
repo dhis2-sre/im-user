@@ -19,10 +19,10 @@ type Service interface {
 	SignOut(userId uint) error
 }
 
-func ProvideTokenService(
+func NewService(
 	c config.Config,
 	tokenRepository Repository,
-) Service {
+) *tokenService {
 	privateKey, err := c.Authentication.Keys.GetPrivateKey()
 	// TODO: Return error
 	if err != nil {

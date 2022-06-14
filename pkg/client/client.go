@@ -16,14 +16,14 @@ type Client interface {
 	Me(token string) (*models.User, error)
 }
 
-func ProvideClient(host string, basePath string) Client {
+type cli struct {
+	clientService operations.ClientService
+}
+
+func New(host string, basePath string) *cli {
 	transport := httptransport.New(host, basePath, nil)
 	userService := operations.New(transport, strfmt.Default)
 	return &cli{userService}
-}
-
-type cli struct {
-	clientService operations.ClientService
 }
 
 func (c cli) FindUserById(token string, id uint) (*models.User, error) {

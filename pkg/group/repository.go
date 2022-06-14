@@ -18,12 +18,12 @@ type Repository interface {
 	FindOrCreate(group *model.Group) (*model.Group, error)
 }
 
-func ProvideRepository(DB *gorm.DB) Repository {
-	return &repository{db: DB}
-}
-
 type repository struct {
 	db *gorm.DB
+}
+
+func NewRepository(DB *gorm.DB) *repository {
+	return &repository{db: DB}
 }
 
 func (r repository) Find(name string) (*model.Group, error) {

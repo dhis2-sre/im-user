@@ -19,12 +19,12 @@ type Service interface {
 	FindOrCreate(email string, password string) (*model.User, error)
 }
 
-func ProvideService(repository Repository) Service {
-	return &service{repository}
-}
-
 type service struct {
 	repository Repository
+}
+
+func NewService(repository Repository) *service {
+	return &service{repository}
 }
 
 func (s service) SignUp(email string, password string) (*model.User, error) {
