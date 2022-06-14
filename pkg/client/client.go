@@ -9,57 +9,51 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-type Client interface {
-	FindUserById(token string, id uint) (*models.User, error)
-	FindGroupByName(token string, name string) (*models.Group, error)
-	SignIn(username, password string) (*models.Tokens, error)
-	Me(token string) (*models.User, error)
+type userClient struct {
+	client operations.ClientService
 }
 
-type cli struct {
-	clientService operations.ClientService
-}
-
-func New(host string, basePath string) *cli {
+func New(host string, basePath string) *userClient {
 	transport := httptransport.New(host, basePath, nil)
-	userService := operations.New(transport, strfmt.Default)
-	return &cli{userService}
+	return &userClient{
+		client: operations.New(transport, strfmt.Default),
+	}
 }
 
-func (c cli) FindUserById(token string, id uint) (*models.User, error) {
+func (c userClient) FindUserById(token string, id uint) (*models.User, error) {
 	params := &operations.FindUserByIDParams{ID: uint64(id), Context: context.Background()}
 	clientAuthInfoWriter := httptransport.BearerToken(token)
-	userByID, err := c.clientService.FindUserByID(params, clientAuthInfoWriter)
+	userByID, err := c.client.FindUserByID(params, clientAuthInfoWriter)
 	if err != nil {
 		return nil, err
 	}
 	return userByID.GetPayload(), nil
 }
 
-func (c cli) FindGroupByName(token string, name string) (*models.Group, error) {
+func (c userClient) FindGroupByName(token string, name string) (*models.Group, error) {
 	params := &operations.FindGroupByNameParams{Name: name, Context: context.Background()}
 	clientAuthInfoWriter := httptransport.BearerToken(token)
-	group, err := c.clientService.FindGroupByName(params, clientAuthInfoWriter)
+	group, err := c.client.FindGroupByName(params, clientAuthInfoWriter)
 	if err != nil {
 		return nil, err
 	}
 	return group.GetPayload(), nil
 }
 
-func (c cli) SignIn(username, password string) (*models.Tokens, error) {
+func (c userClient) SignIn(username, password string) (*models.Tokens, error) {
 	clientAuthInfoWriter := httptransport.BasicAuth(username, password)
 	params := operations.NewSignInParamsWithContext(context.Background())
-	response, err := c.clientService.SignIn(params, clientAuthInfoWriter)
+	response, err := c.client.SignIn(params, clientAuthInfoWriter)
 	if err != nil {
 		return nil, err
 	}
 	return response.Payload, err
 }
 
-func (c cli) Me(token string) (*models.User, error) {
+func (c userClient) Me(token string) (*models.User, error) {
 	clientAuthInfoWriter := httptransport.BearerToken(token)
 	params := operations.NewMeParams().WithDefaults()
-	response, err := c.clientService.Me(params, clientAuthInfoWriter)
+	response, err := c.client.Me(params, clientAuthInfoWriter)
 	if err != nil {
 		return nil, err
 	}
