@@ -66,7 +66,7 @@ func hashPassword(password string) (string, error) {
 }
 
 func (s service) SignIn(email string, password string) (*model.User, error) {
-	unauthorizedMessage := "Invalid email and password combination"
+	unauthorizedMessage := "invalid email and password combination"
 
 	user, err := s.repository.FindByEmail(email)
 	if err != nil {
