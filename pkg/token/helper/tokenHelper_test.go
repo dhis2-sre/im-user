@@ -8,6 +8,7 @@ import (
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGenerateAccessToken(t *testing.T) {
@@ -16,7 +17,8 @@ func TestGenerateAccessToken(t *testing.T) {
 		Password: "pass",
 	}
 
-	c := config.New()
+	c, err := config.New()
+	require.NoError(t, err)
 
 	key, err := c.Authentication.Keys.GetPrivateKey()
 	assert.NoError(t, err)
@@ -38,7 +40,8 @@ func TestValidateAccessToken(t *testing.T) {
 		Password: "pass",
 	}
 
-	c := config.New()
+	c, err := config.New()
+	require.NoError(t, err)
 
 	privateKey, err := c.Authentication.Keys.GetPrivateKey()
 	assert.NoError(t, err)

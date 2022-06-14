@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/dhis2-sre/im-user/internal/middleware"
@@ -15,7 +16,7 @@ import (
 	redocMiddleware "github.com/go-openapi/runtime/middleware"
 )
 
-func GetEngine(c config.Config, tokenHandler token.Handler, usrHandler user.Handler, groupHandler group.Handler, authenticationMiddleware middleware.AuthenticationMiddleware, authorizationMiddleware middleware.AuthorizationMiddleware, usrSvc user.Service, groupSvc group.Service) *gin.Engine {
+func GetEngine(c config.Config, tokenHandler token.Handler, usrHandler user.Handler, groupHandler group.Handler, authenticationMiddleware middleware.AuthenticationMiddleware, authorizationMiddleware middleware.AuthorizationMiddleware, usrSvc user.Service, groupSvc group.Service) (*gin.Engine, error) {
 	basePath := c.BasePath
 
 	r := gin.Default()
@@ -51,11 +52,20 @@ func GetEngine(c config.Config, tokenHandler token.Handler, usrHandler user.Hand
 	administratorRestrictedRouter.POST("/groups/:groupName/users/:userId", groupHandler.AddUserToGroup)
 	administratorRestrictedRouter.POST("/groups/:groupName/cluster-configuration", groupHandler.AddClusterConfiguration)
 
-	createAdminUser(c, usrSvc, groupSvc)
-	createGroups(c, groupSvc)
-	createServiceUsers(c, usrSvc, groupSvc)
+	err := createAdminUser(c, usrSvc, groupSvc)
+	if err != nil {
+		return nil, err
+	}
+	err = createGroups(c, groupSvc)
+	if err != nil {
+		return nil, err
+	}
+	err = createServiceUsers(c, usrSvc, groupSvc)
+	if err != nil {
+		return nil, err
+	}
 
-	return r
+	return r, nil
 }
 
 func redoc(router *gin.RouterGroup, basePath string) {
@@ -71,45 +81,49 @@ func redoc(router *gin.RouterGroup, basePath string) {
 	})
 }
 
-func createGroups(config config.Config, groupSvc group.Service) {
+func createGroups(config config.Config, groupSvc group.Service) error {
 	log.Println("Creating groups...")
 	groups := config.Groups
 	for _, g := range groups {
 		newGroup, err := groupSvc.FindOrCreate(g.Name, g.Hostname)
 		if err != nil {
-			log.Fatalln(err)
+			return fmt.Errorf("error creating group: %v", err)
 		}
 		if newGroup != nil {
 			log.Println("Created:", newGroup.Name)
 		}
 	}
+
+	return nil
 }
 
-func createAdminUser(config config.Config, usrSvc user.Service, groupSvc group.Service) {
+func createAdminUser(config config.Config, usrSvc user.Service, groupSvc group.Service) error {
 	adminUserEmail := config.AdminUser.Email
 	adminUserPassword := config.AdminUser.Password
 
 	u, err := usrSvc.FindOrCreate(adminUserEmail, adminUserPassword)
 	if err != nil {
-		log.Fatalln(err)
+		return fmt.Errorf("error creating admin user: %v", err)
 	}
 
 	g, err := groupSvc.FindOrCreate(model.AdministratorGroupName, "")
 	if err != nil {
-		log.Fatalf("Failed to create admin group: %s", err)
+		return fmt.Errorf("error creating admin group: %v", err)
 	}
 
 	err = groupSvc.AddUser(g.Name, u.ID)
 	if err != nil {
-		log.Fatalf("Failed to add user to admin group: %s", err)
+		return fmt.Errorf("error adding admin user to admin group: %v", err)
 	}
+
+	return nil
 }
 
-func createServiceUsers(config config.Config, usrSvc user.Service, groupSvc group.Service) {
+func createServiceUsers(config config.Config, usrSvc user.Service, groupSvc group.Service) error {
 	log.Println("Creating service users...")
 	g, err := groupSvc.FindOrCreate(model.AdministratorGroupName, "")
 	if err != nil {
-		log.Fatalf("Failed to create admin group: %s", err)
+		return fmt.Errorf("error creating admin group: %v", err)
 	}
 
 	for _, serviceUser := range config.ServiceUsers {
@@ -118,14 +132,16 @@ func createServiceUsers(config config.Config, usrSvc user.Service, groupSvc grou
 
 		u, err := usrSvc.FindOrCreate(email, password)
 		if err != nil {
-			log.Fatalln(err)
+			return fmt.Errorf("error creating service user: %v", err)
 		}
 
 		err = groupSvc.AddUser(g.Name, u.ID)
 		if err != nil {
-			log.Fatalf("Failed to add user to admin group: %s", err)
+			return fmt.Errorf("error adding service user to admin group: %v", err)
 		}
 
 		log.Println("Created:", serviceUser.Email)
 	}
+
+	return nil
 }

@@ -5,78 +5,12 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 )
-
-func New() Config {
-	return Config{
-		BasePath: requireEnv("BASE_PATH"),
-		Groups:   getGroups(),
-		Authentication: authentication{
-			Keys: keys{
-				PrivateKey: requireEnv("PRIVATE_KEY"),
-				PublicKey:  requireEnv("PUBLIC_KEY"),
-			},
-			RefreshTokenSecretKey:         requireEnv("REFRESH_TOKEN_SECRET_KEY"),
-			AccessTokenExpirationSeconds:  requireEnvAsInt("ACCESS_TOKEN_EXPIRATION_IN_SECONDS"),
-			RefreshTokenExpirationSeconds: requireEnvAsInt("REFRESH_TOKEN_EXPIRATION_IN_SECONDS"),
-		},
-		Postgresql: postgresql{
-			Host:         requireEnv("DATABASE_HOST"),
-			Port:         requireEnvAsInt("DATABASE_PORT"),
-			Username:     requireEnv("DATABASE_USERNAME"),
-			Password:     requireEnv("DATABASE_PASSWORD"),
-			DatabaseName: requireEnv("DATABASE_NAME"),
-		},
-		Redis: redis{
-			Host: requireEnv("REDIS_HOST"),
-			Port: requireEnvAsInt("REDIS_PORT"),
-		},
-		AdminUser: user{
-			Email:    requireEnv("ADMIN_USER_EMAIL"),
-			Password: requireEnv("ADMIN_USER_PASSWORD"),
-		},
-		ServiceUsers: getServiceUsers(),
-		DefaultUser:  user{},
-	}
-}
-
-func getGroups() []group {
-	groupNames := requireEnvAsArray("GROUP_NAMES")
-	groupHostnames := requireEnvAsArray("GROUP_HOSTNAMES")
-
-	if len(groupNames) != len(groupHostnames) {
-		log.Fatalln("len(GROUP_NAMES) != len(GROUP_HOSTNAMES)")
-	}
-
-	groups := make([]group, len(groupNames))
-	for i := 0; i < len(groupNames); i++ {
-		groups[i].Name = groupNames[i]
-		groups[i].Hostname = groupHostnames[i]
-	}
-
-	return groups
-}
-
-func getServiceUsers() []user {
-	userEmails := requireEnvAsArray("SERVICE_USER_EMAILS")
-	userPasswords := requireEnvAsArray("SERVICE_USER_PASSWORDS")
-
-	if len(userEmails) != len(userPasswords) {
-		log.Fatalln("len(SERVICE_USER_EMAILS) != len(SERVICE_USER_PASSWORDS)")
-	}
-
-	users := make([]user, len(userEmails))
-	for i := 0; i < len(userEmails); i++ {
-		users[i].Email = userEmails[i]
-		users[i].Password = userPasswords[i]
-	}
-
-	return users
-}
 
 type Config struct {
 	BasePath       string
@@ -89,11 +23,165 @@ type Config struct {
 	DefaultUser    user
 }
 
+func New() (Config, error) {
+	basePath, err := requireEnv("BASE_PATH")
+	if err != nil {
+		return Config{}, err
+	}
+
+	groups, err := newGroups()
+	if err != nil {
+		return Config{}, err
+	}
+
+	auth, err := newAuthentication()
+	if err != nil {
+		return Config{}, err
+	}
+
+	pg, err := newPostgresql()
+	if err != nil {
+		return Config{}, err
+	}
+
+	rd, err := newRedis()
+	if err != nil {
+		return Config{}, err
+	}
+
+	admin, err := newAdminUser()
+	if err != nil {
+		return Config{}, err
+	}
+
+	serviceUsers, err := newServiceUsers()
+	if err != nil {
+		return Config{}, err
+	}
+
+	return Config{
+		BasePath:       basePath,
+		Groups:         groups,
+		Authentication: auth,
+		Postgresql:     pg,
+		Redis:          rd,
+		AdminUser:      admin,
+		ServiceUsers:   serviceUsers,
+		DefaultUser:    user{},
+	}, nil
+}
+
+type group struct {
+	Name     string
+	Hostname string
+}
+
+func newGroups() ([]group, error) {
+	groupNames, err := requireEnvAsArray("GROUP_NAMES")
+	if err != nil {
+		return nil, err
+	}
+	groupHostnames, err := requireEnvAsArray("GROUP_HOSTNAMES")
+	if err != nil {
+		return nil, err
+	}
+
+	if len(groupNames) != len(groupHostnames) {
+		return nil, errors.New("len(GROUP_NAMES) != len(GROUP_HOSTNAMES)")
+	}
+
+	groups := make([]group, len(groupNames))
+	for i := 0; i < len(groupNames); i++ {
+		groups[i].Name = groupNames[i]
+		groups[i].Hostname = groupHostnames[i]
+	}
+
+	return groups, nil
+}
+
+type user struct {
+	Email    string
+	Password string
+}
+
+func newAdminUser() (user, error) {
+	email, err := requireEnv("ADMIN_USER_EMAIL")
+	if err != nil {
+		return user{}, err
+	}
+	pw, err := requireEnv("ADMIN_USER_PASSWORD")
+	if err != nil {
+		return user{}, err
+	}
+
+	return user{
+		Email:    email,
+		Password: pw,
+	}, nil
+}
+
+func newServiceUsers() ([]user, error) {
+	emails, err := requireEnvAsArray("SERVICE_USER_EMAILS")
+	if err != nil {
+		return nil, err
+	}
+	pws, err := requireEnvAsArray("SERVICE_USER_PASSWORDS")
+	if err != nil {
+		return nil, err
+	}
+
+	if len(emails) != len(pws) {
+		return nil, errors.New("len(SERVICE_USER_EMAILS) != len(SERVICE_USER_PASSWORDS)")
+	}
+
+	users := make([]user, len(emails))
+	for i := 0; i < len(emails); i++ {
+		users[i].Email = emails[i]
+		users[i].Password = pws[i]
+	}
+
+	return users, nil
+}
+
 type authentication struct {
 	Keys                          keys
 	RefreshTokenSecretKey         string
 	AccessTokenExpirationSeconds  int
 	RefreshTokenExpirationSeconds int
+}
+
+func newAuthentication() (authentication, error) {
+	privateKey, err := requireEnv("PRIVATE_KEY")
+	if err != nil {
+		return authentication{}, err
+	}
+	publicKey, err := requireEnv("PUBLIC_KEY")
+	if err != nil {
+		return authentication{}, err
+	}
+
+	refreshTokenSecretKey, err := requireEnv("REFRESH_TOKEN_SECRET_KEY")
+	if err != nil {
+		return authentication{}, err
+	}
+	accessTokenExpirationSeconds, err := requireEnvAsInt("ACCESS_TOKEN_EXPIRATION_IN_SECONDS")
+	if err != nil {
+		return authentication{}, err
+	}
+	refreshTokenExpirationSeconds, err := requireEnvAsInt("REFRESH_TOKEN_EXPIRATION_IN_SECONDS")
+	if err != nil {
+		return authentication{}, err
+	}
+
+	return authentication{
+		Keys: keys{
+			PrivateKey: privateKey,
+			PublicKey:  publicKey,
+		},
+		RefreshTokenSecretKey:         refreshTokenSecretKey,
+		AccessTokenExpirationSeconds:  accessTokenExpirationSeconds,
+		RefreshTokenExpirationSeconds: refreshTokenExpirationSeconds,
+	}, nil
 }
 
 type keys struct {
@@ -148,42 +236,86 @@ type postgresql struct {
 	DatabaseName string
 }
 
+func newPostgresql() (postgresql, error) {
+	host, err := requireEnv("DATABASE_HOST")
+	if err != nil {
+		return postgresql{}, err
+	}
+	port, err := requireEnvAsInt("DATABASE_PORT")
+	if err != nil {
+		return postgresql{}, err
+	}
+	usrname, err := requireEnv("DATABASE_USERNAME")
+	if err != nil {
+		return postgresql{}, err
+	}
+	pw, err := requireEnv("DATABASE_PASSWORD")
+	if err != nil {
+		return postgresql{}, err
+	}
+	name, err := requireEnv("DATABASE_NAME")
+	if err != nil {
+		return postgresql{}, err
+	}
+
+	return postgresql{
+		Host:         host,
+		Port:         port,
+		Username:     usrname,
+		Password:     pw,
+		DatabaseName: name,
+	}, nil
+}
+
 type redis struct {
 	Host string
 	Port int
 }
 
-type user struct {
-	Email    string
-	Password string
+func newRedis() (redis, error) {
+	host, err := requireEnv("REDIS_HOST")
+	if err != nil {
+		return redis{}, err
+	}
+	port, err := requireEnvAsInt("REDIS_PORT")
+	if err != nil {
+		return redis{}, err
+	}
+
+	return redis{
+		Host: host,
+		Port: port,
+	}, nil
 }
 
-type group struct {
-	Name     string
-	Hostname string
-}
-
-func requireEnv(key string) string {
+func requireEnv(key string) (string, error) {
 	value, exists := os.LookupEnv(key)
 	if !exists {
-		log.Fatalf("Can't find environment variable: %s\n", key)
+		return "", fmt.Errorf("can't find environment variable: %s", key)
 	}
-	return value
+
+	return value, nil
 }
 
-func requireEnvAsArray(key string) []string {
+func requireEnvAsArray(key string) ([]string, error) {
 	value, exists := os.LookupEnv(key)
 	if !exists {
-		log.Fatalf("Can't find environment variable: %s\n", key)
+		return nil, fmt.Errorf("can't find environment variable: %s", key)
 	}
-	return strings.Split(value, ",")
+
+	return strings.Split(value, ","), nil
 }
 
-func requireEnvAsInt(key string) int {
-	valueStr := requireEnv(key)
+func requireEnvAsInt(key string) (int, error) {
+	valueStr, err := requireEnv(key)
+	if err != nil {
+		return 0, err
+	}
+
 	value, err := strconv.Atoi(valueStr)
 	if err != nil {
-		log.Fatalf("Can't parse value as integer: %s", err.Error())
+		return 0, fmt.Errorf("can't parse value as integer: %v", err)
 	}
-	return value
+
+	return value, nil
 }
