@@ -3,6 +3,8 @@ kind: Config
 build:
   artifacts:
     - image: dhis2/im-users
+  tagPolicy:
+    inputDigest: { }
 deploy:
   statusCheckDeadlineSeconds: 240
   helm:
