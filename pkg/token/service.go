@@ -22,17 +22,15 @@ type Service interface {
 func NewService(
 	c config.Config,
 	tokenRepository Repository,
-) *tokenService {
+) (*tokenService, error) {
 	privateKey, err := c.Authentication.Keys.GetPrivateKey()
-	// TODO: Return error
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	// TODO: Return error
 	publicKey, err := c.Authentication.Keys.GetPublicKey()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return &tokenService{
@@ -42,7 +40,7 @@ func NewService(
 		c.Authentication.AccessTokenExpirationSeconds,
 		c.Authentication.RefreshTokenSecretKey,
 		c.Authentication.RefreshTokenExpirationSeconds,
-	}
+	}, nil
 }
 
 // Tokens domain object defining user tokens

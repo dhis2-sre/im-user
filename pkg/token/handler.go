@@ -2,7 +2,6 @@ package token
 
 import (
 	"crypto/rsa"
-	"log"
 	"net/http"
 
 	"github.com/dhis2-sre/im-user/pkg/config"
@@ -14,15 +13,15 @@ type Handler struct {
 	publicKey *rsa.PublicKey
 }
 
-func NewHandler(config config.Config) Handler {
+func NewHandler(config config.Config) (Handler, error) {
 	publicKey, err := config.Authentication.Keys.GetPublicKey()
 	if err != nil {
-		log.Fatalln(err)
+		return Handler{}, err
 	}
 
 	return Handler{
 		publicKey,
-	}
+	}, nil
 }
 
 // Jwks godoc

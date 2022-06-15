@@ -20,7 +20,8 @@ import (
 )
 
 func TestFindUserById(t *testing.T) {
-	cfg := config.New()
+	cfg, err := config.New()
+	require.NoError(t, err)
 	r := engine(t, cfg)
 
 	ts := httptest.NewServer(r)
@@ -42,7 +43,8 @@ func TestFindUserById(t *testing.T) {
 }
 
 func TestFindGroupByName(t *testing.T) {
-	cfg := config.New()
+	cfg, err := config.New()
+	require.NoError(t, err)
 	r := engine(t, cfg)
 
 	ts := httptest.NewServer(r)
@@ -63,7 +65,8 @@ func TestFindGroupByName(t *testing.T) {
 }
 
 func TestSignIn(t *testing.T) {
-	cfg := config.New()
+	cfg, err := config.New()
+	require.NoError(t, err)
 	r := engine(t, cfg)
 
 	ts := httptest.NewServer(r)
@@ -83,7 +86,8 @@ func TestSignIn(t *testing.T) {
 }
 
 func TestMe(t *testing.T) {
-	cfg := config.New()
+	cfg, err := config.New()
+	require.NoError(t, err)
 	r := engine(t, cfg)
 
 	ts := httptest.NewServer(r)
@@ -107,8 +111,10 @@ func TestMe(t *testing.T) {
 func engine(t *testing.T, cfg config.Config) *gin.Engine {
 	client := storage.NewRedis(cfg)
 	repository := token.NewRepository(client)
-	tokenSvc := token.NewService(cfg, repository)
-	tokenHandler := token.NewHandler(cfg)
+	tokenSvc, err := token.NewService(cfg, repository)
+	require.NoError(t, err)
+	tokenHandler, err := token.NewHandler(cfg)
+	require.NoError(t, err)
 
 	db, err := storage.NewDatabase(cfg)
 	require.NoError(t, err)
@@ -124,5 +130,8 @@ func engine(t *testing.T, cfg config.Config) *gin.Engine {
 	authenticationMiddleware := middleware.NewAuthentication(usrSvc, tokenSvc)
 	authorizationMiddleware := middleware.NewAuthorization(usrSvc)
 
-	return server.GetEngine(cfg, tokenHandler, usrHandler, groupHandler, authenticationMiddleware, authorizationMiddleware, usrSvc, groupSvc)
+	r, err := server.GetEngine(cfg, tokenHandler, usrHandler, groupHandler, authenticationMiddleware, authorizationMiddleware, usrSvc, groupSvc)
+	require.NoError(t, err)
+
+	return r
 }

@@ -46,12 +46,21 @@ func main() {
 }
 
 func run() error {
-	cfg := config.New()
+	cfg, err := config.New()
+	if err != nil {
+		return fmt.Errorf("error getting config: %v", err)
+	}
 
 	client := storage.NewRedis(cfg)
 	repository := token.NewRepository(client)
-	tokenSvc := token.NewService(cfg, repository)
-	tokenHandler := token.NewHandler(cfg)
+	tokenSvc, err := token.NewService(cfg, repository)
+	if err != nil {
+		return err
+	}
+	tokenHandler, err := token.NewHandler(cfg)
+	if err != nil {
+		return err
+	}
 
 	db, err := storage.NewDatabase(cfg)
 	if err != nil {
@@ -68,6 +77,10 @@ func run() error {
 	authenticationMiddleware := middleware.NewAuthentication(usrSvc, tokenSvc)
 	authorizationMiddleware := middleware.NewAuthorization(usrSvc)
 
-	r := server.GetEngine(cfg, tokenHandler, usrHandler, groupHandler, authenticationMiddleware, authorizationMiddleware, usrSvc, groupSvc)
+	r, err := server.GetEngine(cfg, tokenHandler, usrHandler, groupHandler, authenticationMiddleware, authorizationMiddleware, usrSvc, groupSvc)
+	if err != nil {
+		return err
+	}
+
 	return r.Run()
 }
