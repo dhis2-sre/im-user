@@ -14,7 +14,7 @@ require (
 	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/jackc/pgconn v1.12.1
 	github.com/lestrrat-go/jwx v1.2.25
-	github.com/stretchr/testify v1.7.2
+	github.com/stretchr/testify v1.7.3
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f
 	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.6
