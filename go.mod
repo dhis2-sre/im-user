@@ -3,7 +3,7 @@ module github.com/dhis2-sre/im-user
 go 1.18
 
 require (
-	github.com/gin-contrib/cors v1.3.1
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-openapi/errors v0.20.2
 	github.com/go-openapi/runtime v0.24.1
@@ -14,7 +14,7 @@ require (
 	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/jackc/pgconn v1.12.1
 	github.com/lestrrat-go/jwx v1.2.25
-	github.com/stretchr/testify v1.7.5
+	github.com/stretchr/testify v1.8.0
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f
 	gorm.io/driver/postgres v1.3.8
 	gorm.io/gorm v1.23.7
