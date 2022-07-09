@@ -63,10 +63,11 @@ func (r userRepository) FindById(id uint) (*model.User, error) {
 		Preload("Groups").
 		First(&u, id).Error
 	if err != nil {
+		err := fmt.Errorf("failed to find user with id %d: %v", id, err)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return u, errdef.NotFound(fmt.Errorf("failed to find user with id %d: %v", id, err))
+			return u, errdef.NotFound(err)
 		}
-		return u, fmt.Errorf("failed to find user with id %d: %v", id, err)
+		return u, err
 	}
 
 	return u, nil
