@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/model"
@@ -41,6 +42,12 @@ func NewService(
 		c.Authentication.RefreshTokenSecretKey,
 		c.Authentication.RefreshTokenExpirationSeconds,
 	}, nil
+}
+
+type Repository interface {
+	setRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error
+	deleteRefreshToken(userId uint, previousTokenId string) error
+	deleteRefreshTokens(userId uint) error
 }
 
 // Tokens domain object defining user tokens

@@ -9,12 +9,6 @@ import (
 	"github.com/go-redis/redis"
 )
 
-type Repository interface {
-	setRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error
-	deleteRefreshToken(userId uint, previousTokenId string) error
-	deleteRefreshTokens(userId uint) error
-}
-
 type redisTokenRepository struct {
 	Redis *redis.Client
 }
