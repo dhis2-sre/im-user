@@ -69,7 +69,7 @@ type tokenService struct {
 
 func (t tokenService) GetTokens(user *model.User, previousRefreshTokenId string) (*Tokens, error) {
 	if previousRefreshTokenId != "" {
-		if err := t.tokenRepository.DeleteRefreshToken(user.ID, previousRefreshTokenId); err != nil {
+		if err := t.tokenRepository.deleteRefreshToken(user.ID, previousRefreshTokenId); err != nil {
 			return nil, fmt.Errorf("could not delete previous refreshToken for user.Id: %d, tokenId: %s", user.ID, previousRefreshTokenId)
 		}
 	}
@@ -84,7 +84,7 @@ func (t tokenService) GetTokens(user *model.User, previousRefreshTokenId string)
 		return nil, fmt.Errorf("error generating refreshToken for user: %+v\nError: %s", user, err)
 	}
 
-	if err := t.tokenRepository.SetRefreshToken(user.ID, refreshToken.TokenId.String(), refreshToken.ExpiresIn); err != nil {
+	if err := t.tokenRepository.setRefreshToken(user.ID, refreshToken.TokenId.String(), refreshToken.ExpiresIn); err != nil {
 		return nil, fmt.Errorf("error storing token: %d\nError: %s", user.ID, err)
 	}
 
@@ -127,5 +127,5 @@ func (t tokenService) ValidateRefreshToken(tokenString string) (*RefreshTokenDat
 }
 
 func (t tokenService) SignOut(userId uint) error {
-	return t.tokenRepository.DeleteRefreshTokens(userId)
+	return t.tokenRepository.deleteRefreshTokens(userId)
 }

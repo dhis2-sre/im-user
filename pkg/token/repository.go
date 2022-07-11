@@ -10,9 +10,9 @@ import (
 )
 
 type Repository interface {
-	SetRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error
-	DeleteRefreshToken(userId uint, previousTokenId string) error
-	DeleteRefreshTokens(userId uint) error
+	setRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error
+	deleteRefreshToken(userId uint, previousTokenId string) error
+	deleteRefreshTokens(userId uint) error
 }
 
 type redisTokenRepository struct {
@@ -25,7 +25,7 @@ func NewRepository(redisClient *redis.Client) *redisTokenRepository {
 	}
 }
 
-func (r redisTokenRepository) SetRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error {
+func (r redisTokenRepository) setRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error {
 	key := fmt.Sprintf("%d:%s", userId, tokenId)
 	if err := r.Redis.Set(key, 0, expiresIn).Err(); err != nil {
 		return fmt.Errorf("could not SET refresh token to redis for userId/tokenId: %d/%s: %s", userId, tokenId, err)
@@ -33,7 +33,7 @@ func (r redisTokenRepository) SetRefreshToken(userId uint, tokenId string, expir
 	return nil
 }
 
-func (r redisTokenRepository) DeleteRefreshToken(userId uint, previousTokenId string) error {
+func (r redisTokenRepository) deleteRefreshToken(userId uint, previousTokenId string) error {
 	key := fmt.Sprintf("%d:%s", userId, previousTokenId)
 
 	result := r.Redis.Del(key)
@@ -50,7 +50,7 @@ func (r redisTokenRepository) DeleteRefreshToken(userId uint, previousTokenId st
 	return nil
 }
 
-func (r redisTokenRepository) DeleteRefreshTokens(userId uint) error {
+func (r redisTokenRepository) deleteRefreshTokens(userId uint) error {
 	pattern := fmt.Sprintf("%d*", userId)
 
 	iterator := r.Redis.Scan(0, pattern, 5).Iterator()
