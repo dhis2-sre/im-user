@@ -26,6 +26,15 @@ func NewService(groupRepository Repository, userRepository user.Repository) *ser
 	}
 }
 
+type Repository interface {
+	create(group *model.Group) error
+	addUser(group *model.Group, user *model.User) error
+	addClusterConfiguration(configuration *model.ClusterConfiguration) error
+	getClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
+	find(name string) (*model.Group, error)
+	findOrCreate(group *model.Group) (*model.Group, error)
+}
+
 func (s *service) Find(name string) (*model.Group, error) {
 	return s.groupRepository.find(name)
 }

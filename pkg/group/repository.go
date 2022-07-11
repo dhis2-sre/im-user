@@ -9,15 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Repository interface {
-	create(group *model.Group) error
-	addUser(group *model.Group, user *model.User) error
-	addClusterConfiguration(configuration *model.ClusterConfiguration) error
-	getClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
-	find(name string) (*model.Group, error)
-	findOrCreate(group *model.Group) (*model.Group, error)
-}
-
 type repository struct {
 	db *gorm.DB
 }
