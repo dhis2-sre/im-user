@@ -27,7 +27,7 @@ func NewService(groupRepository Repository, userRepository user.Repository) *ser
 }
 
 func (s *service) Find(name string) (*model.Group, error) {
-	return s.groupRepository.Find(name)
+	return s.groupRepository.find(name)
 }
 
 func (s *service) Create(name string, hostname string) (*model.Group, error) {
@@ -36,7 +36,7 @@ func (s *service) Create(name string, hostname string) (*model.Group, error) {
 		Hostname: hostname,
 	}
 
-	err := s.groupRepository.Create(group)
+	err := s.groupRepository.create(group)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *service) FindOrCreate(name string, hostname string) (*model.Group, erro
 		Hostname: hostname,
 	}
 
-	g, err := s.groupRepository.FindOrCreate(group)
+	g, err := s.groupRepository.findOrCreate(group)
 	if err != nil {
 		return nil, err
 	}
@@ -69,13 +69,13 @@ func (s *service) AddUser(groupName string, userId uint) error {
 		return err
 	}
 
-	return s.groupRepository.AddUser(group, u)
+	return s.groupRepository.addUser(group, u)
 }
 
 func (s *service) AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error {
-	return s.groupRepository.AddClusterConfiguration(clusterConfiguration)
+	return s.groupRepository.addClusterConfiguration(clusterConfiguration)
 }
 
 func (s *service) GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error) {
-	return s.groupRepository.GetClusterConfiguration(groupName)
+	return s.groupRepository.getClusterConfiguration(groupName)
 }
