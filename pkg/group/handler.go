@@ -30,6 +30,15 @@ func NewHandler(
 	}
 }
 
+type Service interface {
+	Create(name string, hostname string) (*model.Group, error)
+	AddUser(groupName string, userId uint) error
+	AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error
+	GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
+	Find(name string) (*model.Group, error)
+	FindOrCreate(name string, hostname string) (*model.Group, error)
+}
+
 type CreateGroupRequest struct {
 	Name     string `json:"name" binding:"required"`
 	Hostname string `json:"hostname" binding:"required"`
