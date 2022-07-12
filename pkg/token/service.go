@@ -13,16 +13,9 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-type Service interface {
-	GetTokens(user *model.User, previousTokenId string) (*Tokens, error)
-	ValidateAccessToken(tokenString string) (*model.User, error)
-	ValidateRefreshToken(tokenString string) (*RefreshTokenData, error)
-	SignOut(userId uint) error
-}
-
 func NewService(
 	c config.Config,
-	tokenRepository Repository,
+	tokenRepository repository,
 ) (*tokenService, error) {
 	privateKey, err := c.Authentication.Keys.GetPrivateKey()
 	if err != nil {
@@ -44,7 +37,7 @@ func NewService(
 	}, nil
 }
 
-type Repository interface {
+type repository interface {
 	setRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error
 	deleteRefreshToken(userId uint, previousTokenId string) error
 	deleteRefreshTokens(userId uint) error
@@ -66,7 +59,7 @@ type RefreshTokenData struct {
 }
 
 type tokenService struct {
-	tokenRepository               Repository
+	tokenRepository               repository
 	privateKey                    *rsa.PrivateKey
 	publicKey                     *rsa.PublicKey
 	accessTokenExpirationSeconds  int

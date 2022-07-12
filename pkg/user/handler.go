@@ -5,25 +5,42 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/dhis2-sre/im-user/pkg/model"
+
 	"github.com/dhis2-sre/im-user/internal/errdef"
+
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/token"
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
-	config       config.Config
-	userService  Service
-	tokenService token.Service
-}
-
-func NewHandler(config config.Config, userService Service, tokenService token.Service) Handler {
+func NewHandler(config config.Config, userService userService, tokenService tokenService) Handler {
 	return Handler{
 		config,
 		userService,
 		tokenService,
 	}
+}
+
+type Handler struct {
+	config       config.Config
+	userService  userService
+	tokenService tokenService
+}
+
+type userService interface {
+	SignUp(email string, password string) (*model.User, error)
+	SignIn(email string, password string) (*model.User, error)
+	FindById(id uint) (*model.User, error)
+	FindByEmail(email string) (*model.User, error)
+	FindOrCreate(email string, password string) (*model.User, error)
+}
+
+type tokenService interface {
+	GetTokens(user *model.User, previousTokenId string) (*token.Tokens, error)
+	ValidateRefreshToken(tokenString string) (*token.RefreshTokenData, error)
+	SignOut(userId uint) error
 }
 
 type SignUpRequest struct {

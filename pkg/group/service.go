@@ -2,28 +2,31 @@ package group
 
 import (
 	"github.com/dhis2-sre/im-user/pkg/model"
-	"github.com/dhis2-sre/im-user/pkg/user"
 )
 
-type service struct {
-	groupRepository Repository
-	userRepository  user.Repository
-}
-
-func NewService(groupRepository Repository, userRepository user.Repository) *service {
+func NewService(groupRepository groupRepository, userRepository userRepository) *service {
 	return &service{
 		groupRepository,
 		userRepository,
 	}
 }
 
-type Repository interface {
+type groupRepository interface {
 	create(group *model.Group) error
 	addUser(group *model.Group, user *model.User) error
 	addClusterConfiguration(configuration *model.ClusterConfiguration) error
 	getClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
 	find(name string) (*model.Group, error)
 	findOrCreate(group *model.Group) (*model.Group, error)
+}
+
+type userRepository interface {
+	FindById(id uint) (*model.User, error)
+}
+
+type service struct {
+	groupRepository groupRepository
+	userRepository  userRepository
 }
 
 func (s *service) Find(name string) (*model.Group, error) {

@@ -72,7 +72,7 @@ func run() error {
 
 	groupRepository := group.NewRepository(db)
 	groupSvc := group.NewService(groupRepository, usrRepository)
-	groupHandler := group.NewHandler(groupSvc, usrSvc)
+	groupHandler := group.NewHandler(groupSvc)
 
 	authenticationMiddleware := middleware.NewAuthentication(usrSvc, tokenSvc)
 	authorizationMiddleware := middleware.NewAuthorization(usrSvc)

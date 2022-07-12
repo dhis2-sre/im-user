@@ -11,20 +11,19 @@ import (
 	"golang.org/x/crypto/scrypt"
 )
 
-type Service interface {
-	SignUp(email string, password string) (*model.User, error)
-	SignIn(email string, password string) (*model.User, error)
+func NewService(repository userRepository) *service {
+	return &service{repository}
+}
+
+type userRepository interface {
+	create(user *model.User) error
+	findByEmail(email string) (*model.User, error)
 	FindById(id uint) (*model.User, error)
-	FindByEmail(email string) (*model.User, error)
-	FindOrCreate(email string, password string) (*model.User, error)
+	findOrCreate(email *model.User) (*model.User, error)
 }
 
 type service struct {
-	repository Repository
-}
-
-func NewService(repository Repository) *service {
-	return &service{repository}
+	repository userRepository
 }
 
 func (s service) SignUp(email string, password string) (*model.User, error) {
@@ -38,7 +37,7 @@ func (s service) SignUp(email string, password string) (*model.User, error) {
 		Password: hashedPassword,
 	}
 
-	err = s.repository.Create(user)
+	err = s.repository.create(user)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +67,7 @@ func hashPassword(password string) (string, error) {
 func (s service) SignIn(email string, password string) (*model.User, error) {
 	unauthorizedMessage := "invalid email and password combination"
 
-	user, err := s.repository.FindByEmail(email)
+	user, err := s.repository.findByEmail(email)
 	if err != nil {
 		return nil, errors.New(unauthorizedMessage)
 	}
@@ -109,7 +108,7 @@ func (s service) FindById(id uint) (*model.User, error) {
 }
 
 func (s service) FindByEmail(email string) (*model.User, error) {
-	return s.repository.FindByEmail(email)
+	return s.repository.findByEmail(email)
 }
 
 func (s service) FindOrCreate(email string, password string) (*model.User, error) {
@@ -123,5 +122,5 @@ func (s service) FindOrCreate(email string, password string) (*model.User, error
 		Password: hashedPassword,
 	}
 
-	return s.repository.FindOrCreate(user)
+	return s.repository.findOrCreate(user)
 }

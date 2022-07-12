@@ -5,21 +5,29 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/dhis2-sre/im-user/pkg/token"
-	"github.com/dhis2-sre/im-user/pkg/user"
+	"github.com/dhis2-sre/im-user/pkg/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-type AuthenticationMiddleware struct {
-	userService  user.Service
-	tokenService token.Service
-}
-
-func NewAuthentication(userService user.Service, tokenService token.Service) AuthenticationMiddleware {
+func NewAuthentication(userService signInService, tokenService tokenService) AuthenticationMiddleware {
 	return AuthenticationMiddleware{
 		userService,
 		tokenService,
 	}
+}
+
+type signInService interface {
+	SignIn(email string, password string) (*model.User, error)
+}
+
+type tokenService interface {
+	ValidateAccessToken(tokenString string) (*model.User, error)
+}
+
+type AuthenticationMiddleware struct {
+	userService  signInService
+	tokenService tokenService
 }
 
 // BasicAuthentication Inspiration: https://www.pandurang-waghulde.com/custom-http-basic-authentication-using-gin/

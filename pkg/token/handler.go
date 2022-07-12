@@ -9,10 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
-	publicKey *rsa.PublicKey
-}
-
 func NewHandler(config config.Config) (Handler, error) {
 	publicKey, err := config.Authentication.Keys.GetPublicKey()
 	if err != nil {
@@ -22,6 +18,10 @@ func NewHandler(config config.Config) (Handler, error) {
 	return Handler{
 		publicKey,
 	}, nil
+}
+
+type Handler struct {
+	publicKey *rsa.PublicKey
 }
 
 // Jwks godoc
