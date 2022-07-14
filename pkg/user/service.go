@@ -18,7 +18,7 @@ func NewService(repository userRepository) *service {
 type userRepository interface {
 	create(user *model.User) error
 	findByEmail(email string) (*model.User, error)
-	FindById(id uint) (*model.User, error)
+	findById(id uint) (*model.User, error)
 	findOrCreate(email *model.User) (*model.User, error)
 }
 
@@ -104,7 +104,7 @@ func comparePasswords(storedPassword string, suppliedPassword string) (bool, err
 }
 
 func (s service) FindById(id uint) (*model.User, error) {
-	return s.repository.FindById(id)
+	return s.repository.findById(id)
 }
 
 func (s service) FindByEmail(email string) (*model.User, error) {

@@ -50,7 +50,7 @@ func (r repository) findOrCreate(user *model.User) (*model.User, error) {
 	return u, err
 }
 
-func (r repository) FindById(id uint) (*model.User, error) {
+func (r repository) findById(id uint) (*model.User, error) {
 	var u *model.User
 	err := r.db.
 		Preload("Groups").

@@ -124,7 +124,7 @@ func engine(t *testing.T, cfg config.Config) *gin.Engine {
 	usrHandler := user.NewHandler(cfg, usrSvc, tokenSvc)
 
 	groupRepository := group.NewRepository(db)
-	groupSvc := group.NewService(groupRepository, usrRepository)
+	groupSvc := group.NewService(groupRepository, usrSvc)
 	groupHandler := group.NewHandler(groupSvc)
 
 	authenticationMiddleware := middleware.NewAuthentication(usrSvc, tokenSvc)

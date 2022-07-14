@@ -4,10 +4,10 @@ import (
 	"github.com/dhis2-sre/im-user/pkg/model"
 )
 
-func NewService(groupRepository groupRepository, userRepository userRepository) *service {
+func NewService(groupRepository groupRepository, userService userService) *service {
 	return &service{
 		groupRepository,
-		userRepository,
+		userService,
 	}
 }
 
@@ -20,13 +20,13 @@ type groupRepository interface {
 	findOrCreate(group *model.Group) (*model.Group, error)
 }
 
-type userRepository interface {
+type userService interface {
 	FindById(id uint) (*model.User, error)
 }
 
 type service struct {
 	groupRepository groupRepository
-	userRepository  userRepository
+	userService     userService
 }
 
 func (s *service) Find(name string) (*model.Group, error) {
@@ -67,7 +67,7 @@ func (s *service) AddUser(groupName string, userId uint) error {
 		return err
 	}
 
-	u, err := s.userRepository.FindById(userId)
+	u, err := s.userService.FindById(userId)
 	if err != nil {
 		return err
 	}
