@@ -11,23 +11,28 @@ import (
 	"github.com/dhis2-sre/im-user/internal/errdef"
 	"github.com/dhis2-sre/im-user/internal/handler"
 	"github.com/dhis2-sre/im-user/pkg/model"
-	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
-	groupService Service
-	userService  user.Service
-}
-
 func NewHandler(
-	groupService Service,
-	userService user.Service,
+	groupService groupService,
 ) Handler {
 	return Handler{
 		groupService,
-		userService,
 	}
+}
+
+type Handler struct {
+	groupService groupService
+}
+
+type groupService interface {
+	Create(name string, hostname string) (*model.Group, error)
+	AddUser(groupName string, userId uint) error
+	AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error
+	GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
+	Find(name string) (*model.Group, error)
+	FindOrCreate(name string, hostname string) (*model.Group, error)
 }
 
 type CreateGroupRequest struct {

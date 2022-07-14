@@ -16,7 +16,16 @@ import (
 	redocMiddleware "github.com/go-openapi/runtime/middleware"
 )
 
-func GetEngine(c config.Config, tokenHandler token.Handler, usrHandler user.Handler, groupHandler group.Handler, authenticationMiddleware middleware.AuthenticationMiddleware, authorizationMiddleware middleware.AuthorizationMiddleware, usrSvc user.Service, groupSvc group.Service) (*gin.Engine, error) {
+type userService interface {
+	FindOrCreate(email string, password string) (*model.User, error)
+}
+
+type groupService interface {
+	AddUser(groupName string, userId uint) error
+	FindOrCreate(name string, hostname string) (*model.Group, error)
+}
+
+func GetEngine(c config.Config, tokenHandler token.Handler, usrHandler user.Handler, groupHandler group.Handler, authenticationMiddleware middleware.AuthenticationMiddleware, authorizationMiddleware middleware.AuthorizationMiddleware, usrSvc userService, groupSvc groupService) (*gin.Engine, error) {
 	basePath := c.BasePath
 
 	r := gin.Default()
@@ -81,7 +90,7 @@ func redoc(router *gin.RouterGroup, basePath string) {
 	})
 }
 
-func createGroups(config config.Config, groupSvc group.Service) error {
+func createGroups(config config.Config, groupSvc groupService) error {
 	log.Println("Creating groups...")
 	groups := config.Groups
 	for _, g := range groups {
@@ -97,7 +106,7 @@ func createGroups(config config.Config, groupSvc group.Service) error {
 	return nil
 }
 
-func createAdminUser(config config.Config, usrSvc user.Service, groupSvc group.Service) error {
+func createAdminUser(config config.Config, usrSvc userService, groupSvc groupService) error {
 	adminUserEmail := config.AdminUser.Email
 	adminUserPassword := config.AdminUser.Password
 
@@ -119,7 +128,7 @@ func createAdminUser(config config.Config, usrSvc user.Service, groupSvc group.S
 	return nil
 }
 
-func createServiceUsers(config config.Config, usrSvc user.Service, groupSvc group.Service) error {
+func createServiceUsers(config config.Config, usrSvc userService, groupSvc groupService) error {
 	log.Println("Creating service users...")
 	g, err := groupSvc.FindOrCreate(model.AdministratorGroupName, "")
 	if err != nil {

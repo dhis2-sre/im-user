@@ -2,32 +2,35 @@ package group
 
 import (
 	"github.com/dhis2-sre/im-user/pkg/model"
-	"github.com/dhis2-sre/im-user/pkg/user"
 )
 
-type Service interface {
-	Create(name string, hostname string) (*model.Group, error)
-	AddUser(groupName string, userId uint) error
-	AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error
-	GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
-	Find(name string) (*model.Group, error)
-	FindOrCreate(name string, hostname string) (*model.Group, error)
-}
-
-type service struct {
-	groupRepository Repository
-	userRepository  user.Repository
-}
-
-func NewService(groupRepository Repository, userRepository user.Repository) *service {
+func NewService(groupRepository groupRepository, userService userService) *service {
 	return &service{
 		groupRepository,
-		userRepository,
+		userService,
 	}
 }
 
+type groupRepository interface {
+	create(group *model.Group) error
+	addUser(group *model.Group, user *model.User) error
+	addClusterConfiguration(configuration *model.ClusterConfiguration) error
+	getClusterConfiguration(groupName string) (*model.ClusterConfiguration, error)
+	find(name string) (*model.Group, error)
+	findOrCreate(group *model.Group) (*model.Group, error)
+}
+
+type userService interface {
+	FindById(id uint) (*model.User, error)
+}
+
+type service struct {
+	groupRepository groupRepository
+	userService     userService
+}
+
 func (s *service) Find(name string) (*model.Group, error) {
-	return s.groupRepository.Find(name)
+	return s.groupRepository.find(name)
 }
 
 func (s *service) Create(name string, hostname string) (*model.Group, error) {
@@ -36,7 +39,7 @@ func (s *service) Create(name string, hostname string) (*model.Group, error) {
 		Hostname: hostname,
 	}
 
-	err := s.groupRepository.Create(group)
+	err := s.groupRepository.create(group)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +53,7 @@ func (s *service) FindOrCreate(name string, hostname string) (*model.Group, erro
 		Hostname: hostname,
 	}
 
-	g, err := s.groupRepository.FindOrCreate(group)
+	g, err := s.groupRepository.findOrCreate(group)
 	if err != nil {
 		return nil, err
 	}
@@ -64,18 +67,18 @@ func (s *service) AddUser(groupName string, userId uint) error {
 		return err
 	}
 
-	u, err := s.userRepository.FindById(userId)
+	u, err := s.userService.FindById(userId)
 	if err != nil {
 		return err
 	}
 
-	return s.groupRepository.AddUser(group, u)
+	return s.groupRepository.addUser(group, u)
 }
 
 func (s *service) AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error {
-	return s.groupRepository.AddClusterConfiguration(clusterConfiguration)
+	return s.groupRepository.addClusterConfiguration(clusterConfiguration)
 }
 
 func (s *service) GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error) {
-	return s.groupRepository.GetClusterConfiguration(groupName)
+	return s.groupRepository.getClusterConfiguration(groupName)
 }

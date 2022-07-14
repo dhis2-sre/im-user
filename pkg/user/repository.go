@@ -10,19 +10,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type Repository interface {
-	Create(user *model.User) error
-	FindByEmail(email string) (*model.User, error)
-	FindById(id uint) (*model.User, error)
-	FindOrCreate(email *model.User) (*model.User, error)
+func NewRepository(DB *gorm.DB) *repository {
+	return &repository{db: DB}
 }
 
-type userRepository struct {
+type repository struct {
 	db *gorm.DB
-}
-
-func NewRepository(DB *gorm.DB) *userRepository {
-	return &userRepository{db: DB}
 }
 
 type duplicateError struct{ error }
@@ -33,7 +26,7 @@ func (e duplicateError) Unwrap() error {
 	return e.error
 }
 
-func (r userRepository) Create(u *model.User) error {
+func (r repository) create(u *model.User) error {
 	err := r.db.Create(&u).Error
 
 	var perr *pgconn.PgError
@@ -45,28 +38,29 @@ func (r userRepository) Create(u *model.User) error {
 	return err
 }
 
-func (r userRepository) FindByEmail(email string) (*model.User, error) {
+func (r repository) findByEmail(email string) (*model.User, error) {
 	var u *model.User
 	err := r.db.Where("email = ?", email).First(&u).Error
 	return u, err
 }
 
-func (r userRepository) FindOrCreate(user *model.User) (*model.User, error) {
+func (r repository) findOrCreate(user *model.User) (*model.User, error) {
 	var u *model.User
 	err := r.db.Where(model.User{Email: user.Email}).Attrs(model.User{Password: user.Password}).FirstOrCreate(&u).Error
 	return u, err
 }
 
-func (r userRepository) FindById(id uint) (*model.User, error) {
+func (r repository) findById(id uint) (*model.User, error) {
 	var u *model.User
 	err := r.db.
 		Preload("Groups").
 		First(&u, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return u, errdef.NotFound(fmt.Errorf("failed to find user with id %d: %v", id, err))
+			err := fmt.Errorf("failed to find user with id %d: %v", id, err)
+			return u, errdef.NotFound(err)
 		}
-		return u, fmt.Errorf("failed to find user with id %d: %v", id, err)
+		return u, err
 	}
 
 	return u, nil

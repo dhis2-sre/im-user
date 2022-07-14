@@ -5,18 +5,23 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dhis2-sre/im-user/pkg/model"
+
 	"github.com/dhis2-sre/im-user/internal/errdef"
 	"github.com/dhis2-sre/im-user/internal/handler"
-	"github.com/dhis2-sre/im-user/pkg/user"
 	"github.com/gin-gonic/gin"
 )
 
-type AuthorizationMiddleware struct {
-	userService user.Service
+func NewAuthorization(userService userService) AuthorizationMiddleware {
+	return AuthorizationMiddleware{userService}
 }
 
-func NewAuthorization(userService user.Service) AuthorizationMiddleware {
-	return AuthorizationMiddleware{userService}
+type AuthorizationMiddleware struct {
+	userService userService
+}
+
+type userService interface {
+	FindById(id uint) (*model.User, error)
 }
 
 func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
