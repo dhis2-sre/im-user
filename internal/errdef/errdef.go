@@ -4,15 +4,14 @@ import (
 	"errors"
 )
 
-type duplicate struct{ error }
-
 func NewDuplicated(err error) error {
-	return duplicate{err}
+	return Duplicate{err}
 }
 
-func IsDuplicated(err error) bool {
-	var e duplicate
-	return errors.As(err, &e)
+type Duplicate struct{ error }
+
+func (d Duplicate) As(target any) bool {
+	return errors.As(d, &target)
 }
 
 type unauthorized struct{ error }

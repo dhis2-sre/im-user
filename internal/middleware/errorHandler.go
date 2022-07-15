@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,7 +21,7 @@ func ErrorHandler() gin.HandlerFunc {
 			return
 		}
 
-		if errdef.IsDuplicated(err) {
+		if errors.As(err, &errdef.Duplicate{}) {
 			_ = c.AbortWithError(http.StatusBadRequest, err)
 		} else if errdef.IsNotFound(err) {
 			_ = c.AbortWithError(http.StatusNotFound, err)
