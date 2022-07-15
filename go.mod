@@ -3,7 +3,7 @@ module github.com/dhis2-sre/im-user
 go 1.18
 
 require (
-	github.com/gin-contrib/cors v1.3.1
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-openapi/errors v0.20.2
 	github.com/go-openapi/runtime v0.24.1
