@@ -56,5 +56,10 @@ func (r repository) getClusterConfiguration(groupName string) (*model.ClusterCon
 	err := r.db.
 		Where("group_name = ?", groupName).
 		First(&configuration).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := fmt.Errorf("group %q doesn't exist", groupName)
+		return nil, errdef.NewNotFound(err)
+	}
+
 	return configuration, err
 }
