@@ -60,8 +60,7 @@ func (r repository) findById(id uint) (*model.User, error) {
 			err := fmt.Errorf("failed to find user with id %d: %v", id, err)
 			return u, errdef.NewNotFound(err)
 		}
-		return u, err
 	}
 
-	return u, nil
+	return u, err
 }
