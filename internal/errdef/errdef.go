@@ -2,13 +2,12 @@ package errdef
 
 import (
 	"errors"
-	"fmt"
 )
 
 type duplicate struct{ error }
 
-func NewDuplicated(format string, a ...any) error {
-	return duplicate{fmt.Errorf(format, a...)}
+func NewDuplicated(err error) error {
+	return duplicate{err}
 }
 
 func IsDuplicated(err error) bool {
@@ -18,8 +17,8 @@ func IsDuplicated(err error) bool {
 
 type unauthorized struct{ error }
 
-func NewUnauthorized(format string, a ...any) error {
-	return unauthorized{fmt.Errorf(format, a...)}
+func NewUnauthorized(err error) error {
+	return unauthorized{err}
 }
 
 func IsUnauthorized(err error) bool {
@@ -29,17 +28,8 @@ func IsUnauthorized(err error) bool {
 
 type notFound struct{ error }
 
-func (e notFound) NotFound() {}
-
-func (e notFound) Unwrap() error {
-	return e.error
-}
-
-// NotFound creates an error representing a resource that could not be found.
-func NotFound(err error) error {
-	if err == nil || IsNotFound(err) {
-		return err
-	}
+// NewNotFound creates an error representing a resource that could not be found.
+func NewNotFound(err error) error {
 	return notFound{err}
 }
 

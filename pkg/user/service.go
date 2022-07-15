@@ -66,12 +66,12 @@ func hashPassword(password string) (string, error) {
 }
 
 func (s service) SignIn(email string, password string) (*model.User, error) {
-	unauthorizedMessage := "invalid email and password combination"
+	unauthorizedError := fmt.Errorf("invalid email and password combination")
 
 	user, err := s.repository.findByEmail(email)
 	if err != nil {
 		if errdef.IsNotFound(err) {
-			return nil, errdef.NewUnauthorized(unauthorizedMessage)
+			return nil, errdef.NewUnauthorized(unauthorizedError)
 		}
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (s service) SignIn(email string, password string) (*model.User, error) {
 	}
 
 	if !match {
-		return nil, errdef.NewUnauthorized(unauthorizedMessage)
+		return nil, errdef.NewUnauthorized(unauthorizedError)
 	}
 
 	return user, nil

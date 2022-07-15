@@ -25,7 +25,7 @@ func (r repository) find(name string) (*model.Group, error) {
 		First(&group).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return group, errdef.NotFound(fmt.Errorf("group %q doesn't exist", name))
+			return group, errdef.NewNotFound(fmt.Errorf("group %q doesn't exist", name))
 		}
 		return group, err
 	}
