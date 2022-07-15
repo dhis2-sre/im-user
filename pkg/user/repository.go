@@ -61,6 +61,5 @@ func (r repository) findById(id uint) (*model.User, error) {
 			return u, errdef.NewNotFound(err)
 		}
 	}
-
 	return u, err
 }
