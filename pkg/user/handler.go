@@ -48,10 +48,6 @@ type SignUpRequest struct {
 	Password string `json:"password" binding:"required,gte=16,lte=128"`
 }
 
-type duplicate interface {
-	Duplicate()
-}
-
 // SignUp user
 // swagger:route POST /users signUp
 //
@@ -70,12 +66,7 @@ func (h *Handler) SignUp(c *gin.Context) {
 
 	user, err := h.userService.SignUp(request.Email, request.Password)
 	if err != nil {
-		var dp duplicate
-		if errors.As(err, &dp) {
-			_ = c.AbortWithError(http.StatusBadRequest, err)
-		} else {
-			_ = c.Error(err)
-		}
+		_ = c.Error(err)
 		return
 	}
 

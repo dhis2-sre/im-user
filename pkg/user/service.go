@@ -3,9 +3,10 @@ package user
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"strings"
+
+	"github.com/dhis2-sre/im-user/internal/errdef"
 
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"golang.org/x/crypto/scrypt"
@@ -69,7 +70,10 @@ func (s service) SignIn(email string, password string) (*model.User, error) {
 
 	user, err := s.repository.findByEmail(email)
 	if err != nil {
-		return nil, errors.New(unauthorizedMessage)
+		if errdef.IsNotFound(err) {
+			return nil, errdef.NewUnauthorized(unauthorizedMessage)
+		}
+		return nil, err
 	}
 
 	match, err := comparePasswords(user.Password, password)
@@ -78,7 +82,7 @@ func (s service) SignIn(email string, password string) (*model.User, error) {
 	}
 
 	if !match {
-		return nil, errors.New(unauthorizedMessage)
+		return nil, errdef.NewUnauthorized(unauthorizedMessage)
 	}
 
 	return user, nil

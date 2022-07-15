@@ -1,6 +1,31 @@
 package errdef
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
+
+type duplicate struct{ error }
+
+func NewDuplicated(format string, a ...any) error {
+	return duplicate{fmt.Errorf(format, a...)}
+}
+
+func IsDuplicated(err error) bool {
+	var e duplicate
+	return errors.As(err, &e)
+}
+
+type unauthorized struct{ error }
+
+func NewUnauthorized(format string, a ...any) error {
+	return unauthorized{fmt.Errorf(format, a...)}
+}
+
+func IsUnauthorized(err error) bool {
+	var e unauthorized
+	return errors.As(err, &e)
+}
 
 type notFound struct{ error }
 
