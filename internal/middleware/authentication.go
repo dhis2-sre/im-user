@@ -40,7 +40,7 @@ func (m AuthenticationMiddleware) BasicAuthentication(c *gin.Context) {
 
 	u, err := m.userService.SignIn(username, password)
 	if err != nil {
-		m.handleError(c, errors.New("invalid credentials"))
+		m.handleError(c, err)
 		return
 	}
 

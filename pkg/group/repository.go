@@ -23,14 +23,12 @@ func (r repository) find(name string) (*model.Group, error) {
 		Preload("ClusterConfiguration").
 		Where("name = ?", name).
 		First(&group).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return group, errdef.NotFound(fmt.Errorf("group %q doesn't exist", name))
-		}
-		return group, err
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := fmt.Errorf("group %q doesn't exist", name)
+		return group, errdef.NewNotFound(err)
 	}
 
-	return group, nil
+	return group, err
 }
 
 func (r repository) create(group *model.Group) error {
@@ -56,5 +54,10 @@ func (r repository) getClusterConfiguration(groupName string) (*model.ClusterCon
 	err := r.db.
 		Where("group_name = ?", groupName).
 		First(&configuration).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := fmt.Errorf("group %q doesn't exist", groupName)
+		return nil, errdef.NewNotFound(err)
+	}
+
 	return configuration, err
 }

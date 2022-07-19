@@ -12,6 +12,7 @@ require (
 	github.com/go-openapi/validate v0.22.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofrs/uuid v4.2.0+incompatible
+	github.com/google/uuid v1.1.2
 	github.com/jackc/pgconn v1.12.1
 	github.com/lestrrat-go/jwx v1.2.25
 	github.com/stretchr/testify v1.8.0
@@ -35,7 +36,6 @@ require (
 	github.com/go-playground/validator/v10 v10.10.1 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
-	github.com/google/uuid v1.1.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

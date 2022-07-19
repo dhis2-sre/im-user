@@ -1,22 +1,37 @@
 package errdef
 
-import "errors"
+import (
+	"errors"
+)
 
-type notFound struct{ error }
-
-func (e notFound) NotFound() {}
-
-func (e notFound) Unwrap() error {
-	return e.error
+func NewDuplicated(err error) error {
+	return duplicated{err}
 }
 
-// NotFound creates an error representing a resource that could not be found.
-func NotFound(err error) error {
-	if err == nil || IsNotFound(err) {
-		return err
-	}
+type duplicated struct{ error }
+
+func IsDuplicated(err error) bool {
+	var e duplicated
+	return errors.As(err, &e)
+}
+
+func NewUnauthorized(err error) error {
+	return unauthorized{err}
+}
+
+type unauthorized struct{ error }
+
+func IsUnauthorized(err error) bool {
+	var e unauthorized
+	return errors.As(err, &e)
+}
+
+// NewNotFound creates an error representing a resource that could not be found.
+func NewNotFound(err error) error {
 	return notFound{err}
 }
+
+type notFound struct{ error }
 
 // IsNotFound returns true if err is an error representing a resource that could not be found and false otherwise.
 func IsNotFound(err error) bool {
