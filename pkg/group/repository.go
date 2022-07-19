@@ -23,10 +23,8 @@ func (r repository) find(name string) (*model.Group, error) {
 		Preload("ClusterConfiguration").
 		Where("name = ?", name).
 		First(&group).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return group, errdef.NewNotFound(fmt.Errorf("group %q doesn't exist", name))
-		}
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return group, errdef.NewNotFound(fmt.Errorf("group %q doesn't exist", name))
 	}
 
 	return group, err

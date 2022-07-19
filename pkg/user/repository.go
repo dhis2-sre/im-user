@@ -35,11 +35,9 @@ func (r repository) create(u *model.User) error {
 func (r repository) findByEmail(email string) (*model.User, error) {
 	var u *model.User
 	err := r.db.Where("email = ?", email).First(&u).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			err := fmt.Errorf("failed to find user with email %s: %v", email, err)
-			return u, errdef.NewNotFound(err)
-		}
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := fmt.Errorf("failed to find user with email %s: %v", email, err)
+		return u, errdef.NewNotFound(err)
 	}
 	return u, err
 }
@@ -55,11 +53,9 @@ func (r repository) findById(id uint) (*model.User, error) {
 	err := r.db.
 		Preload("Groups").
 		First(&u, id).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			err := fmt.Errorf("failed to find user with id %d: %v", id, err)
-			return u, errdef.NewNotFound(err)
-		}
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := fmt.Errorf("failed to find user with id %d: %v", id, err)
+		return u, errdef.NewNotFound(err)
 	}
 	return u, err
 }
