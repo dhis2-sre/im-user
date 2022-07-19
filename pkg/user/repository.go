@@ -25,7 +25,7 @@ func (r repository) create(u *model.User) error {
 	var perr *pgconn.PgError
 	const uniqueKeyConstraint = "23505"
 	if errors.As(err, &perr) && perr.Code == uniqueKeyConstraint {
-		err := fmt.Errorf("user already exists: %v", err)
+		err := fmt.Errorf("user %q already exists", u.Email)
 		return errdef.NewDuplicated(err)
 	}
 
@@ -36,7 +36,7 @@ func (r repository) findByEmail(email string) (*model.User, error) {
 	var u *model.User
 	err := r.db.Where("email = ?", email).First(&u).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		err := fmt.Errorf("failed to find user with email %q: %v", email, err)
+		err := fmt.Errorf("failed to find user with email %q", email)
 		return u, errdef.NewNotFound(err)
 	}
 	return u, err
@@ -54,7 +54,7 @@ func (r repository) findById(id uint) (*model.User, error) {
 		Preload("Groups").
 		First(&u, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		err := fmt.Errorf("failed to find user with id %d: %v", id, err)
+		err := fmt.Errorf("failed to find user with id %d", id)
 		return u, errdef.NewNotFound(err)
 	}
 	return u, err
