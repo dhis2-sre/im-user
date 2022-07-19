@@ -19,6 +19,10 @@ func ErrorHandler() gin.HandlerFunc {
 		if err == nil {
 			return
 		}
+		if c.Writer.Status() != http.StatusOK {
+			_, _ = c.Writer.WriteString(err.Error())
+			return
+		}
 
 		if errdef.IsDuplicated(err) {
 			_ = c.AbortWithError(http.StatusBadRequest, err)
