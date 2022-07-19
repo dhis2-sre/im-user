@@ -4,14 +4,14 @@ import (
 	"errors"
 )
 
-type duplicate struct{ error }
+type duplicated struct{ error }
 
 func NewDuplicated(err error) error {
-	return duplicate{err}
+	return duplicated{err}
 }
 
 func IsDuplicated(err error) bool {
-	var e duplicate
+	var e duplicated
 	return errors.As(err, &e)
 }
 
