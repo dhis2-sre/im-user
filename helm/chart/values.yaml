@@ -7,6 +7,7 @@ groups:
   hostnames: whoami.im.feature.test.c.dhis2.org
 
 containerPort: 8080
+debugPort: 4000
 
 basePath: ""
 
@@ -70,6 +71,10 @@ securityContext:
 service:
   type: ClusterIP
   port: 8080
+
+debug:
+  type: ClusterIP
+  port: 4000
 
 ingress:
   enabled: false

@@ -37,6 +37,9 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPort }}
               protocol: TCP
+            - name: debug
+              containerPort: {{ .Values.debugPort }}
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.basePath }}/health
