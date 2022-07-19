@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/dhis2-sre/im-user/internal/middleware"
@@ -56,7 +57,7 @@ func TestErrorHandler(t *testing.T) {
 		r.Use(middleware.ErrorHandler())
 
 		r.GET("/", func(ctx *gin.Context) {
-			_ = ctx.Error(errors.New("something went wrong"))
+			_ = ctx.Error(errors.New("something went wrong but we'll keep it for ourselves"))
 		})
 
 		w := httptest.NewRecorder()
@@ -66,6 +67,6 @@ func TestErrorHandler(t *testing.T) {
 		r.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
-		assert.Equal(t, "something went wrong", w.Body.String())
+		assert.True(t, strings.HasPrefix(w.Body.String(), "something went wrong. We'll look into it if you send us the id "))
 	})
 }

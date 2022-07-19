@@ -25,15 +25,16 @@ func ErrorHandler() gin.HandlerFunc {
 		}
 
 		if errdef.IsDuplicated(err) {
-			_ = c.AbortWithError(http.StatusBadRequest, err)
+			c.String(http.StatusBadRequest, err.Error())
 		} else if errdef.IsNotFound(err) {
-			_ = c.AbortWithError(http.StatusNotFound, err)
+			c.String(http.StatusNotFound, err.Error())
 		} else if errdef.IsUnauthorized(err) {
-			_ = c.AbortWithError(http.StatusUnauthorized, err)
+			c.String(http.StatusUnauthorized, err.Error())
 		} else {
 			id := uuid.New()
-			log.Printf("unhandled error: %v, log id: %s\n", err, id)
-			_ = c.AbortWithError(http.StatusInternalServerError, fmt.Errorf("something went wrong. We'll look into it if you send us the id %q :)", id))
+			log.Printf("unhandled error: %q, log id: %s\n", err, id)
+			err := fmt.Errorf("something went wrong. We'll look into it if you send us the id %q :)", id)
+			c.String(http.StatusInternalServerError, err.Error())
 		}
 	}
 }
