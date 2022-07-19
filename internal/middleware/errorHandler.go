@@ -29,7 +29,7 @@ func ErrorHandler() gin.HandlerFunc {
 		} else {
 			id := uuid.New()
 			log.Printf("unhandled error: %v, log id: %s", err, id)
-			_ = c.AbortWithError(http.StatusInternalServerError, fmt.Errorf("unhandled error, log id: %s", id.String()))
+			_ = c.AbortWithError(http.StatusInternalServerError, fmt.Errorf("something went wrong. We'll look into it if you send us the id \"%s\" :)", id))
 		}
 	}
 }
