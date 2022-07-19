@@ -36,7 +36,7 @@ func (r repository) findByEmail(email string) (*model.User, error) {
 	var u *model.User
 	err := r.db.Where("email = ?", email).First(&u).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		err := fmt.Errorf("failed to find user with email %s: %v", email, err)
+		err := fmt.Errorf("failed to find user with email %q: %v", email, err)
 		return u, errdef.NewNotFound(err)
 	}
 	return u, err
