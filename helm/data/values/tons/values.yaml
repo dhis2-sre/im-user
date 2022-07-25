@@ -1,3 +1,6 @@
+accessTokenExpirationInSeconds: 86400 # 24 hours
+refreshTokenExpirationInSeconds: 172800 # 2 days
+
 image:
   pullPolicy: Always
 
