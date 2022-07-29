@@ -34,7 +34,11 @@ func (r repository) create(u *model.User) error {
 
 func (r repository) findByEmail(email string) (*model.User, error) {
 	var u *model.User
-	err := r.db.Where("email = ?", email).First(&u).Error
+	err := r.db.
+		Preload("Groups").
+		Preload("AdminGroups").
+		Where("email = ?", email).
+		First(&u).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err := fmt.Errorf("failed to find user with email %q", email)
 		return u, errdef.NewNotFound(err)
