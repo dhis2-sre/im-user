@@ -111,10 +111,6 @@ func (s service) FindById(id uint) (*model.User, error) {
 	return s.repository.findById(id)
 }
 
-func (s service) FindByEmail(email string) (*model.User, error) {
-	return s.repository.findByEmail(email)
-}
-
 func (s service) FindOrCreate(email string, password string) (*model.User, error) {
 	hashedPassword, err := hashPassword(password)
 	if err != nil {

@@ -33,8 +33,6 @@ type userService interface {
 	SignUp(email string, password string) (*model.User, error)
 	SignIn(email string, password string) (*model.User, error)
 	FindById(id uint) (*model.User, error)
-	FindByEmail(email string) (*model.User, error)
-	FindOrCreate(email string, password string) (*model.User, error)
 }
 
 type tokenService interface {
