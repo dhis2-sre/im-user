@@ -14,17 +14,17 @@ type User struct {
 	AdminGroups []Group `gorm:"many2many:user_groups;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
-func (u *User) IsMemberOf(groupName string) bool {
-	return u.contains(groupName, u.Groups)
+func (u *User) IsMemberOf(group string) bool {
+	return u.contains(group, u.Groups)
 }
 
-func (u *User) IsAdminOf(groupName string) bool {
-	return u.contains(groupName, u.AdminGroups)
+func (u *User) IsAdminOf(group string) bool {
+	return u.contains(group, u.AdminGroups)
 }
 
-func (u *User) contains(groupName string, groups []Group) bool {
-	for _, group := range groups {
-		if groupName == group.Name {
+func (u *User) contains(group string, groups []Group) bool {
+	for _, g := range groups {
+		if group == g.Name {
 			return true
 		}
 	}
