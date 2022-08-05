@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-USER_ID=$1
-GROUP_NAME=$2
+GROUP=$1
+USER=$2
 
-$HTTP post "$INSTANCE_HOST/groups/$GROUP_NAME/users/$USER_ID" "Authorization: Bearer $ACCESS_TOKEN"
+$HTTP post "$INSTANCE_HOST/groups/$GROUP/users/$USER" "Authorization: Bearer $ACCESS_TOKEN"

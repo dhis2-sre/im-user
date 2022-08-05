@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CONFIG_FILE=$1
-GROUP_NAME=$2
+GROUP=$1
+CONFIG_FILE=$2
 
-$HTTP --ignore-stdin --form post "$INSTANCE_HOST/groups/$GROUP_NAME/cluster-configuration" "kubernetesConfiguration@$CONFIG_FILE" "Authorization: Bearer $ACCESS_TOKEN"
+$HTTP --ignore-stdin --form post "$INSTANCE_HOST/groups/$GROUP/cluster-configuration" "kubernetesConfiguration@$CONFIG_FILE" "Authorization: Bearer $ACCESS_TOKEN"

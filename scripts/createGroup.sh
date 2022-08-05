@@ -2,10 +2,10 @@
 
 set -euo pipefail
 
-GROUP_NAME=$1
-GROUP_HOSTNAME=$2
+GROUP=$1
+HOSTNAME=$2
 
 echo "{
-  \"name\": \"$GROUP_NAME\",
-  \"hostname\": \"$GROUP_HOSTNAME\"
+  \"name\": \"$GROUP\",
+  \"hostname\": \"$HOSTNAME\"
 }" | $HTTP post "$INSTANCE_HOST/groups" "Authorization: Bearer $ACCESS_TOKEN"
