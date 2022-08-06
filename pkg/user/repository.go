@@ -56,6 +56,7 @@ func (r repository) findById(id uint) (*model.User, error) {
 	var u *model.User
 	err := r.db.
 		Preload("Groups").
+		Preload("AdminGroups").
 		First(&u, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err := fmt.Errorf("failed to find user with id %d", id)
