@@ -5,7 +5,7 @@ type _ struct {
 	// Refresh token request body parameter
 	// in: body
 	// required: true
-	_ CreateGroupRequest
+	Body CreateGroupRequest
 }
 
 // swagger:parameters addUserToGroup
@@ -29,7 +29,7 @@ type _ struct {
 	// in: formData
 	// required: true
 	// swagger:file
-	_ CreateClusterConfigurationRequest
+	Body CreateClusterConfigurationRequest
 }
 
 // swagger:parameters findGroupByName

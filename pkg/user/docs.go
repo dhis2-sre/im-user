@@ -7,7 +7,7 @@ type _ struct {
 	// SignUp request body parameter
 	// in: body
 	// required: true
-	_ SignUpRequest
+	Body SignUpRequest
 }
 
 // swagger:parameters refreshToken
@@ -15,7 +15,7 @@ type _ struct {
 	// Refresh token request body parameter
 	// in: body
 	// required: true
-	_ RefreshTokenRequest
+	Body RefreshTokenRequest
 }
 
 // swagger:parameters findUserById

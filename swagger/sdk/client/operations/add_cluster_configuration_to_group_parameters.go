@@ -59,6 +59,12 @@ func NewAddClusterConfigurationToGroupParamsWithHTTPClient(client *http.Client) 
 */
 type AddClusterConfigurationToGroupParams struct {
 
+	/* Body.
+
+	   SOPS encrypted Kubernetes configuration file
+	*/
+	Body runtime.NamedReadCloser
+
 	// Name.
 	Name string
 
@@ -115,6 +121,17 @@ func (o *AddClusterConfigurationToGroupParams) SetHTTPClient(client *http.Client
 	o.HTTPClient = client
 }
 
+// WithBody adds the body to the add cluster configuration to group params
+func (o *AddClusterConfigurationToGroupParams) WithBody(body runtime.NamedReadCloser) *AddClusterConfigurationToGroupParams {
+	o.SetBody(body)
+	return o
+}
+
+// SetBody adds the body to the add cluster configuration to group params
+func (o *AddClusterConfigurationToGroupParams) SetBody(body runtime.NamedReadCloser) {
+	o.Body = body
+}
+
 // WithName adds the name to the add cluster configuration to group params
 func (o *AddClusterConfigurationToGroupParams) WithName(name string) *AddClusterConfigurationToGroupParams {
 	o.SetName(name)
@@ -133,6 +150,10 @@ func (o *AddClusterConfigurationToGroupParams) WriteToRequest(r runtime.ClientRe
 		return err
 	}
 	var res []error
+	// form file param Body
+	if err := r.SetFileParam("Body", o.Body); err != nil {
+		return err
+	}
 
 	// path param name
 	if err := r.SetPathParam("name", o.Name); err != nil {

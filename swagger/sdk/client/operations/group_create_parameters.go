@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"github.com/dhis2-sre/im-user/swagger/sdk/models"
 )
 
 // NewGroupCreateParams creates a new GroupCreateParams object,
@@ -58,6 +60,13 @@ func NewGroupCreateParamsWithHTTPClient(client *http.Client) *GroupCreateParams 
    Typically these are written to a http.Request.
 */
 type GroupCreateParams struct {
+
+	/* Body.
+
+	   Refresh token request body parameter
+	*/
+	Body *models.CreateGroupRequest
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -111,6 +120,17 @@ func (o *GroupCreateParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithBody adds the body to the group create params
+func (o *GroupCreateParams) WithBody(body *models.CreateGroupRequest) *GroupCreateParams {
+	o.SetBody(body)
+	return o
+}
+
+// SetBody adds the body to the group create params
+func (o *GroupCreateParams) SetBody(body *models.CreateGroupRequest) {
+	o.Body = body
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *GroupCreateParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -118,6 +138,11 @@ func (o *GroupCreateParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
+		}
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
