@@ -3,6 +3,10 @@
 set -euo pipefail
 
 GROUP=$1
-CONFIG_FILE=$2
+PLAIN_TEXT_CONFIG_FILE=$2
 
-$HTTP --ignore-stdin --form post "$INSTANCE_HOST/groups/$GROUP/cluster-configuration" "kubernetesConfiguration@$CONFIG_FILE" "Authorization: Bearer $ACCESS_TOKEN"
+ENCRYPTED_CONFIG_FILE=/tmp/kubernetes.sops.yaml
+
+sops -e "$PLAIN_TEXT_CONFIG_FILE" > $ENCRYPTED_CONFIG_FILE
+
+$HTTP --ignore-stdin --form post "$INSTANCE_HOST/groups/$GROUP/cluster-configuration" "kubernetesConfiguration@$ENCRYPTED_CONFIG_FILE" "Authorization: Bearer $ACCESS_TOKEN"
