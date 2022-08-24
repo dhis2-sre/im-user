@@ -65,8 +65,8 @@ type AddClusterConfigurationToGroupParams struct {
 	*/
 	Body runtime.NamedReadCloser
 
-	// Name.
-	Name string
+	// Group.
+	Group string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -132,15 +132,15 @@ func (o *AddClusterConfigurationToGroupParams) SetBody(body runtime.NamedReadClo
 	o.Body = body
 }
 
-// WithName adds the name to the add cluster configuration to group params
-func (o *AddClusterConfigurationToGroupParams) WithName(name string) *AddClusterConfigurationToGroupParams {
-	o.SetName(name)
+// WithGroup adds the group to the add cluster configuration to group params
+func (o *AddClusterConfigurationToGroupParams) WithGroup(group string) *AddClusterConfigurationToGroupParams {
+	o.SetGroup(group)
 	return o
 }
 
-// SetName adds the name to the add cluster configuration to group params
-func (o *AddClusterConfigurationToGroupParams) SetName(name string) {
-	o.Name = name
+// SetGroup adds the group to the add cluster configuration to group params
+func (o *AddClusterConfigurationToGroupParams) SetGroup(group string) {
+	o.Group = group
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -155,8 +155,8 @@ func (o *AddClusterConfigurationToGroupParams) WriteToRequest(r runtime.ClientRe
 		return err
 	}
 
-	// path param name
-	if err := r.SetPathParam("name", o.Name); err != nil {
+	// path param group
+	if err := r.SetPathParam("group", o.Group); err != nil {
 		return err
 	}
 

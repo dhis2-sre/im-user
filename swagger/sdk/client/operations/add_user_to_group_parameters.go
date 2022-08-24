@@ -60,8 +60,8 @@ func NewAddUserToGroupParamsWithHTTPClient(client *http.Client) *AddUserToGroupP
 */
 type AddUserToGroupParams struct {
 
-	// GroupName.
-	GroupName string
+	// Group.
+	Group string
 
 	// UserID.
 	//
@@ -121,15 +121,15 @@ func (o *AddUserToGroupParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithGroupName adds the groupName to the add user to group params
-func (o *AddUserToGroupParams) WithGroupName(groupName string) *AddUserToGroupParams {
-	o.SetGroupName(groupName)
+// WithGroup adds the group to the add user to group params
+func (o *AddUserToGroupParams) WithGroup(group string) *AddUserToGroupParams {
+	o.SetGroup(group)
 	return o
 }
 
-// SetGroupName adds the groupName to the add user to group params
-func (o *AddUserToGroupParams) SetGroupName(groupName string) {
-	o.GroupName = groupName
+// SetGroup adds the group to the add user to group params
+func (o *AddUserToGroupParams) SetGroup(group string) {
+	o.Group = group
 }
 
 // WithUserID adds the userID to the add user to group params
@@ -151,8 +151,8 @@ func (o *AddUserToGroupParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 	}
 	var res []error
 
-	// path param groupName
-	if err := r.SetPathParam("groupName", o.GroupName); err != nil {
+	// path param group
+	if err := r.SetPathParam("group", o.Group); err != nil {
 		return err
 	}
 

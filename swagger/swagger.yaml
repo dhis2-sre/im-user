@@ -661,16 +661,46 @@ paths:
           $ref: '#/responses/Error'
       security:
       - oauth2: []
-  /groups/{groupName}/users/{userId}:
+  /groups/{group}/cluster-configuration:
+    post:
+      description: Add cluster configuration to group
+      operationId: addClusterConfigurationToGroup
+      parameters:
+      - in: path
+        name: group
+        required: true
+        type: string
+        x-go-name: Group
+      - description: SOPS encrypted Kubernetes configuration file
+        in: formData
+        name: Body
+        required: true
+        type: file
+      responses:
+        "201":
+          description: Group
+          schema:
+            $ref: '#/definitions/Group'
+        "400":
+          $ref: '#/responses/Error'
+        "401":
+          $ref: '#/responses/Error'
+        "403":
+          $ref: '#/responses/Error'
+        "415":
+          $ref: '#/responses/Error'
+      security:
+      - oauth2: []
+  /groups/{group}/users/{userId}:
     post:
       description: Add user to group
       operationId: addUserToGroup
       parameters:
       - in: path
-        name: groupName
+        name: group
         required: true
         type: string
-        x-go-name: GroupName
+        x-go-name: Group
       - format: uint64
         in: path
         name: userId
@@ -712,36 +742,6 @@ paths:
         "403":
           $ref: '#/responses/Error'
         "404":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /groups/{name}/cluster-configuration:
-    post:
-      description: Add cluster configuration to group
-      operationId: addClusterConfigurationToGroup
-      parameters:
-      - in: path
-        name: name
-        required: true
-        type: string
-        x-go-name: Name
-      - description: SOPS encrypted Kubernetes configuration file
-        in: formData
-        name: Body
-        required: true
-        type: file
-      responses:
-        "201":
-          description: Group
-          schema:
-            $ref: '#/definitions/Group'
-        "400":
-          $ref: '#/responses/Error'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
           $ref: '#/responses/Error'
         "415":
           $ref: '#/responses/Error'

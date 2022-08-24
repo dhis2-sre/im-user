@@ -72,7 +72,7 @@ type AddClusterConfigurationToGroupCreated struct {
 }
 
 func (o *AddClusterConfigurationToGroupCreated) Error() string {
-	return fmt.Sprintf("[POST /groups/{name}/cluster-configuration][%d] addClusterConfigurationToGroupCreated  %+v", 201, o.Payload)
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupCreated  %+v", 201, o.Payload)
 }
 func (o *AddClusterConfigurationToGroupCreated) GetPayload() *models.Group {
 	return o.Payload
@@ -103,7 +103,7 @@ type AddClusterConfigurationToGroupBadRequest struct {
 }
 
 func (o *AddClusterConfigurationToGroupBadRequest) Error() string {
-	return fmt.Sprintf("[POST /groups/{name}/cluster-configuration][%d] addClusterConfigurationToGroupBadRequest ", 400)
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupBadRequest ", 400)
 }
 
 func (o *AddClusterConfigurationToGroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -124,7 +124,7 @@ type AddClusterConfigurationToGroupUnauthorized struct {
 }
 
 func (o *AddClusterConfigurationToGroupUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /groups/{name}/cluster-configuration][%d] addClusterConfigurationToGroupUnauthorized ", 401)
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupUnauthorized ", 401)
 }
 
 func (o *AddClusterConfigurationToGroupUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -145,7 +145,7 @@ type AddClusterConfigurationToGroupForbidden struct {
 }
 
 func (o *AddClusterConfigurationToGroupForbidden) Error() string {
-	return fmt.Sprintf("[POST /groups/{name}/cluster-configuration][%d] addClusterConfigurationToGroupForbidden ", 403)
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupForbidden ", 403)
 }
 
 func (o *AddClusterConfigurationToGroupForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -166,7 +166,7 @@ type AddClusterConfigurationToGroupUnsupportedMediaType struct {
 }
 
 func (o *AddClusterConfigurationToGroupUnsupportedMediaType) Error() string {
-	return fmt.Sprintf("[POST /groups/{name}/cluster-configuration][%d] addClusterConfigurationToGroupUnsupportedMediaType ", 415)
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupUnsupportedMediaType ", 415)
 }
 
 func (o *AddClusterConfigurationToGroupUnsupportedMediaType) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

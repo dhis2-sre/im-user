@@ -106,7 +106,7 @@ func (a *Client) AddClusterConfigurationToGroup(params *AddClusterConfigurationT
 	op := &runtime.ClientOperation{
 		ID:                 "addClusterConfigurationToGroup",
 		Method:             "POST",
-		PathPattern:        "/groups/{name}/cluster-configuration",
+		PathPattern:        "/groups/{group}/cluster-configuration",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json", "multipart/form-data"},
 		Schemes:            []string{"http"},
@@ -145,7 +145,7 @@ func (a *Client) AddUserToGroup(params *AddUserToGroupParams, authInfo runtime.C
 	op := &runtime.ClientOperation{
 		ID:                 "addUserToGroup",
 		Method:             "POST",
-		PathPattern:        "/groups/{groupName}/users/{userId}",
+		PathPattern:        "/groups/{group}/users/{userId}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json", "multipart/form-data"},
 		Schemes:            []string{"http"},

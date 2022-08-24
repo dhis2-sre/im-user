@@ -58,8 +58,8 @@ func GetEngine(c config.Config, tokenHandler token.Handler, usrHandler user.Hand
 	administratorRestrictedRouter := tokenAuthenticationRouter.Group("")
 	administratorRestrictedRouter.Use(authorizationMiddleware.RequireAdministrator)
 	administratorRestrictedRouter.POST("/groups", groupHandler.Create)
-	administratorRestrictedRouter.POST("/groups/:groupName/users/:userId", groupHandler.AddUserToGroup)
-	administratorRestrictedRouter.POST("/groups/:groupName/cluster-configuration", groupHandler.AddClusterConfiguration)
+	administratorRestrictedRouter.POST("/groups/:group/users/:userId", groupHandler.AddUserToGroup)
+	administratorRestrictedRouter.POST("/groups/:group/cluster-configuration", groupHandler.AddClusterConfiguration)
 
 	err := createAdminUser(c, usrSvc, groupSvc)
 	if err != nil {

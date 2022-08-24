@@ -72,7 +72,7 @@ type AddUserToGroupCreated struct {
 }
 
 func (o *AddUserToGroupCreated) Error() string {
-	return fmt.Sprintf("[POST /groups/{groupName}/users/{userId}][%d] addUserToGroupCreated  %+v", 201, o.Payload)
+	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupCreated  %+v", 201, o.Payload)
 }
 func (o *AddUserToGroupCreated) GetPayload() *models.Group {
 	return o.Payload
@@ -103,7 +103,7 @@ type AddUserToGroupBadRequest struct {
 }
 
 func (o *AddUserToGroupBadRequest) Error() string {
-	return fmt.Sprintf("[POST /groups/{groupName}/users/{userId}][%d] addUserToGroupBadRequest ", 400)
+	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupBadRequest ", 400)
 }
 
 func (o *AddUserToGroupBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -124,7 +124,7 @@ type AddUserToGroupUnauthorized struct {
 }
 
 func (o *AddUserToGroupUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /groups/{groupName}/users/{userId}][%d] addUserToGroupUnauthorized ", 401)
+	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupUnauthorized ", 401)
 }
 
 func (o *AddUserToGroupUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -145,7 +145,7 @@ type AddUserToGroupForbidden struct {
 }
 
 func (o *AddUserToGroupForbidden) Error() string {
-	return fmt.Sprintf("[POST /groups/{groupName}/users/{userId}][%d] addUserToGroupForbidden ", 403)
+	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupForbidden ", 403)
 }
 
 func (o *AddUserToGroupForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -166,7 +166,7 @@ type AddUserToGroupUnsupportedMediaType struct {
 }
 
 func (o *AddUserToGroupUnsupportedMediaType) Error() string {
-	return fmt.Sprintf("[POST /groups/{groupName}/users/{userId}][%d] addUserToGroupUnsupportedMediaType ", 415)
+	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupUnsupportedMediaType ", 415)
 }
 
 func (o *AddUserToGroupUnsupportedMediaType) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

@@ -12,7 +12,7 @@ type _ struct {
 type _ struct {
 	// in: path
 	// required: true
-	GroupName string `json:"groupName"`
+	Group string `json:"group"`
 
 	// in: path
 	// required: true
@@ -23,7 +23,7 @@ type _ struct {
 type _ struct {
 	// in: path
 	// required: true
-	Name string `json:"name"`
+	Group string `json:"group"`
 
 	// SOPS encrypted Kubernetes configuration file
 	// in: formData

@@ -71,7 +71,7 @@ func (h Handler) Create(c *gin.Context) {
 }
 
 // AddUserToGroup group
-// swagger:route POST /groups/{groupName}/users/{userId} addUserToGroup
+// swagger:route POST /groups/{group}/users/{userId} addUserToGroup
 //
 // Add user to group
 //
@@ -85,8 +85,8 @@ func (h Handler) Create(c *gin.Context) {
 //   403: Error
 //   415: Error
 func (h Handler) AddUserToGroup(c *gin.Context) {
+	groupName := c.Param("group")
 	userIdString := c.Param("userId")
-	groupName := c.Param("groupName")
 
 	userId, err := strconv.ParseUint(userIdString, 10, 64)
 	if err != nil {
@@ -112,7 +112,7 @@ type CreateClusterConfigurationRequest struct {
 }
 
 // AddClusterConfiguration group
-// swagger:route POST /groups/{name}/cluster-configuration addClusterConfigurationToGroup
+// swagger:route POST /groups/{group}/cluster-configuration addClusterConfigurationToGroup
 //
 // Add cluster configuration to group
 //
@@ -131,9 +131,9 @@ func (h Handler) AddClusterConfiguration(c *gin.Context) {
 		return
 	}
 
-	groupName := c.Param("name")
+	groupName := c.Param("group")
 	if groupName == "" {
-		_ = c.AbortWithError(http.StatusBadRequest, errors.New("group name is missing"))
+		_ = c.AbortWithError(http.StatusBadRequest, errors.New("group not found"))
 		return
 	}
 
