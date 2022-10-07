@@ -17,7 +17,7 @@ require (
 	github.com/lestrrat-go/jwx v1.2.25
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa
-	gorm.io/driver/postgres v1.3.10
+	gorm.io/driver/postgres v1.4.1
 	gorm.io/gorm v1.23.10
 )
 
