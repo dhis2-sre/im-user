@@ -71,9 +71,39 @@ type FindGroupByNameOK struct {
 	Payload *models.Group
 }
 
+// IsSuccess returns true when this find group by name o k response has a 2xx status code
+func (o *FindGroupByNameOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this find group by name o k response has a 3xx status code
+func (o *FindGroupByNameOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this find group by name o k response has a 4xx status code
+func (o *FindGroupByNameOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this find group by name o k response has a 5xx status code
+func (o *FindGroupByNameOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this find group by name o k response a status code equal to that given
+func (o *FindGroupByNameOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *FindGroupByNameOK) Error() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameOK  %+v", 200, o.Payload)
 }
+
+func (o *FindGroupByNameOK) String() string {
+	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameOK  %+v", 200, o.Payload)
+}
+
 func (o *FindGroupByNameOK) GetPayload() *models.Group {
 	return o.Payload
 }
@@ -102,7 +132,36 @@ FindGroupByNameUnauthorized find group by name unauthorized
 type FindGroupByNameUnauthorized struct {
 }
 
+// IsSuccess returns true when this find group by name unauthorized response has a 2xx status code
+func (o *FindGroupByNameUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this find group by name unauthorized response has a 3xx status code
+func (o *FindGroupByNameUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this find group by name unauthorized response has a 4xx status code
+func (o *FindGroupByNameUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this find group by name unauthorized response has a 5xx status code
+func (o *FindGroupByNameUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this find group by name unauthorized response a status code equal to that given
+func (o *FindGroupByNameUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *FindGroupByNameUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameUnauthorized ", 401)
+}
+
+func (o *FindGroupByNameUnauthorized) String() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameUnauthorized ", 401)
 }
 
@@ -123,7 +182,36 @@ FindGroupByNameForbidden find group by name forbidden
 type FindGroupByNameForbidden struct {
 }
 
+// IsSuccess returns true when this find group by name forbidden response has a 2xx status code
+func (o *FindGroupByNameForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this find group by name forbidden response has a 3xx status code
+func (o *FindGroupByNameForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this find group by name forbidden response has a 4xx status code
+func (o *FindGroupByNameForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this find group by name forbidden response has a 5xx status code
+func (o *FindGroupByNameForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this find group by name forbidden response a status code equal to that given
+func (o *FindGroupByNameForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
 func (o *FindGroupByNameForbidden) Error() string {
+	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameForbidden ", 403)
+}
+
+func (o *FindGroupByNameForbidden) String() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameForbidden ", 403)
 }
 
@@ -144,7 +232,36 @@ FindGroupByNameNotFound find group by name not found
 type FindGroupByNameNotFound struct {
 }
 
+// IsSuccess returns true when this find group by name not found response has a 2xx status code
+func (o *FindGroupByNameNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this find group by name not found response has a 3xx status code
+func (o *FindGroupByNameNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this find group by name not found response has a 4xx status code
+func (o *FindGroupByNameNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this find group by name not found response has a 5xx status code
+func (o *FindGroupByNameNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this find group by name not found response a status code equal to that given
+func (o *FindGroupByNameNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
 func (o *FindGroupByNameNotFound) Error() string {
+	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameNotFound ", 404)
+}
+
+func (o *FindGroupByNameNotFound) String() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameNotFound ", 404)
 }
 
@@ -165,7 +282,36 @@ FindGroupByNameUnsupportedMediaType find group by name unsupported media type
 type FindGroupByNameUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this find group by name unsupported media type response has a 2xx status code
+func (o *FindGroupByNameUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this find group by name unsupported media type response has a 3xx status code
+func (o *FindGroupByNameUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this find group by name unsupported media type response has a 4xx status code
+func (o *FindGroupByNameUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this find group by name unsupported media type response has a 5xx status code
+func (o *FindGroupByNameUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this find group by name unsupported media type response a status code equal to that given
+func (o *FindGroupByNameUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *FindGroupByNameUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameUnsupportedMediaType ", 415)
+}
+
+func (o *FindGroupByNameUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameUnsupportedMediaType ", 415)
 }
 

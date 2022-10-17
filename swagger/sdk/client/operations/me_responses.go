@@ -71,9 +71,39 @@ type MeOK struct {
 	Payload *models.User
 }
 
+// IsSuccess returns true when this me o k response has a 2xx status code
+func (o *MeOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this me o k response has a 3xx status code
+func (o *MeOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this me o k response has a 4xx status code
+func (o *MeOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this me o k response has a 5xx status code
+func (o *MeOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this me o k response a status code equal to that given
+func (o *MeOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *MeOK) Error() string {
 	return fmt.Sprintf("[GET /me][%d] meOK  %+v", 200, o.Payload)
 }
+
+func (o *MeOK) String() string {
+	return fmt.Sprintf("[GET /me][%d] meOK  %+v", 200, o.Payload)
+}
+
 func (o *MeOK) GetPayload() *models.User {
 	return o.Payload
 }
@@ -102,7 +132,36 @@ MeUnauthorized me unauthorized
 type MeUnauthorized struct {
 }
 
+// IsSuccess returns true when this me unauthorized response has a 2xx status code
+func (o *MeUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this me unauthorized response has a 3xx status code
+func (o *MeUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this me unauthorized response has a 4xx status code
+func (o *MeUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this me unauthorized response has a 5xx status code
+func (o *MeUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this me unauthorized response a status code equal to that given
+func (o *MeUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *MeUnauthorized) Error() string {
+	return fmt.Sprintf("[GET /me][%d] meUnauthorized ", 401)
+}
+
+func (o *MeUnauthorized) String() string {
 	return fmt.Sprintf("[GET /me][%d] meUnauthorized ", 401)
 }
 
@@ -123,7 +182,36 @@ MeForbidden me forbidden
 type MeForbidden struct {
 }
 
+// IsSuccess returns true when this me forbidden response has a 2xx status code
+func (o *MeForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this me forbidden response has a 3xx status code
+func (o *MeForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this me forbidden response has a 4xx status code
+func (o *MeForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this me forbidden response has a 5xx status code
+func (o *MeForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this me forbidden response a status code equal to that given
+func (o *MeForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
 func (o *MeForbidden) Error() string {
+	return fmt.Sprintf("[GET /me][%d] meForbidden ", 403)
+}
+
+func (o *MeForbidden) String() string {
 	return fmt.Sprintf("[GET /me][%d] meForbidden ", 403)
 }
 
@@ -144,7 +232,36 @@ MeNotFound me not found
 type MeNotFound struct {
 }
 
+// IsSuccess returns true when this me not found response has a 2xx status code
+func (o *MeNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this me not found response has a 3xx status code
+func (o *MeNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this me not found response has a 4xx status code
+func (o *MeNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this me not found response has a 5xx status code
+func (o *MeNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this me not found response a status code equal to that given
+func (o *MeNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
 func (o *MeNotFound) Error() string {
+	return fmt.Sprintf("[GET /me][%d] meNotFound ", 404)
+}
+
+func (o *MeNotFound) String() string {
 	return fmt.Sprintf("[GET /me][%d] meNotFound ", 404)
 }
 
@@ -165,7 +282,36 @@ MeUnsupportedMediaType me unsupported media type
 type MeUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this me unsupported media type response has a 2xx status code
+func (o *MeUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this me unsupported media type response has a 3xx status code
+func (o *MeUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this me unsupported media type response has a 4xx status code
+func (o *MeUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this me unsupported media type response has a 5xx status code
+func (o *MeUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this me unsupported media type response a status code equal to that given
+func (o *MeUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *MeUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[GET /me][%d] meUnsupportedMediaType ", 415)
+}
+
+func (o *MeUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[GET /me][%d] meUnsupportedMediaType ", 415)
 }
 

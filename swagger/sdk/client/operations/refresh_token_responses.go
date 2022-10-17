@@ -59,9 +59,39 @@ type RefreshTokenCreated struct {
 	Payload *models.Tokens
 }
 
+// IsSuccess returns true when this refresh token created response has a 2xx status code
+func (o *RefreshTokenCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this refresh token created response has a 3xx status code
+func (o *RefreshTokenCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this refresh token created response has a 4xx status code
+func (o *RefreshTokenCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this refresh token created response has a 5xx status code
+func (o *RefreshTokenCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this refresh token created response a status code equal to that given
+func (o *RefreshTokenCreated) IsCode(code int) bool {
+	return code == 201
+}
+
 func (o *RefreshTokenCreated) Error() string {
 	return fmt.Sprintf("[POST /refresh][%d] refreshTokenCreated  %+v", 201, o.Payload)
 }
+
+func (o *RefreshTokenCreated) String() string {
+	return fmt.Sprintf("[POST /refresh][%d] refreshTokenCreated  %+v", 201, o.Payload)
+}
+
 func (o *RefreshTokenCreated) GetPayload() *models.Tokens {
 	return o.Payload
 }
@@ -90,7 +120,36 @@ RefreshTokenBadRequest refresh token bad request
 type RefreshTokenBadRequest struct {
 }
 
+// IsSuccess returns true when this refresh token bad request response has a 2xx status code
+func (o *RefreshTokenBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this refresh token bad request response has a 3xx status code
+func (o *RefreshTokenBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this refresh token bad request response has a 4xx status code
+func (o *RefreshTokenBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this refresh token bad request response has a 5xx status code
+func (o *RefreshTokenBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this refresh token bad request response a status code equal to that given
+func (o *RefreshTokenBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *RefreshTokenBadRequest) Error() string {
+	return fmt.Sprintf("[POST /refresh][%d] refreshTokenBadRequest ", 400)
+}
+
+func (o *RefreshTokenBadRequest) String() string {
 	return fmt.Sprintf("[POST /refresh][%d] refreshTokenBadRequest ", 400)
 }
 
@@ -111,7 +170,36 @@ RefreshTokenUnsupportedMediaType refresh token unsupported media type
 type RefreshTokenUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this refresh token unsupported media type response has a 2xx status code
+func (o *RefreshTokenUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this refresh token unsupported media type response has a 3xx status code
+func (o *RefreshTokenUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this refresh token unsupported media type response has a 4xx status code
+func (o *RefreshTokenUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this refresh token unsupported media type response has a 5xx status code
+func (o *RefreshTokenUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this refresh token unsupported media type response a status code equal to that given
+func (o *RefreshTokenUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *RefreshTokenUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[POST /refresh][%d] refreshTokenUnsupportedMediaType ", 415)
+}
+
+func (o *RefreshTokenUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[POST /refresh][%d] refreshTokenUnsupportedMediaType ", 415)
 }
 

@@ -66,7 +66,7 @@ type Certificate struct {
 	ExtraExtensions []*Extension `json:"ExtraExtensions"`
 
 	// IP addresses
-	IPAddresses []IP `json:"IPAddresses"`
+	IPAddresses []string `json:"IPAddresses"`
 
 	// is c a
 	IsCA bool `json:"IsCA,omitempty"`
@@ -147,7 +147,7 @@ type Certificate struct {
 	RawTBSCertificate []uint8 `json:"RawTBSCertificate"`
 
 	// serial number
-	SerialNumber Int `json:"SerialNumber,omitempty"`
+	SerialNumber string `json:"SerialNumber,omitempty"`
 
 	// signature
 	Signature []uint8 `json:"Signature"`
@@ -198,10 +198,6 @@ func (m *Certificate) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExtraExtensions(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIPAddresses(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -347,27 +343,6 @@ func (m *Certificate) validateExtraExtensions(formats strfmt.Registry) error {
 				}
 				return err
 			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *Certificate) validateIPAddresses(formats strfmt.Registry) error {
-	if swag.IsZero(m.IPAddresses) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.IPAddresses); i++ {
-
-		if err := m.IPAddresses[i].Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("IPAddresses" + "." + strconv.Itoa(i))
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("IPAddresses" + "." + strconv.Itoa(i))
-			}
-			return err
 		}
 
 	}
@@ -611,10 +586,6 @@ func (m *Certificate) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateIPAddresses(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateIssuer(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -732,24 +703,6 @@ func (m *Certificate) contextValidateExtraExtensions(ctx context.Context, format
 				}
 				return err
 			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *Certificate) contextValidateIPAddresses(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.IPAddresses); i++ {
-
-		if err := m.IPAddresses[i].ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("IPAddresses" + "." + strconv.Itoa(i))
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("IPAddresses" + "." + strconv.Itoa(i))
-			}
-			return err
 		}
 
 	}

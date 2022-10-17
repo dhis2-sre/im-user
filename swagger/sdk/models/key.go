@@ -40,7 +40,7 @@ type Key struct {
 	// PrivateParams returns the non-standard elements in the source structure
 	// WARNING: DO NOT USE PrivateParams() IF YOU HAVE CONCURRENT CODE ACCESSING THEM.
 	// Use `AsMap()` to get a copy of the entire header, or use `Iterate()` instead
-	PrivateParams map[string]interface{} `json:"PrivateParams,omitempty"`
+	PrivateParams interface{} `json:"PrivateParams,omitempty"`
 
 	// X509CertChain returns `x5c` of a JWK
 	X509CertChain []*Certificate `json:"X509CertChain"`

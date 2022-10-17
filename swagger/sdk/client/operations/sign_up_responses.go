@@ -59,9 +59,39 @@ type SignUpCreated struct {
 	Payload *models.User
 }
 
+// IsSuccess returns true when this sign up created response has a 2xx status code
+func (o *SignUpCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this sign up created response has a 3xx status code
+func (o *SignUpCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign up created response has a 4xx status code
+func (o *SignUpCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this sign up created response has a 5xx status code
+func (o *SignUpCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign up created response a status code equal to that given
+func (o *SignUpCreated) IsCode(code int) bool {
+	return code == 201
+}
+
 func (o *SignUpCreated) Error() string {
 	return fmt.Sprintf("[POST /users][%d] signUpCreated  %+v", 201, o.Payload)
 }
+
+func (o *SignUpCreated) String() string {
+	return fmt.Sprintf("[POST /users][%d] signUpCreated  %+v", 201, o.Payload)
+}
+
 func (o *SignUpCreated) GetPayload() *models.User {
 	return o.Payload
 }
@@ -90,7 +120,36 @@ SignUpBadRequest sign up bad request
 type SignUpBadRequest struct {
 }
 
+// IsSuccess returns true when this sign up bad request response has a 2xx status code
+func (o *SignUpBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign up bad request response has a 3xx status code
+func (o *SignUpBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign up bad request response has a 4xx status code
+func (o *SignUpBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign up bad request response has a 5xx status code
+func (o *SignUpBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign up bad request response a status code equal to that given
+func (o *SignUpBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *SignUpBadRequest) Error() string {
+	return fmt.Sprintf("[POST /users][%d] signUpBadRequest ", 400)
+}
+
+func (o *SignUpBadRequest) String() string {
 	return fmt.Sprintf("[POST /users][%d] signUpBadRequest ", 400)
 }
 
@@ -111,7 +170,36 @@ SignUpUnsupportedMediaType sign up unsupported media type
 type SignUpUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this sign up unsupported media type response has a 2xx status code
+func (o *SignUpUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign up unsupported media type response has a 3xx status code
+func (o *SignUpUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign up unsupported media type response has a 4xx status code
+func (o *SignUpUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign up unsupported media type response has a 5xx status code
+func (o *SignUpUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign up unsupported media type response a status code equal to that given
+func (o *SignUpUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *SignUpUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[POST /users][%d] signUpUnsupportedMediaType ", 415)
+}
+
+func (o *SignUpUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[POST /users][%d] signUpUnsupportedMediaType ", 415)
 }
 

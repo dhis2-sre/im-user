@@ -71,9 +71,39 @@ type GroupCreateCreated struct {
 	Payload *models.Group
 }
 
+// IsSuccess returns true when this group create created response has a 2xx status code
+func (o *GroupCreateCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this group create created response has a 3xx status code
+func (o *GroupCreateCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this group create created response has a 4xx status code
+func (o *GroupCreateCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this group create created response has a 5xx status code
+func (o *GroupCreateCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this group create created response a status code equal to that given
+func (o *GroupCreateCreated) IsCode(code int) bool {
+	return code == 201
+}
+
 func (o *GroupCreateCreated) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateCreated  %+v", 201, o.Payload)
 }
+
+func (o *GroupCreateCreated) String() string {
+	return fmt.Sprintf("[POST /groups][%d] groupCreateCreated  %+v", 201, o.Payload)
+}
+
 func (o *GroupCreateCreated) GetPayload() *models.Group {
 	return o.Payload
 }
@@ -102,7 +132,36 @@ GroupCreateBadRequest group create bad request
 type GroupCreateBadRequest struct {
 }
 
+// IsSuccess returns true when this group create bad request response has a 2xx status code
+func (o *GroupCreateBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this group create bad request response has a 3xx status code
+func (o *GroupCreateBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this group create bad request response has a 4xx status code
+func (o *GroupCreateBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this group create bad request response has a 5xx status code
+func (o *GroupCreateBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this group create bad request response a status code equal to that given
+func (o *GroupCreateBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *GroupCreateBadRequest) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] groupCreateBadRequest ", 400)
+}
+
+func (o *GroupCreateBadRequest) String() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateBadRequest ", 400)
 }
 
@@ -123,7 +182,36 @@ GroupCreateUnauthorized group create unauthorized
 type GroupCreateUnauthorized struct {
 }
 
+// IsSuccess returns true when this group create unauthorized response has a 2xx status code
+func (o *GroupCreateUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this group create unauthorized response has a 3xx status code
+func (o *GroupCreateUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this group create unauthorized response has a 4xx status code
+func (o *GroupCreateUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this group create unauthorized response has a 5xx status code
+func (o *GroupCreateUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this group create unauthorized response a status code equal to that given
+func (o *GroupCreateUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *GroupCreateUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] groupCreateUnauthorized ", 401)
+}
+
+func (o *GroupCreateUnauthorized) String() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateUnauthorized ", 401)
 }
 
@@ -144,7 +232,36 @@ GroupCreateForbidden group create forbidden
 type GroupCreateForbidden struct {
 }
 
+// IsSuccess returns true when this group create forbidden response has a 2xx status code
+func (o *GroupCreateForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this group create forbidden response has a 3xx status code
+func (o *GroupCreateForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this group create forbidden response has a 4xx status code
+func (o *GroupCreateForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this group create forbidden response has a 5xx status code
+func (o *GroupCreateForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this group create forbidden response a status code equal to that given
+func (o *GroupCreateForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
 func (o *GroupCreateForbidden) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] groupCreateForbidden ", 403)
+}
+
+func (o *GroupCreateForbidden) String() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateForbidden ", 403)
 }
 
@@ -165,7 +282,36 @@ GroupCreateUnsupportedMediaType group create unsupported media type
 type GroupCreateUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this group create unsupported media type response has a 2xx status code
+func (o *GroupCreateUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this group create unsupported media type response has a 3xx status code
+func (o *GroupCreateUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this group create unsupported media type response has a 4xx status code
+func (o *GroupCreateUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this group create unsupported media type response has a 5xx status code
+func (o *GroupCreateUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this group create unsupported media type response a status code equal to that given
+func (o *GroupCreateUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *GroupCreateUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[POST /groups][%d] groupCreateUnsupportedMediaType ", 415)
+}
+
+func (o *GroupCreateUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateUnsupportedMediaType ", 415)
 }
 

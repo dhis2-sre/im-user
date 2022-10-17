@@ -59,9 +59,39 @@ type JwksOK struct {
 	Payload *models.Key
 }
 
+// IsSuccess returns true when this jwks o k response has a 2xx status code
+func (o *JwksOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this jwks o k response has a 3xx status code
+func (o *JwksOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this jwks o k response has a 4xx status code
+func (o *JwksOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this jwks o k response has a 5xx status code
+func (o *JwksOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this jwks o k response a status code equal to that given
+func (o *JwksOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *JwksOK) Error() string {
 	return fmt.Sprintf("[GET /jwks][%d] jwksOK  %+v", 200, o.Payload)
 }
+
+func (o *JwksOK) String() string {
+	return fmt.Sprintf("[GET /jwks][%d] jwksOK  %+v", 200, o.Payload)
+}
+
 func (o *JwksOK) GetPayload() *models.Key {
 	return o.Payload
 }
@@ -90,7 +120,36 @@ JwksUnsupportedMediaType jwks unsupported media type
 type JwksUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this jwks unsupported media type response has a 2xx status code
+func (o *JwksUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this jwks unsupported media type response has a 3xx status code
+func (o *JwksUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this jwks unsupported media type response has a 4xx status code
+func (o *JwksUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this jwks unsupported media type response has a 5xx status code
+func (o *JwksUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this jwks unsupported media type response a status code equal to that given
+func (o *JwksUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *JwksUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[GET /jwks][%d] jwksUnsupportedMediaType ", 415)
+}
+
+func (o *JwksUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[GET /jwks][%d] jwksUnsupportedMediaType ", 415)
 }
 
@@ -111,7 +170,36 @@ JwksInternalServerError jwks internal server error
 type JwksInternalServerError struct {
 }
 
+// IsSuccess returns true when this jwks internal server error response has a 2xx status code
+func (o *JwksInternalServerError) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this jwks internal server error response has a 3xx status code
+func (o *JwksInternalServerError) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this jwks internal server error response has a 4xx status code
+func (o *JwksInternalServerError) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this jwks internal server error response has a 5xx status code
+func (o *JwksInternalServerError) IsServerError() bool {
+	return true
+}
+
+// IsCode returns true when this jwks internal server error response a status code equal to that given
+func (o *JwksInternalServerError) IsCode(code int) bool {
+	return code == 500
+}
+
 func (o *JwksInternalServerError) Error() string {
+	return fmt.Sprintf("[GET /jwks][%d] jwksInternalServerError ", 500)
+}
+
+func (o *JwksInternalServerError) String() string {
 	return fmt.Sprintf("[GET /jwks][%d] jwksInternalServerError ", 500)
 }
 

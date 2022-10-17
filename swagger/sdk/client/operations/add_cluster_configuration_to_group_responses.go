@@ -71,9 +71,39 @@ type AddClusterConfigurationToGroupCreated struct {
 	Payload *models.Group
 }
 
+// IsSuccess returns true when this add cluster configuration to group created response has a 2xx status code
+func (o *AddClusterConfigurationToGroupCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this add cluster configuration to group created response has a 3xx status code
+func (o *AddClusterConfigurationToGroupCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this add cluster configuration to group created response has a 4xx status code
+func (o *AddClusterConfigurationToGroupCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this add cluster configuration to group created response has a 5xx status code
+func (o *AddClusterConfigurationToGroupCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this add cluster configuration to group created response a status code equal to that given
+func (o *AddClusterConfigurationToGroupCreated) IsCode(code int) bool {
+	return code == 201
+}
+
 func (o *AddClusterConfigurationToGroupCreated) Error() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupCreated  %+v", 201, o.Payload)
 }
+
+func (o *AddClusterConfigurationToGroupCreated) String() string {
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupCreated  %+v", 201, o.Payload)
+}
+
 func (o *AddClusterConfigurationToGroupCreated) GetPayload() *models.Group {
 	return o.Payload
 }
@@ -102,7 +132,36 @@ AddClusterConfigurationToGroupBadRequest add cluster configuration to group bad 
 type AddClusterConfigurationToGroupBadRequest struct {
 }
 
+// IsSuccess returns true when this add cluster configuration to group bad request response has a 2xx status code
+func (o *AddClusterConfigurationToGroupBadRequest) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this add cluster configuration to group bad request response has a 3xx status code
+func (o *AddClusterConfigurationToGroupBadRequest) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this add cluster configuration to group bad request response has a 4xx status code
+func (o *AddClusterConfigurationToGroupBadRequest) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this add cluster configuration to group bad request response has a 5xx status code
+func (o *AddClusterConfigurationToGroupBadRequest) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this add cluster configuration to group bad request response a status code equal to that given
+func (o *AddClusterConfigurationToGroupBadRequest) IsCode(code int) bool {
+	return code == 400
+}
+
 func (o *AddClusterConfigurationToGroupBadRequest) Error() string {
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupBadRequest ", 400)
+}
+
+func (o *AddClusterConfigurationToGroupBadRequest) String() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupBadRequest ", 400)
 }
 
@@ -123,7 +182,36 @@ AddClusterConfigurationToGroupUnauthorized add cluster configuration to group un
 type AddClusterConfigurationToGroupUnauthorized struct {
 }
 
+// IsSuccess returns true when this add cluster configuration to group unauthorized response has a 2xx status code
+func (o *AddClusterConfigurationToGroupUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this add cluster configuration to group unauthorized response has a 3xx status code
+func (o *AddClusterConfigurationToGroupUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this add cluster configuration to group unauthorized response has a 4xx status code
+func (o *AddClusterConfigurationToGroupUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this add cluster configuration to group unauthorized response has a 5xx status code
+func (o *AddClusterConfigurationToGroupUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this add cluster configuration to group unauthorized response a status code equal to that given
+func (o *AddClusterConfigurationToGroupUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *AddClusterConfigurationToGroupUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupUnauthorized ", 401)
+}
+
+func (o *AddClusterConfigurationToGroupUnauthorized) String() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupUnauthorized ", 401)
 }
 
@@ -144,7 +232,36 @@ AddClusterConfigurationToGroupForbidden add cluster configuration to group forbi
 type AddClusterConfigurationToGroupForbidden struct {
 }
 
+// IsSuccess returns true when this add cluster configuration to group forbidden response has a 2xx status code
+func (o *AddClusterConfigurationToGroupForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this add cluster configuration to group forbidden response has a 3xx status code
+func (o *AddClusterConfigurationToGroupForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this add cluster configuration to group forbidden response has a 4xx status code
+func (o *AddClusterConfigurationToGroupForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this add cluster configuration to group forbidden response has a 5xx status code
+func (o *AddClusterConfigurationToGroupForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this add cluster configuration to group forbidden response a status code equal to that given
+func (o *AddClusterConfigurationToGroupForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
 func (o *AddClusterConfigurationToGroupForbidden) Error() string {
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupForbidden ", 403)
+}
+
+func (o *AddClusterConfigurationToGroupForbidden) String() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupForbidden ", 403)
 }
 
@@ -165,7 +282,36 @@ AddClusterConfigurationToGroupUnsupportedMediaType add cluster configuration to 
 type AddClusterConfigurationToGroupUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this add cluster configuration to group unsupported media type response has a 2xx status code
+func (o *AddClusterConfigurationToGroupUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this add cluster configuration to group unsupported media type response has a 3xx status code
+func (o *AddClusterConfigurationToGroupUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this add cluster configuration to group unsupported media type response has a 4xx status code
+func (o *AddClusterConfigurationToGroupUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this add cluster configuration to group unsupported media type response has a 5xx status code
+func (o *AddClusterConfigurationToGroupUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this add cluster configuration to group unsupported media type response a status code equal to that given
+func (o *AddClusterConfigurationToGroupUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *AddClusterConfigurationToGroupUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupUnsupportedMediaType ", 415)
+}
+
+func (o *AddClusterConfigurationToGroupUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupUnsupportedMediaType ", 415)
 }
 

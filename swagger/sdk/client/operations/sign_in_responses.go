@@ -71,9 +71,39 @@ type SignInCreated struct {
 	Payload *models.Tokens
 }
 
+// IsSuccess returns true when this sign in created response has a 2xx status code
+func (o *SignInCreated) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this sign in created response has a 3xx status code
+func (o *SignInCreated) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign in created response has a 4xx status code
+func (o *SignInCreated) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this sign in created response has a 5xx status code
+func (o *SignInCreated) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign in created response a status code equal to that given
+func (o *SignInCreated) IsCode(code int) bool {
+	return code == 201
+}
+
 func (o *SignInCreated) Error() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInCreated  %+v", 201, o.Payload)
 }
+
+func (o *SignInCreated) String() string {
+	return fmt.Sprintf("[POST /tokens][%d] signInCreated  %+v", 201, o.Payload)
+}
+
 func (o *SignInCreated) GetPayload() *models.Tokens {
 	return o.Payload
 }
@@ -102,7 +132,36 @@ SignInUnauthorized sign in unauthorized
 type SignInUnauthorized struct {
 }
 
+// IsSuccess returns true when this sign in unauthorized response has a 2xx status code
+func (o *SignInUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign in unauthorized response has a 3xx status code
+func (o *SignInUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign in unauthorized response has a 4xx status code
+func (o *SignInUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign in unauthorized response has a 5xx status code
+func (o *SignInUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign in unauthorized response a status code equal to that given
+func (o *SignInUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *SignInUnauthorized) Error() string {
+	return fmt.Sprintf("[POST /tokens][%d] signInUnauthorized ", 401)
+}
+
+func (o *SignInUnauthorized) String() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInUnauthorized ", 401)
 }
 
@@ -123,7 +182,36 @@ SignInForbidden sign in forbidden
 type SignInForbidden struct {
 }
 
+// IsSuccess returns true when this sign in forbidden response has a 2xx status code
+func (o *SignInForbidden) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign in forbidden response has a 3xx status code
+func (o *SignInForbidden) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign in forbidden response has a 4xx status code
+func (o *SignInForbidden) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign in forbidden response has a 5xx status code
+func (o *SignInForbidden) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign in forbidden response a status code equal to that given
+func (o *SignInForbidden) IsCode(code int) bool {
+	return code == 403
+}
+
 func (o *SignInForbidden) Error() string {
+	return fmt.Sprintf("[POST /tokens][%d] signInForbidden ", 403)
+}
+
+func (o *SignInForbidden) String() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInForbidden ", 403)
 }
 
@@ -144,7 +232,36 @@ SignInNotFound sign in not found
 type SignInNotFound struct {
 }
 
+// IsSuccess returns true when this sign in not found response has a 2xx status code
+func (o *SignInNotFound) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign in not found response has a 3xx status code
+func (o *SignInNotFound) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign in not found response has a 4xx status code
+func (o *SignInNotFound) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign in not found response has a 5xx status code
+func (o *SignInNotFound) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign in not found response a status code equal to that given
+func (o *SignInNotFound) IsCode(code int) bool {
+	return code == 404
+}
+
 func (o *SignInNotFound) Error() string {
+	return fmt.Sprintf("[POST /tokens][%d] signInNotFound ", 404)
+}
+
+func (o *SignInNotFound) String() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInNotFound ", 404)
 }
 
@@ -165,7 +282,36 @@ SignInUnsupportedMediaType sign in unsupported media type
 type SignInUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this sign in unsupported media type response has a 2xx status code
+func (o *SignInUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign in unsupported media type response has a 3xx status code
+func (o *SignInUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign in unsupported media type response has a 4xx status code
+func (o *SignInUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign in unsupported media type response has a 5xx status code
+func (o *SignInUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign in unsupported media type response a status code equal to that given
+func (o *SignInUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *SignInUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[POST /tokens][%d] signInUnsupportedMediaType ", 415)
+}
+
+func (o *SignInUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInUnsupportedMediaType ", 415)
 }
 

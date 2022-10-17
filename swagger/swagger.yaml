@@ -1,903 +1,868 @@
 consumes:
-- application/json
-- multipart/form-data
+    - application/json
+    - multipart/form-data
 definitions:
-  AttributeTypeAndValue:
-    description: |-
-      AttributeTypeAndValue mirrors the ASN.1 structure of the same name in
-      RFC 5280, Section 4.1.2.4.
-    properties:
-      Type:
-        $ref: '#/definitions/ObjectIdentifier'
-      Value:
+    AttributeTypeAndValue:
+        description: |-
+            AttributeTypeAndValue mirrors the ASN.1 structure of the same name in
+            RFC 5280, Section 4.1.2.4.
+        properties:
+            Type:
+                $ref: '#/definitions/ObjectIdentifier'
+            Value: {}
         type: object
-    type: object
-    x-go-package: crypto/x509/pkix
-  Certificate:
-    properties:
-      AuthorityKeyId:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      BasicConstraintsValid:
-        description: |-
-          BasicConstraintsValid indicates whether IsCA, MaxPathLen,
-          and MaxPathLenZero are valid.
-        type: boolean
-      CRLDistributionPoints:
-        description: CRL Distribution Points
-        items:
-          type: string
-        type: array
-      DNSNames:
-        description: |-
-          Subject Alternate Name values. (Note that these values may not be valid
-          if invalid values were contained within a parsed certificate. For
-          example, an element of DNSNames may not be a valid DNS domain name.)
-        items:
-          type: string
-        type: array
-      EmailAddresses:
-        items:
-          type: string
-        type: array
-      ExcludedDNSDomains:
-        items:
-          type: string
-        type: array
-      ExcludedEmailAddresses:
-        items:
-          type: string
-        type: array
-      ExcludedIPRanges:
-        items:
-          $ref: '#/definitions/IPNet'
-        type: array
-      ExcludedURIDomains:
-        items:
-          type: string
-        type: array
-      ExtKeyUsage:
-        items:
-          $ref: '#/definitions/ExtKeyUsage'
-        type: array
-      Extensions:
-        description: |-
-          Extensions contains raw X.509 extensions. When parsing certificates,
-          this can be used to extract non-critical extensions that are not
-          parsed by this package. When marshaling certificates, the Extensions
-          field is ignored, see ExtraExtensions.
-        items:
-          $ref: '#/definitions/Extension'
-        type: array
-      ExtraExtensions:
-        description: |-
-          ExtraExtensions contains extensions to be copied, raw, into any
-          marshaled certificates. Values override any extensions that would
-          otherwise be produced based on the other fields. The ExtraExtensions
-          field is not populated when parsing certificates, see Extensions.
-        items:
-          $ref: '#/definitions/Extension'
-        type: array
-      IPAddresses:
-        items:
-          $ref: '#/definitions/IP'
-        type: array
-      IsCA:
-        type: boolean
-      Issuer:
-        $ref: '#/definitions/Name'
-      IssuingCertificateURL:
-        items:
-          type: string
-        type: array
-      KeyUsage:
-        $ref: '#/definitions/KeyUsage'
-      MaxPathLen:
-        description: |-
-          MaxPathLen and MaxPathLenZero indicate the presence and
-          value of the BasicConstraints' "pathLenConstraint".
+        x-go-package: crypto/x509/pkix
+    Certificate:
+        properties:
+            AuthorityKeyId:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            BasicConstraintsValid:
+                description: |-
+                    BasicConstraintsValid indicates whether IsCA, MaxPathLen,
+                    and MaxPathLenZero are valid.
+                type: boolean
+            CRLDistributionPoints:
+                description: CRL Distribution Points
+                items:
+                    type: string
+                type: array
+            DNSNames:
+                description: |-
+                    Subject Alternate Name values. (Note that these values may not be valid
+                    if invalid values were contained within a parsed certificate. For
+                    example, an element of DNSNames may not be a valid DNS domain name.)
+                items:
+                    type: string
+                type: array
+            EmailAddresses:
+                items:
+                    type: string
+                type: array
+            ExcludedDNSDomains:
+                items:
+                    type: string
+                type: array
+            ExcludedEmailAddresses:
+                items:
+                    type: string
+                type: array
+            ExcludedIPRanges:
+                items:
+                    $ref: '#/definitions/IPNet'
+                type: array
+            ExcludedURIDomains:
+                items:
+                    type: string
+                type: array
+            ExtKeyUsage:
+                items:
+                    $ref: '#/definitions/ExtKeyUsage'
+                type: array
+            Extensions:
+                description: |-
+                    Extensions contains raw X.509 extensions. When parsing certificates,
+                    this can be used to extract non-critical extensions that are not
+                    parsed by this package. When marshaling certificates, the Extensions
+                    field is ignored, see ExtraExtensions.
+                items:
+                    $ref: '#/definitions/Extension'
+                type: array
+            ExtraExtensions:
+                description: |-
+                    ExtraExtensions contains extensions to be copied, raw, into any
+                    marshaled certificates. Values override any extensions that would
+                    otherwise be produced based on the other fields. The ExtraExtensions
+                    field is not populated when parsing certificates, see Extensions.
+                items:
+                    $ref: '#/definitions/Extension'
+                type: array
+            IPAddresses:
+                items:
+                    type: string
+                type: array
+            IsCA:
+                type: boolean
+            Issuer:
+                $ref: '#/definitions/Name'
+            IssuingCertificateURL:
+                items:
+                    type: string
+                type: array
+            KeyUsage:
+                $ref: '#/definitions/KeyUsage'
+            MaxPathLen:
+                description: |-
+                    MaxPathLen and MaxPathLenZero indicate the presence and
+                    value of the BasicConstraints' "pathLenConstraint".
 
-          When parsing a certificate, a positive non-zero MaxPathLen
-          means that the field was specified, -1 means it was unset,
-          and MaxPathLenZero being true mean that the field was
-          explicitly set to zero. The case of MaxPathLen==0 with MaxPathLenZero==false
-          should be treated equivalent to -1 (unset).
+                    When parsing a certificate, a positive non-zero MaxPathLen
+                    means that the field was specified, -1 means it was unset,
+                    and MaxPathLenZero being true mean that the field was
+                    explicitly set to zero. The case of MaxPathLen==0 with MaxPathLenZero==false
+                    should be treated equivalent to -1 (unset).
 
-          When generating a certificate, an unset pathLenConstraint
-          can be requested with either MaxPathLen == -1 or using the
-          zero value for both MaxPathLen and MaxPathLenZero.
+                    When generating a certificate, an unset pathLenConstraint
+                    can be requested with either MaxPathLen == -1 or using the
+                    zero value for both MaxPathLen and MaxPathLenZero.
+                format: int64
+                type: integer
+            MaxPathLenZero:
+                description: |-
+                    MaxPathLenZero indicates that BasicConstraintsValid==true
+                    and MaxPathLen==0 should be interpreted as an actual
+                    maximum path length of zero. Otherwise, that combination is
+                    interpreted as MaxPathLen not being set.
+                type: boolean
+            NotBefore:
+                format: date-time
+                type: string
+                x-go-name: NotAfter
+            OCSPServer:
+                description: RFC 5280, 4.2.2.1 (Authority Information Access)
+                items:
+                    type: string
+                type: array
+            PermittedDNSDomains:
+                items:
+                    type: string
+                type: array
+            PermittedDNSDomainsCritical:
+                description: Name constraints
+                type: boolean
+            PermittedEmailAddresses:
+                items:
+                    type: string
+                type: array
+            PermittedIPRanges:
+                items:
+                    $ref: '#/definitions/IPNet'
+                type: array
+            PermittedURIDomains:
+                items:
+                    type: string
+                type: array
+            PolicyIdentifiers:
+                items:
+                    $ref: '#/definitions/ObjectIdentifier'
+                type: array
+            PublicKey: {}
+            PublicKeyAlgorithm:
+                $ref: '#/definitions/PublicKeyAlgorithm'
+            Raw:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            RawIssuer:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            RawSubject:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            RawSubjectPublicKeyInfo:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            RawTBSCertificate:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            SerialNumber:
+                type: string
+            Signature:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            SignatureAlgorithm:
+                $ref: '#/definitions/SignatureAlgorithm'
+            Subject:
+                $ref: '#/definitions/Name'
+            SubjectKeyId:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            URIs:
+                items:
+                    $ref: '#/definitions/URL'
+                type: array
+            UnhandledCriticalExtensions:
+                description: |-
+                    UnhandledCriticalExtensions contains a list of extension IDs that
+                    were not (fully) processed when parsing. Verify will fail if this
+                    slice is non-empty, unless verification is delegated to an OS
+                    library which understands all the critical extensions.
+
+                    Users can access these extensions using Extensions and can remove
+                    elements from this slice if they believe that they have been
+                    handled.
+                items:
+                    $ref: '#/definitions/ObjectIdentifier'
+                type: array
+            UnknownExtKeyUsage:
+                items:
+                    $ref: '#/definitions/ObjectIdentifier'
+                type: array
+            Version:
+                format: int64
+                type: integer
+        title: A Certificate represents an X.509 certificate.
+        type: object
+        x-go-package: crypto/x509
+    ClusterConfiguration:
+        properties:
+            CreatedAt:
+                format: date-time
+                type: string
+            DeletedAt:
+                $ref: '#/definitions/DeletedAt'
+            GroupName:
+                type: string
+            ID:
+                format: uint64
+                type: integer
+            KubernetesConfiguration:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+            UpdatedAt:
+                format: date-time
+                type: string
+        type: object
+        x-go-package: github.com/dhis2-sre/im-user/pkg/model
+    CreateGroupRequest:
+        properties:
+            hostname:
+                type: string
+                x-go-name: Hostname
+            name:
+                type: string
+                x-go-name: Name
+        type: object
+        x-go-package: github.com/dhis2-sre/im-user/pkg/group
+    DeletedAt:
+        $ref: '#/definitions/NullTime'
+    ExtKeyUsage:
+        description: Each of the ExtKeyUsage* constants define a unique action.
+        format: int64
+        title: ExtKeyUsage represents an extended set of actions that are valid for a given key.
+        type: integer
+        x-go-package: crypto/x509
+    Extension:
+        description: |-
+            Extension represents the ASN.1 structure of the same name. See RFC
+            5280, section 4.2.
+        properties:
+            Critical:
+                type: boolean
+            Id:
+                $ref: '#/definitions/ObjectIdentifier'
+            Value:
+                items:
+                    format: uint8
+                    type: integer
+                type: array
+        type: object
+        x-go-package: crypto/x509/pkix
+    Group:
+        description: Group domain object defining a group
+        properties:
+            CreatedAt:
+                format: date-time
+                type: string
+            DeletedAt:
+                $ref: '#/definitions/DeletedAt'
+            Hostname:
+                type: string
+            Name:
+                type: string
+            UpdatedAt:
+                format: date-time
+                type: string
+            Users:
+                items:
+                    $ref: '#/definitions/User'
+                type: array
+            clusterConfiguration:
+                $ref: '#/definitions/ClusterConfiguration'
+        type: object
+        x-go-package: github.com/dhis2-sre/im-user/pkg/model
+    IPMask:
+        description: See type IPNet and func ParseCIDR for details.
+        items:
+            format: uint8
+            type: integer
+        title: |-
+            An IPMask is a bitmask that can be used to manipulate
+            IP addresses for IP addressing and routing.
+        type: array
+        x-go-package: net
+    IPNet:
+        properties:
+            IP:
+                type: string
+            Mask:
+                $ref: '#/definitions/IPMask'
+        title: An IPNet represents an IP network.
+        type: object
+        x-go-package: net
+    Key:
+        description: |-
+            Key defines the minimal interface for each of the
+            key types. Their use and implementation differ significantly
+            between each key types, so you should use type assertions
+            to perform more specific tasks with each key
+        properties:
+            Algorithm:
+                description: Algorithm returns `alg` of a JWK
+                type: string
+            KeyID:
+                description: KeyID returns `kid` of a JWK
+                type: string
+            KeyOps:
+                $ref: '#/definitions/KeyOperationList'
+            KeyType:
+                $ref: '#/definitions/KeyType'
+            KeyUsage:
+                description: KeyUsage returns `use` of a JWK
+                type: string
+            PrivateParams:
+                additionalProperties: {}
+                description: |-
+                    PrivateParams returns the non-standard elements in the source structure
+                    WARNING: DO NOT USE PrivateParams() IF YOU HAVE CONCURRENT CODE ACCESSING THEM.
+                    Use `AsMap()` to get a copy of the entire header, or use `Iterate()` instead
+                type: object
+            X509CertChain:
+                description: X509CertChain returns `x5c` of a JWK
+                items:
+                    $ref: '#/definitions/Certificate'
+                type: array
+            X509CertThumbprint:
+                description: X509CertThumbprint returns `x5t` of a JWK
+                type: string
+            X509CertThumbprintS256:
+                description: X509CertThumbprintS256 returns `x5t#S256` of a JWK
+                type: string
+            X509URL:
+                description: X509URL returns `x58` of a JWK
+                type: string
+        type: object
+        x-go-package: github.com/lestrrat-go/jwx/jwk
+    KeyOperation:
+        type: string
+        x-go-package: github.com/lestrrat-go/jwx/jwk
+    KeyOperationList:
+        items:
+            $ref: '#/definitions/KeyOperation'
+        type: array
+        x-go-package: github.com/lestrrat-go/jwx/jwk
+    KeyType:
+        description: KeyType represents the key type ("kty") that are supported
+        type: string
+        x-go-package: github.com/lestrrat-go/jwx/jwa
+    KeyUsage:
+        description: |-
+            KeyUsage represents the set of actions that are valid for a given key. It's
+            a bitmap of the KeyUsage* constants.
         format: int64
         type: integer
-      MaxPathLenZero:
+        x-go-package: crypto/x509
+    Model:
         description: |-
-          MaxPathLenZero indicates that BasicConstraintsValid==true
-          and MaxPathLen==0 should be interpreted as an actual
-          maximum path length of zero. Otherwise, that combination is
-          interpreted as MaxPathLen not being set.
-        type: boolean
-      NotBefore:
-        format: date-time
-        type: string
-        x-go-name: NotAfter
-      OCSPServer:
-        description: RFC 5280, 4.2.2.1 (Authority Information Access)
-        items:
-          type: string
-        type: array
-      PermittedDNSDomains:
-        items:
-          type: string
-        type: array
-      PermittedDNSDomainsCritical:
-        description: Name constraints
-        type: boolean
-      PermittedEmailAddresses:
-        items:
-          type: string
-        type: array
-      PermittedIPRanges:
-        items:
-          $ref: '#/definitions/IPNet'
-        type: array
-      PermittedURIDomains:
-        items:
-          type: string
-        type: array
-      PolicyIdentifiers:
-        items:
-          $ref: '#/definitions/ObjectIdentifier'
-        type: array
-      PublicKey:
+            Model a basic GoLang struct which includes the following fields: ID, CreatedAt, UpdatedAt, DeletedAt
+            It may be embedded into your model or you may build your own model without it
+            type User struct {
+            gorm.Model
+            }
+        properties:
+            CreatedAt:
+                format: date-time
+                type: string
+            DeletedAt:
+                $ref: '#/definitions/DeletedAt'
+            ID:
+                format: uint64
+                type: integer
+            UpdatedAt:
+                format: date-time
+                type: string
         type: object
-      PublicKeyAlgorithm:
-        $ref: '#/definitions/PublicKeyAlgorithm'
-      Raw:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      RawIssuer:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      RawSubject:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      RawSubjectPublicKeyInfo:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      RawTBSCertificate:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      SerialNumber:
-        $ref: '#/definitions/Int'
-      Signature:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      SignatureAlgorithm:
-        $ref: '#/definitions/SignatureAlgorithm'
-      Subject:
-        $ref: '#/definitions/Name'
-      SubjectKeyId:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      URIs:
-        items:
-          $ref: '#/definitions/URL'
-        type: array
-      UnhandledCriticalExtensions:
+        x-go-package: gorm.io/gorm
+    Name:
         description: |-
-          UnhandledCriticalExtensions contains a list of extension IDs that
-          were not (fully) processed when parsing. Verify will fail if this
-          slice is non-empty, unless verification is delegated to an OS
-          library which understands all the critical extensions.
-
-          Users can access these extensions using Extensions and can remove
-          elements from this slice if they believe that they have been
-          handled.
+            Name represents an X.509 distinguished name. This only includes the common
+            elements of a DN. Note that Name is only an approximation of the X.509
+            structure. If an accurate representation is needed, asn1.Unmarshal the raw
+            subject or issuer as an RDNSequence.
+        properties:
+            Country:
+                items:
+                    type: string
+                type: array
+                x-go-name: OrganizationalUnit
+            ExtraNames:
+                description: |-
+                    ExtraNames contains attributes to be copied, raw, into any marshaled
+                    distinguished names. Values override any attributes with the same OID.
+                    The ExtraNames field is not populated when parsing, see Names.
+                items:
+                    $ref: '#/definitions/AttributeTypeAndValue'
+                type: array
+            Locality:
+                items:
+                    type: string
+                type: array
+                x-go-name: Province
+            Names:
+                description: |-
+                    Names contains all parsed attributes. When parsing distinguished names,
+                    this can be used to extract non-standard attributes that are not parsed
+                    by this package. When marshaling to RDNSequences, the Names field is
+                    ignored, see ExtraNames.
+                items:
+                    $ref: '#/definitions/AttributeTypeAndValue'
+                type: array
+            SerialNumber:
+                type: string
+                x-go-name: CommonName
+            StreetAddress:
+                items:
+                    type: string
+                type: array
+                x-go-name: PostalCode
+        type: object
+        x-go-package: crypto/x509/pkix
+    NullTime:
+        description: |-
+            NullTime implements the Scanner interface so
+            it can be used as a scan destination, similar to NullString.
+        properties:
+            Time:
+                format: date-time
+                type: string
+            Valid:
+                type: boolean
+        title: NullTime represents a time.Time that may be null.
+        type: object
+        x-go-package: database/sql
+    ObjectIdentifier:
         items:
-          $ref: '#/definitions/ObjectIdentifier'
+            format: int64
+            type: integer
+        title: An ObjectIdentifier represents an ASN.1 OBJECT IDENTIFIER.
         type: array
-      UnknownExtKeyUsage:
-        items:
-          $ref: '#/definitions/ObjectIdentifier'
-        type: array
-      Version:
+        x-go-package: encoding/asn1
+    PublicKeyAlgorithm:
         format: int64
         type: integer
-    title: A Certificate represents an X.509 certificate.
-    type: object
-    x-go-package: crypto/x509
-  ClusterConfiguration:
-    properties:
-      CreatedAt:
-        format: date-time
-        type: string
-      DeletedAt:
-        $ref: '#/definitions/DeletedAt'
-      GroupName:
-        type: string
-      ID:
-        format: uint64
-        type: integer
-      KubernetesConfiguration:
-        items:
-          format: uint8
-          type: integer
-        type: array
-      UpdatedAt:
-        format: date-time
-        type: string
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/model
-  CreateGroupRequest:
-    properties:
-      hostname:
-        type: string
-        x-go-name: Hostname
-      name:
-        type: string
-        x-go-name: Name
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/group
-  DeletedAt:
-    $ref: '#/definitions/NullTime'
-  ExtKeyUsage:
-    description: Each of the ExtKeyUsage* constants define a unique action.
-    format: int64
-    title: ExtKeyUsage represents an extended set of actions that are valid for a
-      given key.
-    type: integer
-    x-go-package: crypto/x509
-  Extension:
-    description: |-
-      Extension represents the ASN.1 structure of the same name. See RFC
-      5280, section 4.2.
-    properties:
-      Critical:
-        type: boolean
-      Id:
-        $ref: '#/definitions/ObjectIdentifier'
-      Value:
-        items:
-          format: uint8
-          type: integer
-        type: array
-    type: object
-    x-go-package: crypto/x509/pkix
-  Group:
-    description: Group domain object defining a group
-    properties:
-      CreatedAt:
-        format: date-time
-        type: string
-      DeletedAt:
-        $ref: '#/definitions/DeletedAt'
-      Hostname:
-        type: string
-      Name:
-        type: string
-      UpdatedAt:
-        format: date-time
-        type: string
-      Users:
-        items:
-          $ref: '#/definitions/User'
-        type: array
-      clusterConfiguration:
-        $ref: '#/definitions/ClusterConfiguration'
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/model
-  IP:
-    description: |-
-      Note that in this documentation, referring to an
-      IP address as an IPv4 address or an IPv6 address
-      is a semantic property of the address, not just the
-      length of the byte slice: a 16-byte slice can still
-      be an IPv4 address.
-    items:
-      format: uint8
-      type: integer
-    title: |-
-      An IP is a single IP address, a slice of bytes.
-      Functions in this package accept either 4-byte (IPv4)
-      or 16-byte (IPv6) slices as input.
-    type: array
-    x-go-package: net
-  IPMask:
-    description: See type IPNet and func ParseCIDR for details.
-    items:
-      format: uint8
-      type: integer
-    title: |-
-      An IPMask is a bitmask that can be used to manipulate
-      IP addresses for IP addressing and routing.
-    type: array
-    x-go-package: net
-  IPNet:
-    properties:
-      IP:
-        $ref: '#/definitions/IP'
-      Mask:
-        $ref: '#/definitions/IPMask'
-    title: An IPNet represents an IP network.
-    type: object
-    x-go-package: net
-  Int:
-    description: |-
-      Operations always take pointer arguments (*Int) rather
-      than Int values, and each unique Int value requires
-      its own unique *Int pointer. To "copy" an Int value,
-      an existing (or newly allocated) Int must be set to
-      a new value using the Int.Set method; shallow copies
-      of Ints are not supported and may lead to errors.
-    title: |-
-      An Int represents a signed multi-precision integer.
-      The zero value for an Int represents the value 0.
-    type: object
-    x-go-package: math/big
-  Key:
-    description: |-
-      Key defines the minimal interface for each of the
-      key types. Their use and implementation differ significantly
-      between each key types, so you should use type assertions
-      to perform more specific tasks with each key
-    properties:
-      Algorithm:
-        description: Algorithm returns `alg` of a JWK
-        type: string
-      KeyID:
-        description: KeyID returns `kid` of a JWK
-        type: string
-      KeyOps:
-        $ref: '#/definitions/KeyOperationList'
-      KeyType:
-        $ref: '#/definitions/KeyType'
-      KeyUsage:
-        description: KeyUsage returns `use` of a JWK
-        type: string
-      PrivateParams:
-        additionalProperties:
-          type: object
-        description: |-
-          PrivateParams returns the non-standard elements in the source structure
-          WARNING: DO NOT USE PrivateParams() IF YOU HAVE CONCURRENT CODE ACCESSING THEM.
-          Use `AsMap()` to get a copy of the entire header, or use `Iterate()` instead
+        x-go-package: crypto/x509
+    RefreshTokenRequest:
+        properties:
+            refreshToken:
+                type: string
+                x-go-name: RefreshToken
         type: object
-      X509CertChain:
-        description: X509CertChain returns `x5c` of a JWK
-        items:
-          $ref: '#/definitions/Certificate'
-        type: array
-      X509CertThumbprint:
-        description: X509CertThumbprint returns `x5t` of a JWK
-        type: string
-      X509CertThumbprintS256:
-        description: X509CertThumbprintS256 returns `x5t#S256` of a JWK
-        type: string
-      X509URL:
-        description: X509URL returns `x58` of a JWK
-        type: string
-    type: object
-    x-go-package: github.com/lestrrat-go/jwx/jwk
-  KeyOperation:
-    type: string
-    x-go-package: github.com/lestrrat-go/jwx/jwk
-  KeyOperationList:
-    items:
-      $ref: '#/definitions/KeyOperation'
-    type: array
-    x-go-package: github.com/lestrrat-go/jwx/jwk
-  KeyType:
-    description: KeyType represents the key type ("kty") that are supported
-    type: string
-    x-go-package: github.com/lestrrat-go/jwx/jwa
-  KeyUsage:
-    description: |-
-      KeyUsage represents the set of actions that are valid for a given key. It's
-      a bitmap of the KeyUsage* constants.
-    format: int64
-    type: integer
-    x-go-package: crypto/x509
-  Model:
-    description: |-
-      Model a basic GoLang struct which includes the following fields: ID, CreatedAt, UpdatedAt, DeletedAt
-      It may be embedded into your model or you may build your own model without it
-      type User struct {
-      gorm.Model
-      }
-    properties:
-      CreatedAt:
-        format: date-time
-        type: string
-      DeletedAt:
-        $ref: '#/definitions/DeletedAt'
-      ID:
-        format: uint64
+        x-go-package: github.com/dhis2-sre/im-user/pkg/user
+    Response:
+        properties:
+            status:
+                type: string
+                x-go-name: Status
+        type: object
+        x-go-package: github.com/dhis2-sre/im-user/pkg/health
+    SignUpRequest:
+        properties:
+            email:
+                type: string
+                x-go-name: Email
+            password:
+                type: string
+                x-go-name: Password
+        type: object
+        x-go-package: github.com/dhis2-sre/im-user/pkg/user
+    SignatureAlgorithm:
+        format: int64
         type: integer
-      UpdatedAt:
-        format: date-time
-        type: string
-    type: object
-    x-go-package: gorm.io/gorm
-  Name:
-    description: |-
-      Name represents an X.509 distinguished name. This only includes the common
-      elements of a DN. Note that Name is only an approximation of the X.509
-      structure. If an accurate representation is needed, asn1.Unmarshal the raw
-      subject or issuer as an RDNSequence.
-    properties:
-      Country:
-        items:
-          type: string
-        type: array
-        x-go-name: OrganizationalUnit
-      ExtraNames:
+        x-go-package: crypto/x509
+    Tokens:
+        description: Tokens domain object defining user tokens
+        properties:
+            access_token:
+                type: string
+                x-go-name: AccessToken
+            expires_in:
+                format: uint64
+                type: integer
+                x-go-name: ExpiresIn
+            refresh_token:
+                type: string
+                x-go-name: RefreshToken
+            token_type:
+                type: string
+                x-go-name: TokenType
+        type: object
+        x-go-package: github.com/dhis2-sre/im-user/pkg/token
+    URL:
         description: |-
-          ExtraNames contains attributes to be copied, raw, into any marshaled
-          distinguished names. Values override any attributes with the same OID.
-          The ExtraNames field is not populated when parsing, see Names.
-        items:
-          $ref: '#/definitions/AttributeTypeAndValue'
-        type: array
-      Locality:
-        items:
-          type: string
-        type: array
-        x-go-name: Province
-      Names:
+            The general form represented is:
+
+            [scheme:][//[userinfo@]host][/]path[?query][#fragment]
+
+            URLs that do not start with a slash after the scheme are interpreted as:
+
+            scheme:opaque[?query][#fragment]
+
+            Note that the Path field is stored in decoded form: /%47%6f%2f becomes /Go/.
+            A consequence is that it is impossible to tell which slashes in the Path were
+            slashes in the raw URL and which were %2f. This distinction is rarely important,
+            but when it is, the code should use RawPath, an optional field which only gets
+            set if the default encoding is different from Path.
+
+            URL's String method uses the EscapedPath method to obtain the path. See the
+            EscapedPath method for more details.
+        properties:
+            ForceQuery:
+                type: boolean
+            Fragment:
+                type: string
+            Host:
+                type: string
+            Opaque:
+                type: string
+            Path:
+                type: string
+            RawFragment:
+                type: string
+            RawPath:
+                type: string
+            RawQuery:
+                type: string
+            Scheme:
+                type: string
+            User:
+                $ref: '#/definitions/Userinfo'
+        title: A URL represents a parsed URL (technically, a URI reference).
+        type: object
+        x-go-package: net/url
+    User:
+        description: User domain object defining a user
+        properties:
+            AdminGroups:
+                items:
+                    $ref: '#/definitions/Group'
+                type: array
+            CreatedAt:
+                format: date-time
+                type: string
+            DeletedAt:
+                $ref: '#/definitions/DeletedAt'
+            Email:
+                type: string
+            Groups:
+                items:
+                    $ref: '#/definitions/Group'
+                type: array
+            ID:
+                format: uint64
+                type: integer
+            UpdatedAt:
+                format: date-time
+                type: string
+        type: object
+        x-go-package: github.com/dhis2-sre/im-user/pkg/model
+    Userinfo:
         description: |-
-          Names contains all parsed attributes. When parsing distinguished names,
-          this can be used to extract non-standard attributes that are not parsed
-          by this package. When marshaling to RDNSequences, the Names field is
-          ignored, see ExtraNames.
-        items:
-          $ref: '#/definitions/AttributeTypeAndValue'
-        type: array
-      SerialNumber:
-        type: string
-        x-go-name: CommonName
-      StreetAddress:
-        items:
-          type: string
-        type: array
-        x-go-name: PostalCode
-    type: object
-    x-go-package: crypto/x509/pkix
-  NullTime:
-    description: |-
-      NullTime implements the Scanner interface so
-      it can be used as a scan destination, similar to NullString.
-    properties:
-      Time:
-        format: date-time
-        type: string
-      Valid:
-        type: boolean
-    title: NullTime represents a time.Time that may be null.
-    type: object
-    x-go-package: database/sql
-  ObjectIdentifier:
-    items:
-      format: int64
-      type: integer
-    title: An ObjectIdentifier represents an ASN.1 OBJECT IDENTIFIER.
-    type: array
-    x-go-package: encoding/asn1
-  PublicKeyAlgorithm:
-    format: int64
-    type: integer
-    x-go-package: crypto/x509
-  RefreshTokenRequest:
-    properties:
-      refreshToken:
-        type: string
-        x-go-name: RefreshToken
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/user
-  Response:
-    properties:
-      status:
-        type: string
-        x-go-name: Status
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/health
-  SignUpRequest:
-    properties:
-      email:
-        type: string
-        x-go-name: Email
-      password:
-        type: string
-        x-go-name: Password
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/user
-  SignatureAlgorithm:
-    format: int64
-    type: integer
-    x-go-package: crypto/x509
-  Tokens:
-    description: Tokens domain object defining user tokens
-    properties:
-      access_token:
-        type: string
-        x-go-name: AccessToken
-      expires_in:
-        format: uint64
-        type: integer
-        x-go-name: ExpiresIn
-      refresh_token:
-        type: string
-        x-go-name: RefreshToken
-      token_type:
-        type: string
-        x-go-name: TokenType
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/token
-  URL:
-    description: |-
-      The general form represented is:
-
-      [scheme:][//[userinfo@]host][/]path[?query][#fragment]
-
-      URLs that do not start with a slash after the scheme are interpreted as:
-
-      scheme:opaque[?query][#fragment]
-
-      Note that the Path field is stored in decoded form: /%47%6f%2f becomes /Go/.
-      A consequence is that it is impossible to tell which slashes in the Path were
-      slashes in the raw URL and which were %2f. This distinction is rarely important,
-      but when it is, the code should use RawPath, an optional field which only gets
-      set if the default encoding is different from Path.
-
-      URL's String method uses the EscapedPath method to obtain the path. See the
-      EscapedPath method for more details.
-    properties:
-      ForceQuery:
-        type: boolean
-      Fragment:
-        type: string
-      Host:
-        type: string
-      Opaque:
-        type: string
-      Path:
-        type: string
-      RawFragment:
-        type: string
-      RawPath:
-        type: string
-      RawQuery:
-        type: string
-      Scheme:
-        type: string
-      User:
-        $ref: '#/definitions/Userinfo'
-    title: A URL represents a parsed URL (technically, a URI reference).
-    type: object
-    x-go-package: net/url
-  User:
-    description: User domain object defining a user
-    properties:
-      AdminGroups:
-        items:
-          $ref: '#/definitions/Group'
-        type: array
-      CreatedAt:
-        format: date-time
-        type: string
-      DeletedAt:
-        $ref: '#/definitions/DeletedAt'
-      Email:
-        type: string
-      Groups:
-        items:
-          $ref: '#/definitions/Group'
-        type: array
-      ID:
-        format: uint64
-        type: integer
-      UpdatedAt:
-        format: date-time
-        type: string
-    type: object
-    x-go-package: github.com/dhis2-sre/im-user/pkg/model
-  Userinfo:
-    description: |-
-      The Userinfo type is an immutable encapsulation of username and
-      password details for a URL. An existing Userinfo value is guaranteed
-      to have a username set (potentially empty, as allowed by RFC 2396),
-      and optionally a password.
-    type: object
-    x-go-package: net/url
+            The Userinfo type is an immutable encapsulation of username and
+            password details for a URL. An existing Userinfo value is guaranteed
+            to have a username set (potentially empty, as allowed by RFC 2396),
+            and optionally a password.
+        type: object
+        x-go-package: net/url
 info:
-  contact:
-    email: info@dhis2.org
-    url: https://github.com/dhis2-sre/im-user
-  description: User Service as part of the Instance Manager environment
-  license:
-    name: TODO
-  termsOfService: there are no TOS at this moment, use at your own risk we take no
-    responsibility
-  title: Instance Manager User Service.
-  version: 0.1.0
+    contact:
+        email: info@dhis2.org
+        url: https://github.com/dhis2-sre/im-user
+    description: User Service as part of the Instance Manager environment
+    license:
+        name: TODO
+    termsOfService: there are no TOS at this moment, use at your own risk we take no responsibility
+    title: Instance Manager User Service.
+    version: 0.1.0
 paths:
-  /groups:
-    post:
-      description: Create group
-      operationId: groupCreate
-      parameters:
-      - description: Refresh token request body parameter
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateGroupRequest'
-      responses:
-        "201":
-          description: Group
-          schema:
-            $ref: '#/definitions/Group'
-        "400":
-          $ref: '#/responses/Error'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /groups/{group}/cluster-configuration:
-    post:
-      description: Add cluster configuration to group
-      operationId: addClusterConfigurationToGroup
-      parameters:
-      - in: path
-        name: group
-        required: true
-        type: string
-        x-go-name: Group
-      - description: SOPS encrypted Kubernetes configuration file
-        in: formData
-        name: Body
-        required: true
-        type: file
-      responses:
-        "201":
-          description: Group
-          schema:
-            $ref: '#/definitions/Group'
-        "400":
-          $ref: '#/responses/Error'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /groups/{group}/users/{userId}:
-    post:
-      description: Add user to group
-      operationId: addUserToGroup
-      parameters:
-      - in: path
-        name: group
-        required: true
-        type: string
-        x-go-name: Group
-      - format: uint64
-        in: path
-        name: userId
-        required: true
-        type: integer
-        x-go-name: UserID
-      responses:
-        "201":
-          description: Group
-          schema:
-            $ref: '#/definitions/Group'
-        "400":
-          $ref: '#/responses/Error'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /groups/{name}:
-    get:
-      description: Return a group by name
-      operationId: findGroupByName
-      parameters:
-      - in: path
-        name: name
-        required: true
-        type: string
-        x-go-name: Name
-      responses:
-        "200":
-          description: Group
-          schema:
-            $ref: '#/definitions/Group'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "404":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /health:
-    get:
-      description: Service health status
-      operationId: health
-      responses:
-        "200":
-          $ref: '#/responses/Response'
-  /jwks:
-    get:
-      description: Return a JWKS containing the public key which can be used to validate
-        the JWT's dispensed at /signin
-      operationId: Jwks
-      responses:
-        "200":
-          $ref: '#/responses/Jwks'
-        "415":
-          $ref: '#/responses/Error'
-        "500":
-          $ref: '#/responses/Error'
-  /me:
-    get:
-      description: Return user details
-      operationId: me
-      responses:
-        "200":
-          description: User
-          schema:
-            $ref: '#/definitions/User'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "404":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-  /refresh:
-    post:
-      description: Refresh user tokens
-      operationId: refreshToken
-      parameters:
-      - description: Refresh token request body parameter
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/RefreshTokenRequest'
-      responses:
-        "201":
-          $ref: '#/responses/Tokens'
-        "400":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-  /tokens:
-    post:
-      description: Return user tokens
-      operationId: signIn
-      responses:
-        "201":
-          $ref: '#/responses/Tokens'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "404":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - basicAuth: []
-  /users:
-    delete:
-      description: Sign out user
-      operationId: signOut
-      responses:
-        "200":
-          description: ""
-        "401":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
-    post:
-      description: SignUp user
-      operationId: signUp
-      parameters:
-      - description: SignUp request body parameter
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/SignUpRequest'
-      responses:
-        "201":
-          description: User
-          schema:
-            $ref: '#/definitions/User'
-        "400":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-  /users/{id}:
-    get:
-      description: Return a user by id
-      operationId: findUserById
-      parameters:
-      - format: uint64
-        in: path
-        name: id
-        required: true
-        type: integer
-        x-go-name: ID
-      responses:
-        "200":
-          description: User
-          schema:
-            $ref: '#/definitions/User'
-        "401":
-          $ref: '#/responses/Error'
-        "403":
-          $ref: '#/responses/Error'
-        "404":
-          $ref: '#/responses/Error'
-        "415":
-          $ref: '#/responses/Error'
-      security:
-      - oauth2: []
+    /groups:
+        post:
+            description: Create group
+            operationId: groupCreate
+            parameters:
+                - description: Refresh token request body parameter
+                  in: body
+                  name: Body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/CreateGroupRequest'
+            responses:
+                "201":
+                    description: Group
+                    schema:
+                        $ref: '#/definitions/Group'
+                "400":
+                    $ref: '#/responses/Error'
+                "401":
+                    $ref: '#/responses/Error'
+                "403":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - oauth2: []
+    /groups/{group}/cluster-configuration:
+        post:
+            description: Add cluster configuration to group
+            operationId: addClusterConfigurationToGroup
+            parameters:
+                - in: path
+                  name: group
+                  required: true
+                  type: string
+                  x-go-name: Group
+                - description: SOPS encrypted Kubernetes configuration file
+                  in: formData
+                  name: Body
+                  required: true
+                  type: file
+            responses:
+                "201":
+                    description: Group
+                    schema:
+                        $ref: '#/definitions/Group'
+                "400":
+                    $ref: '#/responses/Error'
+                "401":
+                    $ref: '#/responses/Error'
+                "403":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - oauth2: []
+    /groups/{group}/users/{userId}:
+        post:
+            description: Add user to group
+            operationId: addUserToGroup
+            parameters:
+                - in: path
+                  name: group
+                  required: true
+                  type: string
+                  x-go-name: Group
+                - format: uint64
+                  in: path
+                  name: userId
+                  required: true
+                  type: integer
+                  x-go-name: UserID
+            responses:
+                "201":
+                    description: Group
+                    schema:
+                        $ref: '#/definitions/Group'
+                "400":
+                    $ref: '#/responses/Error'
+                "401":
+                    $ref: '#/responses/Error'
+                "403":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - oauth2: []
+    /groups/{name}:
+        get:
+            description: Return a group by name
+            operationId: findGroupByName
+            parameters:
+                - in: path
+                  name: name
+                  required: true
+                  type: string
+                  x-go-name: Name
+            responses:
+                "200":
+                    description: Group
+                    schema:
+                        $ref: '#/definitions/Group'
+                "401":
+                    $ref: '#/responses/Error'
+                "403":
+                    $ref: '#/responses/Error'
+                "404":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - oauth2: []
+    /health:
+        get:
+            description: Service health status
+            operationId: health
+            responses:
+                "200":
+                    $ref: '#/responses/Response'
+    /jwks:
+        get:
+            description: Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
+            operationId: Jwks
+            responses:
+                "200":
+                    $ref: '#/responses/Jwks'
+                "415":
+                    $ref: '#/responses/Error'
+                "500":
+                    $ref: '#/responses/Error'
+    /me:
+        get:
+            description: Return user details
+            operationId: me
+            responses:
+                "200":
+                    description: User
+                    schema:
+                        $ref: '#/definitions/User'
+                "401":
+                    $ref: '#/responses/Error'
+                "403":
+                    $ref: '#/responses/Error'
+                "404":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - oauth2: []
+    /refresh:
+        post:
+            description: Refresh user tokens
+            operationId: refreshToken
+            parameters:
+                - description: Refresh token request body parameter
+                  in: body
+                  name: Body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/RefreshTokenRequest'
+            responses:
+                "201":
+                    $ref: '#/responses/Tokens'
+                "400":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+    /tokens:
+        post:
+            description: Return user tokens
+            operationId: signIn
+            responses:
+                "201":
+                    $ref: '#/responses/Tokens'
+                "401":
+                    $ref: '#/responses/Error'
+                "403":
+                    $ref: '#/responses/Error'
+                "404":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - basicAuth: []
+    /users:
+        delete:
+            description: Sign out user
+            operationId: signOut
+            responses:
+                "200":
+                    description: ""
+                "401":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - oauth2: []
+        post:
+            description: SignUp user
+            operationId: signUp
+            parameters:
+                - description: SignUp request body parameter
+                  in: body
+                  name: Body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/SignUpRequest'
+            responses:
+                "201":
+                    description: User
+                    schema:
+                        $ref: '#/definitions/User'
+                "400":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+    /users/{id}:
+        get:
+            description: Return a user by id
+            operationId: findUserById
+            parameters:
+                - format: uint64
+                  in: path
+                  name: id
+                  required: true
+                  type: integer
+                  x-go-name: ID
+            responses:
+                "200":
+                    description: User
+                    schema:
+                        $ref: '#/definitions/User'
+                "401":
+                    $ref: '#/responses/Error'
+                "403":
+                    $ref: '#/responses/Error'
+                "404":
+                    $ref: '#/responses/Error'
+                "415":
+                    $ref: '#/responses/Error'
+            security:
+                - oauth2: []
 responses:
-  Error:
-    description: ""
-  Jwks:
-    description: ""
-    schema:
-      $ref: '#/definitions/Key'
-  Response:
-    description: ""
-    schema:
-      $ref: '#/definitions/Response'
-  Tokens:
-    description: ""
-    schema:
-      $ref: '#/definitions/Tokens'
+    Error:
+        description: ""
+    Jwks:
+        description: ""
+        schema:
+            $ref: '#/definitions/Key'
+    Response:
+        description: ""
+        schema:
+            $ref: '#/definitions/Response'
+    Tokens:
+        description: ""
+        schema:
+            $ref: '#/definitions/Tokens'
 securityDefinitions:
-  basicAuth:
-    type: basic
-  oauth2:
-    flow: password
-    tokenUrl: /tokens
-    type: oauth2
+    basicAuth:
+        type: basic
+    oauth2:
+        flow: password
+        tokenUrl: /tokens
+        type: oauth2
 swagger: "2.0"

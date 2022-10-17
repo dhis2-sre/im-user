@@ -55,7 +55,36 @@ SignOutOK sign out o k
 type SignOutOK struct {
 }
 
+// IsSuccess returns true when this sign out o k response has a 2xx status code
+func (o *SignOutOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this sign out o k response has a 3xx status code
+func (o *SignOutOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign out o k response has a 4xx status code
+func (o *SignOutOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this sign out o k response has a 5xx status code
+func (o *SignOutOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign out o k response a status code equal to that given
+func (o *SignOutOK) IsCode(code int) bool {
+	return code == 200
+}
+
 func (o *SignOutOK) Error() string {
+	return fmt.Sprintf("[DELETE /users][%d] signOutOK ", 200)
+}
+
+func (o *SignOutOK) String() string {
 	return fmt.Sprintf("[DELETE /users][%d] signOutOK ", 200)
 }
 
@@ -76,7 +105,36 @@ SignOutUnauthorized sign out unauthorized
 type SignOutUnauthorized struct {
 }
 
+// IsSuccess returns true when this sign out unauthorized response has a 2xx status code
+func (o *SignOutUnauthorized) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign out unauthorized response has a 3xx status code
+func (o *SignOutUnauthorized) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign out unauthorized response has a 4xx status code
+func (o *SignOutUnauthorized) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign out unauthorized response has a 5xx status code
+func (o *SignOutUnauthorized) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign out unauthorized response a status code equal to that given
+func (o *SignOutUnauthorized) IsCode(code int) bool {
+	return code == 401
+}
+
 func (o *SignOutUnauthorized) Error() string {
+	return fmt.Sprintf("[DELETE /users][%d] signOutUnauthorized ", 401)
+}
+
+func (o *SignOutUnauthorized) String() string {
 	return fmt.Sprintf("[DELETE /users][%d] signOutUnauthorized ", 401)
 }
 
@@ -97,7 +155,36 @@ SignOutUnsupportedMediaType sign out unsupported media type
 type SignOutUnsupportedMediaType struct {
 }
 
+// IsSuccess returns true when this sign out unsupported media type response has a 2xx status code
+func (o *SignOutUnsupportedMediaType) IsSuccess() bool {
+	return false
+}
+
+// IsRedirect returns true when this sign out unsupported media type response has a 3xx status code
+func (o *SignOutUnsupportedMediaType) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this sign out unsupported media type response has a 4xx status code
+func (o *SignOutUnsupportedMediaType) IsClientError() bool {
+	return true
+}
+
+// IsServerError returns true when this sign out unsupported media type response has a 5xx status code
+func (o *SignOutUnsupportedMediaType) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this sign out unsupported media type response a status code equal to that given
+func (o *SignOutUnsupportedMediaType) IsCode(code int) bool {
+	return code == 415
+}
+
 func (o *SignOutUnsupportedMediaType) Error() string {
+	return fmt.Sprintf("[DELETE /users][%d] signOutUnsupportedMediaType ", 415)
+}
+
+func (o *SignOutUnsupportedMediaType) String() string {
 	return fmt.Sprintf("[DELETE /users][%d] signOutUnsupportedMediaType ", 415)
 }
 

@@ -19,7 +19,7 @@ import (
 type IPNet struct {
 
 	// IP
-	IP IP `json:"IP,omitempty"`
+	IP string `json:"IP,omitempty"`
 
 	// mask
 	Mask IPMask `json:"Mask,omitempty"`
@@ -29,10 +29,6 @@ type IPNet struct {
 func (m *IPNet) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateIP(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateMask(formats); err != nil {
 		res = append(res, err)
 	}
@@ -40,23 +36,6 @@ func (m *IPNet) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *IPNet) validateIP(formats strfmt.Registry) error {
-	if swag.IsZero(m.IP) { // not required
-		return nil
-	}
-
-	if err := m.IP.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("IP")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("IP")
-		}
-		return err
-	}
-
 	return nil
 }
 
@@ -81,10 +60,6 @@ func (m *IPNet) validateMask(formats strfmt.Registry) error {
 func (m *IPNet) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateIP(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateMask(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -92,20 +67,6 @@ func (m *IPNet) ContextValidate(ctx context.Context, formats strfmt.Registry) er
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *IPNet) contextValidateIP(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := m.IP.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("IP")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("IP")
-		}
-		return err
-	}
-
 	return nil
 }
 
