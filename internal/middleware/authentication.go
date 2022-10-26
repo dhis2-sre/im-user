@@ -57,6 +57,7 @@ func (m AuthenticationMiddleware) handleError(c *gin.Context, e error) {
 func (m AuthenticationMiddleware) TokenAuthentication(c *gin.Context) {
 	authorizationHeader := c.GetHeader("Authorization")
 	authorizationHeader = strings.TrimPrefix(authorizationHeader, "Bearer ")
+	authorizationHeader = strings.TrimPrefix(authorizationHeader, "bearer ")
 
 	u, err := m.tokenService.ValidateAccessToken(authorizationHeader)
 	if err != nil {
