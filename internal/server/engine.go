@@ -29,7 +29,13 @@ func GetEngine(c config.Config, tokenHandler token.Handler, usrHandler user.Hand
 	basePath := c.BasePath
 
 	r := gin.Default()
-	r.Use(cors.Default())
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowCredentials = true
+	corsConfig.AddAllowHeaders("authorization")
+	r.Use(cors.New(corsConfig))
+
 	r.Use(middleware.ErrorHandler())
 
 	router := r.Group(basePath)
