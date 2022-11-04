@@ -1,0 +1,22 @@
+image:
+  pullPolicy: Always
+
+groups:
+  names: whoami,play
+  hostnames: whoami.im.radnov.test.c.dhis2.org,play.im.radnov.test.c.dhis2.org
+
+database:
+  host: im-user-postgresql-radnov.instance-manager-radnov.svc
+  port: "5432"
+
+redis:
+  host: im-user-redis-radnov-master.instance-manager-radnov.svc
+  port: "6379"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 768Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
