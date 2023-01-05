@@ -91,7 +91,7 @@ func TestHandler_SignIn(t *testing.T) {
 		Return(&model.User{
 			Model:    gorm.Model{ID: id},
 			Email:    email,
-			Password: password, // TODO: Should be hashed
+			Password: password,
 		})
 	tokenService := &mockTokenService{}
 	tokenService.
@@ -158,7 +158,7 @@ func TestHandler_Me(t *testing.T) {
 		Return(&model.User{
 			Model:    gorm.Model{ID: id},
 			Email:    email,
-			Password: password, // TODO: Should be hashed
+			Password: password,
 		}, nil)
 
 	r := gin.Default()
