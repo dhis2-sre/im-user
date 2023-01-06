@@ -4,3 +4,4 @@ im-user
 # decrypted secret files
 *.dec
 *.pem
+coverage.*
