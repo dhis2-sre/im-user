@@ -112,7 +112,43 @@ func TestAuthenticationMiddleware_BasicAuthentication_WrongCredentials(t *testin
 	tokenService.AssertExpectations(t)
 }
 
-func TestAuthenticationMiddleware_TokenAuthentication(t *testing.T) {
+func TestAuthenticationMiddleware_TokenAuthentication_Happy(t *testing.T) {
+	id := uint(1)
+	email := "someone@something.org"
+	password := "password"
+
+	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.Header.Set("Authorization", "Bearer token")
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Request = req
+
+	userService := &mockUserService{}
+	tokenService := &mockTokenService{}
+	tokenService.
+		On("ValidateAccessToken", mock.AnythingOfType("string")).
+		Return(&model.User{
+			Model:    gorm.Model{ID: id},
+			Email:    email,
+			Password: password,
+		}, nil)
+	authentication := NewAuthentication(userService, tokenService)
+
+	_, exists := c.Get("user")
+	assert.False(t, exists)
+
+	authentication.TokenAuthentication(c)
+
+	value, exists := c.Get("user")
+	assert.True(t, exists)
+	user, ok := value.(*model.User)
+	assert.True(t, ok)
+	assert.Equal(t, id, user.ID)
+	assert.Equal(t, email, user.Email)
+	assert.Equal(t, password, user.Password)
 }
 
 type mockUserService struct{ mock.Mock }
@@ -145,8 +181,8 @@ func (s *mockUserService) FindById(id uint) (*model.User, error) {
 type mockTokenService struct{ mock.Mock }
 
 func (t *mockTokenService) ValidateAccessToken(tokenString string) (*model.User, error) {
-	//TODO implement me
-	panic("implement me")
+	called := t.Called(tokenString)
+	return called.Get(0).(*model.User), nil
 }
 
 func (t *mockTokenService) GetTokens(user *model.User, previousTokenId string) (*token.Tokens, error) {
