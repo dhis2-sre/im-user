@@ -169,13 +169,18 @@ func (s *mockUserService) SignIn(email string, password string) (*model.User, er
 	if ok {
 		return user, nil
 	} else {
-		return nil, errors.New("whatever")
+		return nil, called.Error(1)
 	}
 }
 
 func (s *mockUserService) FindById(id uint) (*model.User, error) {
-	//TODO implement me
-	panic("implement me")
+	called := s.Called(id)
+	user, ok := called.Get(0).(*model.User)
+	if ok {
+		return user, nil
+	} else {
+		return nil, called.Error(1)
+	}
 }
 
 type mockTokenService struct{ mock.Mock }
