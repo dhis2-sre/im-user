@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -26,10 +27,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_Happy(t *testing.T) {
 	}, nil)
 
 	tokenService := &mockTokenService{}
-	m := AuthenticationMiddleware{
-		userService:  userService,
-		tokenService: tokenService,
-	}
+	authentication := NewAuthentication(userService, tokenService)
 
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
 	assert.NoError(t, err)
@@ -43,7 +41,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_Happy(t *testing.T) {
 	_, exists := c.Get("user")
 	assert.False(t, exists)
 
-	m.BasicAuthentication(c)
+	authentication.BasicAuthentication(c)
 
 	value, exists := c.Get("user")
 	assert.True(t, exists)
@@ -52,6 +50,63 @@ func TestAuthenticationMiddleware_BasicAuthentication_Happy(t *testing.T) {
 	assert.Equal(t, id, user.ID)
 	assert.Equal(t, email, user.Email)
 	assert.Equal(t, password, user.Password)
+
+	userService.AssertExpectations(t)
+	tokenService.AssertExpectations(t)
+}
+
+func TestAuthenticationMiddleware_BasicAuthentication_NoCredentials(t *testing.T) {
+	userService := &mockUserService{}
+	tokenService := &mockTokenService{}
+	authentication := NewAuthentication(userService, tokenService)
+
+	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Request = req
+
+	_, exists := c.Get("user")
+	assert.False(t, exists)
+
+	authentication.BasicAuthentication(c)
+
+	_, exists = c.Get("user")
+	assert.False(t, exists)
+
+	userService.AssertExpectations(t)
+	tokenService.AssertExpectations(t)
+}
+
+func TestAuthenticationMiddleware_BasicAuthentication_WrongCredentials(t *testing.T) {
+	email := "someone@something.org"
+	password := "password"
+
+	userService := &mockUserService{}
+	userService.
+		On("SignIn", email, password).
+		Return(nil, errors.New("wrong credentials"))
+	tokenService := &mockTokenService{}
+	authentication := NewAuthentication(userService, tokenService)
+
+	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.SetBasicAuth(email, password)
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Request = req
+
+	_, exists := c.Get("user")
+	assert.False(t, exists)
+
+	authentication.BasicAuthentication(c)
+
+	_, exists = c.Get("user")
+	assert.False(t, exists)
 
 	userService.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
@@ -74,7 +129,12 @@ func (s *mockUserService) SignUp(email string, password string) (*model.User, er
 
 func (s *mockUserService) SignIn(email string, password string) (*model.User, error) {
 	called := s.Called(email, password)
-	return called.Get(0).(*model.User), nil
+	user, ok := called.Get(0).(*model.User)
+	if ok {
+		return user, nil
+	} else {
+		return nil, errors.New("whatever")
+	}
 }
 
 func (s *mockUserService) FindById(id uint) (*model.User, error) {
