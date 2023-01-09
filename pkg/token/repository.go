@@ -9,14 +9,20 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func NewRepository(redisClient *redis.Client) *redisTokenRepository {
+func NewRepository(redisClient redisClient) *redisTokenRepository {
 	return &redisTokenRepository{
 		redis: redisClient,
 	}
 }
 
+type redisClient interface {
+	Set(key string, value interface{}, expiration time.Duration) *redis.StatusCmd
+	Del(key ...string) *redis.IntCmd
+	Scan(cursor uint64, match string, count int64) *redis.ScanCmd
+}
+
 type redisTokenRepository struct {
-	redis *redis.Client
+	redis redisClient
 }
 
 func (r redisTokenRepository) setRefreshToken(userId uint, tokenId string, expiresIn time.Duration) error {
