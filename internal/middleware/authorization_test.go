@@ -40,7 +40,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_Happy(t *testing.T) {
 	assert.Equal(t, 0, len(errs))
 }
 
-func TestAuthorizationMiddleware_RequireAdministrator_NotInAdminstratorGroup(t *testing.T) {
+func TestAuthorizationMiddleware_RequireAdministrator_NotInAdministratorGroup(t *testing.T) {
 	id := uint(1)
 	email := "someone@something.org"
 	password := "password"
