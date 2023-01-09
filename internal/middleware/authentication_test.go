@@ -151,6 +151,70 @@ func TestAuthenticationMiddleware_TokenAuthentication_Happy(t *testing.T) {
 	assert.Equal(t, password, user.Password)
 }
 
+func TestAuthenticationMiddleware_TokenAuthentication_TokenValidationFail(t *testing.T) {
+	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.Header.Set("Authorization", "Bearer token")
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Request = req
+
+	userService := &mockUserService{}
+	tokenService := &mockTokenService{}
+	errorMessage := "validation fail"
+	tokenService.
+		On("ValidateAccessToken", mock.AnythingOfType("string")).
+		Return(nil, errors.New(errorMessage))
+	authentication := NewAuthentication(userService, tokenService)
+
+	_, exists := c.Get("user")
+	assert.False(t, exists)
+
+	authentication.TokenAuthentication(c)
+
+	_, exists = c.Get("user")
+	assert.False(t, exists)
+}
+
+func TestAuthenticationMiddleware_TokenAuthentication_ExternalError(t *testing.T) {
+	id := uint(1)
+	email := "someone@something.org"
+	password := "password"
+
+	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.Header.Set("Authorization", "Bearer token")
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Request = req
+
+	userService := &mockUserService{}
+	tokenService := &mockTokenService{}
+	tokenService.
+		On("ValidateAccessToken", mock.AnythingOfType("string")).
+		Return(&model.User{
+			Model:    gorm.Model{ID: id},
+			Email:    email,
+			Password: password,
+		}, nil)
+	authentication := NewAuthentication(userService, tokenService)
+
+	_ = c.Error(errors.New("some error which wasn't handled properly"))
+	assert.NoError(t, err)
+
+	_, exists := c.Get("user")
+	assert.False(t, exists)
+
+	authentication.TokenAuthentication(c)
+
+	_, exists = c.Get("user")
+	assert.False(t, exists)
+}
+
 type mockUserService struct{ mock.Mock }
 
 func (s *mockUserService) FindOrCreate(email string, password string) (*model.User, error) {
@@ -187,7 +251,12 @@ type mockTokenService struct{ mock.Mock }
 
 func (t *mockTokenService) ValidateAccessToken(tokenString string) (*model.User, error) {
 	called := t.Called(tokenString)
-	return called.Get(0).(*model.User), nil
+	user, ok := called.Get(0).(*model.User)
+	if ok {
+		return user, nil
+	} else {
+		return nil, called.Error(1)
+	}
 }
 
 func (t *mockTokenService) GetTokens(user *model.User, previousTokenId string) (*token.Tokens, error) {

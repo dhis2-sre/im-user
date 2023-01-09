@@ -2,8 +2,13 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
+	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
+
+	"github.com/dhis2-sre/im-user/internal/errdef"
 
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/gin-gonic/gin"
@@ -87,4 +92,86 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotFound(t *testing.T)
 	errs := c.Errors.Errors()
 	assert.Equal(t, 1, len(errs))
 	assert.Equal(t, errorMessage, errs[0])
+}
+
+func TestAuthorizationMiddleware_RequireAdministrator_UserNotFoundError(t *testing.T) {
+	id := uint(0)
+
+	userService := &mockUserService{}
+	errorMessage := "not found"
+	userService.
+		On("FindById", id).
+		Return(nil, errdef.NewNotFound(fmt.Errorf(errorMessage)))
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Set("user", &model.User{
+		Model: gorm.Model{ID: id},
+	})
+	authorization := NewAuthorization(userService)
+
+	authorization.RequireAdministrator(c)
+
+	errs := c.Errors.Errors()
+	assert.Equal(t, 1, len(errs))
+	assert.Equal(t, errorMessage, errs[0])
+	lastError := c.Errors.Last()
+	assert.True(t, errdef.IsNotFound(lastError))
+}
+
+func TestAuthorizationMiddleware_RequireAdministrator_UserNotOnContext(t *testing.T) {
+	userService := &mockUserService{}
+	errorMessage := "unable to extract user from request context for unknown reason: "
+	authorization := NewAuthorization(userService)
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+
+	authorization.RequireAdministrator(c)
+
+	errs := c.Errors.Errors()
+	assert.Equal(t, 1, len(errs))
+	assert.True(t, strings.HasPrefix(errs[0], errorMessage))
+}
+
+func TestAuthorizationMiddleware_RequireAdministrator_ExternalError(t *testing.T) {
+	id := uint(1)
+	email := "someone@something.org"
+	password := "password"
+
+	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.Header.Set("Authorization", "Bearer token")
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+
+	c.Set("user", &model.User{
+		Model: gorm.Model{ID: id},
+	})
+
+	c.Request = req
+
+	userService := &mockUserService{}
+	userService.On("FindById", mock.AnythingOfType("uint")).Return(&model.User{
+		Model:    gorm.Model{ID: id},
+		Email:    email,
+		Password: password,
+		Groups: []model.Group{
+			{Name: model.AdministratorGroupName},
+		},
+	}, nil)
+	authorization := NewAuthorization(userService)
+
+	_ = c.Error(errors.New("some error which wasn't handled properly"))
+	assert.NoError(t, err)
+
+	_, exists := c.Get("user")
+	assert.False(t, exists)
+
+	authorization.RequireAdministrator(c)
+
+	_, exists = c.Get("user")
+	assert.False(t, exists)
 }
