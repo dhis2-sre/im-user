@@ -21,7 +21,7 @@ func Test_service_SignUp_Happy(t *testing.T) {
 		On("create", mock.AnythingOfType("*model.User")).
 		Return(nil, nil)
 
-	s := service{repository: createUserRepository}
+	s := NewService(createUserRepository)
 
 	user, err := s.SignUp(email, password)
 	require.NoError(t, err)
@@ -42,7 +42,7 @@ func Test_service_SignUp_UserExists(t *testing.T) {
 		On("create", mock.AnythingOfType("*model.User")).
 		Return(errors.New(errorMessage))
 
-	s := service{repository: repository}
+	s := NewService(repository)
 
 	_, err := s.SignUp(email, password)
 	require.Error(t, err)
@@ -67,7 +67,7 @@ func Test_service_SignIn_Happy(t *testing.T) {
 			Password: hashedPassword,
 		}, nil)
 
-	s := service{repository: repository}
+	s := NewService(repository)
 
 	user, err := s.SignIn(email, password)
 	require.NoError(t, err)
@@ -90,7 +90,7 @@ func Test_service_SignIn_BadCredentials(t *testing.T) {
 		On("findByEmail", email).
 		Return(&model.User{Password: hashedPassword}, nil)
 
-	s := service{repository: repository}
+	s := NewService(repository)
 
 	user, err := s.SignIn(email, password)
 	require.Error(t, err)
@@ -111,7 +111,7 @@ func Test_service_SignIn_NotFound(t *testing.T) {
 		On("findByEmail", email).
 		Return(nil, errdef.NewNotFound(errors.New(errorMessage)))
 
-	s := service{repository: repository}
+	s := NewService(repository)
 
 	user, err := s.SignIn(email, password)
 	require.Error(t, err)
@@ -136,7 +136,7 @@ func Test_service_FindById_Happy(t *testing.T) {
 			Password: password,
 		}, nil)
 
-	s := service{repository: repository}
+	s := NewService(repository)
 
 	user, err := s.FindById(id)
 	require.NoError(t, err)
@@ -157,7 +157,7 @@ func Test_service_FindById_NotFound(t *testing.T) {
 		On("findById", id).
 		Return(nil, errdef.NewNotFound(errors.New(errorMessage)))
 
-	s := service{repository: repository}
+	s := NewService(repository)
 
 	user, err := s.FindById(id)
 	require.Error(t, err)
@@ -182,7 +182,7 @@ func Test_service_FindOrCreate_Happy(t *testing.T) {
 			Password: password,
 		}, nil)
 
-	s := service{repository: repository}
+	s := NewService(repository)
 
 	user, err := s.FindOrCreate(email, password)
 	require.NoError(t, err)
