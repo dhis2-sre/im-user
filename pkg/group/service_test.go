@@ -34,6 +34,9 @@ func Test_service_GetClusterConfiguration_Happy(t *testing.T) {
 
 	assert.Equal(t, id, cc.ID)
 	assert.Equal(t, groupName, cc.GroupName)
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_AddClusterConfiguration_Happy(t *testing.T) {
@@ -48,6 +51,9 @@ func Test_service_AddClusterConfiguration_Happy(t *testing.T) {
 	err := service.AddClusterConfiguration(clusterConfiguration)
 
 	require.NoError(t, err)
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_AddUser_Happy(t *testing.T) {
@@ -76,6 +82,9 @@ func Test_service_AddUser_Happy(t *testing.T) {
 	err := service.AddUser(groupName, userId)
 
 	require.NoError(t, err)
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_AddUser_UserNotFound(t *testing.T) {
@@ -99,6 +108,9 @@ func Test_service_AddUser_UserNotFound(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Equal(t, errorMessage, err.Error())
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_AddUser_GroupNotFound(t *testing.T) {
@@ -119,6 +131,9 @@ func Test_service_AddUser_GroupNotFound(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Equal(t, errorMessage, err.Error())
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_Create_Happy(t *testing.T) {
@@ -142,6 +157,9 @@ func Test_service_Create_Happy(t *testing.T) {
 
 	assert.Equal(t, name, found.Name)
 	assert.Equal(t, hostname, found.Hostname)
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_Create_NotFound(t *testing.T) {
@@ -164,6 +182,9 @@ func Test_service_Create_NotFound(t *testing.T) {
 	assert.True(t, found == nil)
 	require.Error(t, err)
 	assert.Equal(t, errorMessage, err.Error())
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_Find_Happy(t *testing.T) {
@@ -184,6 +205,9 @@ func Test_service_Find_Happy(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, name, found.Name)
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_Find_NotFound(t *testing.T) {
@@ -205,6 +229,7 @@ func Test_service_Find_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Equal(t, errorMessage, err.Error())
 
+	userService.AssertExpectations(t)
 	repository.AssertExpectations(t)
 }
 
@@ -227,6 +252,9 @@ func Test_service_FindOrCreate_Happy(t *testing.T) {
 
 	assert.Equal(t, name, found.Name)
 	assert.Equal(t, hostname, found.Hostname)
+
+	userService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func Test_service_FindOrCreate_NotFound(t *testing.T) {
@@ -250,6 +278,7 @@ func Test_service_FindOrCreate_NotFound(t *testing.T) {
 	require.Error(t, err)
 	assert.Equal(t, errorMessage, err.Error())
 
+	userService.AssertExpectations(t)
 	repository.AssertExpectations(t)
 }
 
