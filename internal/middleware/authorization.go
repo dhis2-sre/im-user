@@ -38,6 +38,7 @@ func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
 		} else {
 			_ = c.Error(err)
 		}
+		c.Abort()
 		return
 	}
 
