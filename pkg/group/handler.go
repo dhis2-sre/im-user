@@ -63,7 +63,7 @@ func (h Handler) Create(c *gin.Context) {
 
 	group, err := h.groupService.Create(request.Name, request.Hostname)
 	if err != nil {
-		_ = c.Error(err)
+		_ = c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
