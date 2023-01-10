@@ -41,6 +41,8 @@ func TestAuthorizationMiddleware_RequireAdministrator_Happy(t *testing.T) {
 
 	authorization.RequireAdministrator(c)
 
+	assert.False(t, c.IsAborted())
+
 	errs := c.Errors.Errors()
 	assert.Equal(t, 0, len(errs))
 }
@@ -66,6 +68,8 @@ func TestAuthorizationMiddleware_RequireAdministrator_NotInAdministratorGroup(t 
 
 	authorization.RequireAdministrator(c)
 
+	assert.True(t, c.IsAborted())
+
 	errs := c.Errors.Errors()
 	assert.Equal(t, 1, len(errs))
 	assert.Equal(t, "administrator access denied", errs[0])
@@ -88,6 +92,8 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotFound(t *testing.T)
 	authorization := NewAuthorization(userService)
 
 	authorization.RequireAdministrator(c)
+
+	assert.True(t, c.IsAborted())
 
 	errs := c.Errors.Errors()
 	assert.Equal(t, 1, len(errs))
@@ -112,6 +118,8 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotFoundError(t *testi
 
 	authorization.RequireAdministrator(c)
 
+	assert.True(t, c.IsAborted())
+
 	errs := c.Errors.Errors()
 	assert.Equal(t, 1, len(errs))
 	assert.Equal(t, errorMessage, errs[0])
@@ -128,6 +136,8 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotOnContext(t *testin
 	c, _ := gin.CreateTestContext(w)
 
 	authorization.RequireAdministrator(c)
+
+	assert.True(t, c.IsAborted())
 
 	errs := c.Errors.Errors()
 	assert.Equal(t, 1, len(errs))
@@ -146,32 +156,24 @@ func TestAuthorizationMiddleware_RequireAdministrator_ExternalError(t *testing.T
 
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
-
-	c.Set("user", &model.User{
-		Model: gorm.Model{ID: id},
-	})
-
 	c.Request = req
 
 	userService := &mockUserService{}
-	userService.On("FindById", mock.AnythingOfType("uint")).Return(&model.User{
-		Model:    gorm.Model{ID: id},
-		Email:    email,
-		Password: password,
-		Groups: []model.Group{
-			{Name: model.AdministratorGroupName},
-		},
-	}, nil)
+	userService.
+		On("FindById", mock.AnythingOfType("uint")).
+		Return(&model.User{
+			Model:    gorm.Model{ID: id},
+			Email:    email,
+			Password: password,
+			Groups: []model.Group{
+				{Name: model.AdministratorGroupName},
+			},
+		}, nil)
 	authorization := NewAuthorization(userService)
 
 	_ = c.Error(errors.New("some error which wasn't handled properly"))
-	assert.NoError(t, err)
-
-	_, exists := c.Get("user")
-	assert.False(t, exists)
 
 	authorization.RequireAdministrator(c)
 
-	_, exists = c.Get("user")
-	assert.False(t, exists)
+	assert.True(t, c.IsAborted())
 }
