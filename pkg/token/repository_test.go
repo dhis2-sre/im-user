@@ -31,6 +31,29 @@ func Test_redisTokenRepository_deleteRefreshToken_Happy(t *testing.T) {
 	r.AssertExpectations(t)
 }
 
+// TODO: WIP... Mock and test Del, and assert more
+func Test_redisTokenRepository_deleteRefreshTokens_Happy(t *testing.T) {
+	id := uint(1)
+
+	r := &redisMock{}
+	pattern := fmt.Sprintf("%d*", id)
+	r.
+		On("Scan", uint64(0), pattern, int64(5)).
+		Return(redis.NewScanCmd(func(cmd redis.Cmder) error {
+			return nil
+		}))
+	//	r.
+	//		On("Del", mock.AnythingOfType("string")).
+	//		Return(redis.NewIntCmd())
+
+	repository := NewRepository(r)
+	err := repository.deleteRefreshTokens(id)
+
+	require.NoError(t, err)
+
+	r.AssertExpectations(t)
+}
+
 func Test_redisTokenRepository_setRefreshToken_Happy(t *testing.T) {
 	id := uint(1)
 	tokenId := "some-uuid"
@@ -67,6 +90,6 @@ func (r *redisMock) Del(key ...string) *redis.IntCmd {
 }
 
 func (r *redisMock) Scan(cursor uint64, match string, count int64) *redis.ScanCmd {
-	//TODO implement me
-	panic("implement me")
+	called := r.Called(cursor, match, count)
+	return called.Get(0).(*redis.ScanCmd)
 }
