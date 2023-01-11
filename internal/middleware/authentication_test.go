@@ -214,12 +214,10 @@ func TestAuthenticationMiddleware_TokenAuthentication_ExternalError(t *testing.T
 type mockUserService struct{ mock.Mock }
 
 func (s *mockUserService) FindOrCreate(email string, password string) (*model.User, error) {
-	//TODO implement me
 	panic("implement me")
 }
 
 func (s *mockUserService) SignUp(email string, password string) (*model.User, error) {
-	//TODO implement me
 	panic("implement me")
 }
 
@@ -256,16 +254,13 @@ func (t *mockTokenService) ValidateAccessToken(tokenString string) (*model.User,
 }
 
 func (t *mockTokenService) GetTokens(user *model.User, previousTokenId string) (*token.Tokens, error) {
-	//TODO implement me
 	panic("implement me")
 }
 
 func (t *mockTokenService) ValidateRefreshToken(tokenString string) (*token.RefreshTokenData, error) {
-	//TODO implement me
 	panic("implement me")
 }
 
 func (t *mockTokenService) SignOut(userId uint) error {
-	//TODO implement me
 	panic("implement me")
 }

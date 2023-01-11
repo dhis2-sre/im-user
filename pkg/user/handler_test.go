@@ -241,7 +241,6 @@ func TestHandler_Me(t *testing.T) {
 type mockUserService struct{ mock.Mock }
 
 func (s *mockUserService) FindOrCreate(email string, password string) (*model.User, error) {
-	//TODO implement me
 	panic("implement me")
 }
 
@@ -278,11 +277,9 @@ func (t *mockTokenService) GetTokens(user *model.User, previousTokenId string) (
 }
 
 func (t *mockTokenService) ValidateRefreshToken(tokenString string) (*token.RefreshTokenData, error) {
-	//TODO implement me
 	panic("implement me")
 }
 
 func (t *mockTokenService) SignOut(userId uint) error {
-	//TODO implement me
 	panic("implement me")
 }

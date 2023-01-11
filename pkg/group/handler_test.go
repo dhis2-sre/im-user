@@ -94,12 +94,10 @@ func (m *mockGroupService) AddUser(groupName string, userId uint) error {
 }
 
 func (m *mockGroupService) AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error {
-	//TODO implement me
 	panic("implement me")
 }
 
 func (m *mockGroupService) GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error) {
-	//TODO implement me
 	panic("implement me")
 }
 
@@ -109,6 +107,5 @@ func (m *mockGroupService) Find(name string) (*model.Group, error) {
 }
 
 func (m *mockGroupService) FindOrCreate(name string, hostname string) (*model.Group, error) {
-	//TODO implement me
 	panic("implement me")
 }
