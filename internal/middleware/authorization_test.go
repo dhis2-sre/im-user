@@ -121,8 +121,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotFoundError(t *testi
 	errs := c.Errors.Errors()
 	assert.Equal(t, 1, len(errs))
 	assert.Equal(t, errorMessage, errs[0])
-	lastError := c.Errors.Last()
-	assert.True(t, errdef.IsNotFound(lastError))
+	assert.True(t, errdef.IsNotFound(c.Errors.Last()))
 }
 
 func TestAuthorizationMiddleware_RequireAdministrator_UserNotOnContext(t *testing.T) {
