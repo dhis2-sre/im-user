@@ -19,7 +19,7 @@ import (
 )
 
 func TestHandler_SignUp(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 
@@ -74,7 +74,7 @@ func newRequest(t *testing.T, request any) *http.Request {
 }
 
 func TestHandler_SignIn_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 
@@ -137,7 +137,7 @@ func TestHandler_SignIn_Happy(t *testing.T) {
 }
 
 func TestHandler_SignIn_GetTokensError(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 	errorMessage := "some err"
@@ -185,7 +185,7 @@ func TestHandler_SignIn_GetTokensError(t *testing.T) {
 
 func TestHandler_Me(t *testing.T) {
 	bearerToken := "token"
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 

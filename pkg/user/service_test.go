@@ -53,7 +53,7 @@ func Test_service_SignUp_UserExists(t *testing.T) {
 }
 
 func Test_service_SignIn_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "email"
 	password := "passwordpasswordpasswordpassword"
 	hashedPassword := "c55d1333f8567be7bfcc00fcae72720d30ae465cf62fb31c33303b707a18c2ca.f053011abe74ca660c2d98de8747ad0d6a6f401ccfb513e68127b1a46b42ed19"
@@ -123,7 +123,7 @@ func Test_service_SignIn_NotFound(t *testing.T) {
 }
 
 func Test_service_FindById_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "email"
 	password := "password"
 
@@ -149,7 +149,7 @@ func Test_service_FindById_Happy(t *testing.T) {
 }
 
 func Test_service_FindById_NotFound(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	errorMessage := "not found"
 
 	repository := &mockUserRepository{}
@@ -169,7 +169,7 @@ func Test_service_FindById_NotFound(t *testing.T) {
 }
 
 func Test_service_FindOrCreate_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "email"
 	password := "password"
 

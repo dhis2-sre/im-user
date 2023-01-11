@@ -13,7 +13,7 @@ import (
 )
 
 func Test_service_GetClusterConfiguration_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	groupName := "whatever"
 	clusterConfiguration := &model.ClusterConfiguration{
 		Model:                   gorm.Model{ID: id},
@@ -57,7 +57,7 @@ func Test_service_AddClusterConfiguration_Happy(t *testing.T) {
 }
 
 func Test_service_AddUser_Happy(t *testing.T) {
-	userId := uint(1)
+	var userId uint = 1
 	groupName := "whatever"
 	group := &model.Group{Name: groupName}
 	user := &model.User{
@@ -88,7 +88,7 @@ func Test_service_AddUser_Happy(t *testing.T) {
 }
 
 func Test_service_AddUser_UserNotFound(t *testing.T) {
-	userId := uint(1)
+	var userId uint = 1
 	groupName := "whatever"
 	errorMessage := "also whatever"
 
@@ -114,7 +114,7 @@ func Test_service_AddUser_UserNotFound(t *testing.T) {
 }
 
 func Test_service_AddUser_GroupNotFound(t *testing.T) {
-	userId := uint(1)
+	var userId uint = 1
 	groupName := "whatever"
 	errorMessage := "also whatever"
 

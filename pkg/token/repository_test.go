@@ -12,7 +12,7 @@ import (
 )
 
 func Test_redisTokenRepository_deleteRefreshToken_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	previousTokenId := ""
 	key := fmt.Sprintf("%d:%s", id, previousTokenId)
 
@@ -33,7 +33,7 @@ func Test_redisTokenRepository_deleteRefreshToken_Happy(t *testing.T) {
 
 // TODO: WIP... Mock and test Del, and assert more
 func Test_redisTokenRepository_deleteRefreshTokens_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 
 	r := &redisMock{}
 	pattern := fmt.Sprintf("%d*", id)
@@ -55,7 +55,7 @@ func Test_redisTokenRepository_deleteRefreshTokens_Happy(t *testing.T) {
 }
 
 func Test_redisTokenRepository_setRefreshToken_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	tokenId := "some-uuid"
 	var d time.Duration = 1000000000
 	key := fmt.Sprintf("%d:%s", id, tokenId)

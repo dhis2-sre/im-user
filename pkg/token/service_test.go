@@ -13,7 +13,7 @@ import (
 )
 
 func Test_tokenService_GetTokens_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 
@@ -58,7 +58,7 @@ func Test_tokenService_ValidateAccessToken(t *testing.T) {
 }
 
 func Test_tokenService_ValidateRefreshToken(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 
 	c, err := config.New()
 	assert.NoError(t, err)
@@ -75,7 +75,7 @@ func Test_tokenService_ValidateRefreshToken(t *testing.T) {
 }
 
 func Test_tokenService_SignOut(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 
 	c, err := config.New()
 	assert.NoError(t, err)

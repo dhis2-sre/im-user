@@ -12,7 +12,7 @@ import (
 )
 
 func TestGetUserFromContext_Happy(t *testing.T) {
-	id := uint(0)
+	var id uint = 0
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 	c.Set("user", &model.User{

@@ -15,7 +15,7 @@ import (
 )
 
 func TestAuthenticationMiddleware_BasicAuthentication_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 
@@ -113,7 +113,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_WrongCredentials(t *testin
 }
 
 func TestAuthenticationMiddleware_TokenAuthentication_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "password"
 
@@ -179,7 +179,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_TokenValidationFail(t *tes
 }
 
 func TestAuthenticationMiddleware_TokenAuthentication_ExternalError(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "password"
 

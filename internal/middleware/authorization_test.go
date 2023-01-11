@@ -18,7 +18,7 @@ import (
 )
 
 func TestAuthorizationMiddleware_RequireAdministrator_Happy(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "password"
 
@@ -48,7 +48,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_Happy(t *testing.T) {
 }
 
 func TestAuthorizationMiddleware_RequireAdministrator_NotInAdministratorGroup(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "password"
 
@@ -145,7 +145,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotOnContext(t *testin
 }
 
 func TestAuthorizationMiddleware_RequireAdministrator_ExternalError(t *testing.T) {
-	id := uint(1)
+	var id uint = 1
 	email := "someone@something.org"
 	password := "password"
 
