@@ -45,7 +45,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_Happy(t *testing.T) {
 	assert.False(t, c.IsAborted())
 
 	errs := c.Errors.Errors()
-	assert.Equal(t, 0, len(errs))
+	assert.Empty(t, errs)
 }
 
 func TestAuthorizationMiddleware_RequireAdministrator_NotInAdministratorGroup(t *testing.T) {
