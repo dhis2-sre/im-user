@@ -3,6 +3,7 @@ package user
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -72,7 +73,7 @@ func newRequest(t *testing.T, request any) *http.Request {
 	return req
 }
 
-func TestHandler_SignIn(t *testing.T) {
+func TestHandler_SignIn_Happy(t *testing.T) {
 	id := uint(1)
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
@@ -130,6 +131,53 @@ func TestHandler_SignIn(t *testing.T) {
 	assert.Equal(t, tokenType, tokens.TokenType)
 	assert.Equal(t, refreshToken, tokens.RefreshToken)
 	assert.Equal(t, expiresIn, tokens.ExpiresIn)
+
+	userService.AssertExpectations(t)
+	tokenService.AssertExpectations(t)
+}
+
+func TestHandler_SignIn_GetTokensError(t *testing.T) {
+	id := uint(1)
+	email := "someone@something.org"
+	password := "passwordpasswordpasswordpassword"
+	errorMessage := "some err"
+
+	c, err := config.New()
+	assert.NoError(t, err)
+
+	userService := &mockUserService{}
+	userService.
+		On("SignIn", email, password).
+		Return(&model.User{
+			Model:    gorm.Model{ID: id},
+			Email:    email,
+			Password: password,
+		})
+	tokenService := &mockTokenService{}
+	tokenService.
+		On("GetTokens", mock.AnythingOfType("*model.User"), "").
+		Return(nil, errors.New(errorMessage))
+
+	r := gin.Default()
+	authentication := middleware.NewAuthentication(userService, tokenService)
+	r.Use(middleware.ErrorHandler(), authentication.BasicAuthentication)
+	handler := NewHandler(c, userService, tokenService)
+	r.POST("/tokens", handler.SignIn)
+
+	recorder := httptest.NewRecorder()
+
+	req, err := http.NewRequest(http.MethodPost, "/tokens", nil)
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.SetBasicAuth(email, password)
+
+	r.ServeHTTP(recorder, req)
+
+	actual := recorder.Code
+	assert.Equal(t, http.StatusInternalServerError, actual)
+
+	b := recorder.Body.String()
+	assert.Contains(t, b, "something went wrong. We'll look into it if you send us the id", b)
 
 	userService.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
@@ -219,7 +267,12 @@ func (t *mockTokenService) ValidateAccessToken(tokenString string) (*model.User,
 
 func (t *mockTokenService) GetTokens(user *model.User, previousTokenId string) (*token.Tokens, error) {
 	called := t.Called(user, previousTokenId)
-	return called.Get(0).(*token.Tokens), nil
+	tokens, ok := called.Get(0).(*token.Tokens)
+	if ok {
+		return tokens, nil
+	} else {
+		return nil, called.Error(1)
+	}
 }
 
 func (t *mockTokenService) ValidateRefreshToken(tokenString string) (*token.RefreshTokenData, error) {
