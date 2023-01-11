@@ -47,8 +47,7 @@ func TestHandler_SignUp(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	r.ServeHTTP(recorder, req)
 
-	actual := recorder.Code
-	assert.Equal(t, http.StatusCreated, actual)
+	assert.Equal(t, http.StatusCreated, recorder.Code)
 
 	body := recorder.Body
 	user := &model.User{}
@@ -121,8 +120,7 @@ func TestHandler_SignIn_Happy(t *testing.T) {
 
 	r.ServeHTTP(recorder, req)
 
-	actual := recorder.Code
-	assert.Equal(t, http.StatusCreated, actual)
+	assert.Equal(t, http.StatusCreated, recorder.Code)
 
 	body := recorder.Body
 	tokens := &token.Tokens{}
@@ -175,8 +173,7 @@ func TestHandler_SignIn_GetTokensError(t *testing.T) {
 
 	r.ServeHTTP(recorder, req)
 
-	actual := recorder.Code
-	assert.Equal(t, http.StatusInternalServerError, actual)
+	assert.Equal(t, http.StatusInternalServerError, recorder.Code)
 
 	b := recorder.Body.String()
 	assert.Contains(t, b, "something went wrong. We'll look into it if you send us the id", b)

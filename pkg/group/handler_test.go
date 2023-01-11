@@ -32,8 +32,7 @@ func TestHandler_Create_Happy(t *testing.T) {
 
 	handler.Create(c)
 
-	actual := recorder.Code
-	assert.Equal(t, http.StatusCreated, actual)
+	assert.Equal(t, http.StatusCreated, recorder.Code)
 
 	groupService.AssertExpectations(t)
 }
