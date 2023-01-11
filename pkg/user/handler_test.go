@@ -175,8 +175,7 @@ func TestHandler_SignIn_GetTokensError(t *testing.T) {
 
 	assert.Equal(t, http.StatusInternalServerError, recorder.Code)
 
-	b := recorder.Body.String()
-	assert.Contains(t, b, "something went wrong. We'll look into it if you send us the id", b)
+	assert.Contains(t, recorder.Body.String(), "something went wrong. We'll look into it if you send us the id", recorder.Body.String())
 
 	userService.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
