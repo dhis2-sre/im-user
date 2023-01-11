@@ -30,8 +30,8 @@ func Test_service_GetClusterConfiguration_Happy(t *testing.T) {
 	service := NewService(repository, userService)
 
 	cc, err := service.GetClusterConfiguration(groupName)
-	require.NoError(t, err)
 
+	require.NoError(t, err)
 	assert.Equal(t, id, cc.ID)
 	assert.Equal(t, groupName, cc.GroupName)
 
@@ -153,8 +153,8 @@ func Test_service_Create_Happy(t *testing.T) {
 	service := NewService(repository, userService)
 
 	found, err := service.Create(name, hostname)
-	require.NoError(t, err)
 
+	require.NoError(t, err)
 	assert.Equal(t, name, found.Name)
 	assert.Equal(t, hostname, found.Hostname)
 
@@ -177,7 +177,6 @@ func Test_service_Create_NotFound(t *testing.T) {
 	service := NewService(repository, userService)
 
 	found, err := service.Create(name, hostname)
-	require.Error(t, err)
 
 	assert.True(t, found == nil)
 	require.Error(t, err)
@@ -202,8 +201,8 @@ func Test_service_Find_Happy(t *testing.T) {
 	service := NewService(repository, userService)
 
 	found, err := service.Find(name)
-	require.NoError(t, err)
 
+	require.NoError(t, err)
 	assert.Equal(t, name, found.Name)
 
 	userService.AssertExpectations(t)
@@ -248,8 +247,8 @@ func Test_service_FindOrCreate_Happy(t *testing.T) {
 	service := NewService(repository, userService)
 
 	found, err := service.FindOrCreate(name, hostname)
-	require.NoError(t, err)
 
+	require.NoError(t, err)
 	assert.Equal(t, name, found.Name)
 	assert.Equal(t, hostname, found.Hostname)
 
