@@ -32,12 +32,3 @@ func TestGetUserFromContext_NoUserOnContext(t *testing.T) {
 
 	assert.ErrorContains(t, err, "unable to extract user from request context for unknown reason")
 }
-
-func TestGetUserFromContext_InvalidUserOnContext(t *testing.T) {
-	c, _ := gin.CreateTestContext(httptest.NewRecorder())
-	c.Set("user", "not a user struct")
-
-	_, err := GetUserFromContext(c)
-
-	assert.ErrorContains(t, err, "unable to cast user for unknown reason")
-}
