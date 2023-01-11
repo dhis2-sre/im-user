@@ -35,12 +35,10 @@ cluster-dev:
 	skaffold dev
 
 test: clean
-	docker compose up -d database redis
 	docker compose run --no-deps test
 	$(clean-cmd)
 
 test-coverage: clean
-	docker compose up -d database redis
 	docker compose run --no-deps test-coverage
 	$(clean-cmd)
 
