@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/token"
 	"github.com/gin-gonic/gin"
@@ -30,7 +32,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_Happy(t *testing.T) {
 	authentication := NewAuthentication(userService, tokenService)
 
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(email, password)
 
@@ -60,7 +62,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_NoCredentials(t *testing.T
 	authentication := NewAuthentication(userService, tokenService)
 
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
 	c, _ := gin.CreateTestContext(httptest.NewRecorder())
@@ -90,7 +92,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_WrongCredentials(t *testin
 	authentication := NewAuthentication(userService, tokenService)
 
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(email, password)
 
@@ -115,7 +117,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_Happy(t *testing.T) {
 	password := "password"
 
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 
@@ -149,7 +151,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_Happy(t *testing.T) {
 
 func TestAuthenticationMiddleware_TokenAuthentication_TokenValidationFail(t *testing.T) {
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 
@@ -179,7 +181,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_ExternalError(t *testing.T
 	password := "password"
 
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 
@@ -198,7 +200,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_ExternalError(t *testing.T
 	authentication := NewAuthentication(userService, tokenService)
 
 	_ = c.Error(errors.New("some error which wasn't handled properly"))
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	_, exists := c.Get("user")
 	assert.False(t, exists)

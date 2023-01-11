@@ -8,6 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/dhis2-sre/im-user/internal/errdef"
 
 	"github.com/dhis2-sre/im-user/pkg/model"
@@ -145,7 +147,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_ExternalError(t *testing.T
 	password := "password"
 
 	req, err := http.NewRequest(http.MethodPost, "/whatever", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 

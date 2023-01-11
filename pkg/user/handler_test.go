@@ -8,6 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/dhis2-sre/im-user/internal/middleware"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/model"
@@ -24,7 +26,7 @@ func TestHandler_SignUp(t *testing.T) {
 	password := "passwordpasswordpasswordpassword"
 
 	c, err := config.New()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	userService := &mockUserService{}
 	userService.
@@ -51,7 +53,7 @@ func TestHandler_SignUp(t *testing.T) {
 	body := recorder.Body
 	user := &model.User{}
 	err = json.Unmarshal(body.Bytes(), user)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, id, user.ID)
 	assert.Equal(t, email, user.Email)
@@ -63,10 +65,10 @@ func TestHandler_SignUp(t *testing.T) {
 
 func newRequest(t *testing.T, request any) *http.Request {
 	body, err := json.Marshal(request)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	req, err := http.NewRequest(http.MethodPost, "/users", bytes.NewReader(body))
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
@@ -84,7 +86,7 @@ func TestHandler_SignIn_Happy(t *testing.T) {
 	expiresIn := uint(0)
 
 	c, err := config.New()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	userService := &mockUserService{}
 	userService.
@@ -113,7 +115,7 @@ func TestHandler_SignIn_Happy(t *testing.T) {
 	recorder := httptest.NewRecorder()
 
 	req, err := http.NewRequest(http.MethodPost, "/tokens", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(email, password)
 
@@ -125,7 +127,7 @@ func TestHandler_SignIn_Happy(t *testing.T) {
 	body := recorder.Body
 	tokens := &token.Tokens{}
 	err = json.Unmarshal(body.Bytes(), tokens)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, accessToken, tokens.AccessToken)
 	assert.Equal(t, tokenType, tokens.TokenType)
@@ -143,7 +145,7 @@ func TestHandler_SignIn_GetTokensError(t *testing.T) {
 	errorMessage := "some err"
 
 	c, err := config.New()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	userService := &mockUserService{}
 	userService.
@@ -167,7 +169,7 @@ func TestHandler_SignIn_GetTokensError(t *testing.T) {
 	recorder := httptest.NewRecorder()
 
 	req, err := http.NewRequest(http.MethodPost, "/tokens", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(email, password)
 
@@ -190,7 +192,7 @@ func TestHandler_Me(t *testing.T) {
 	password := "passwordpasswordpasswordpassword"
 
 	c, err := config.New()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	userService := &mockUserService{}
 	userService.
@@ -218,7 +220,7 @@ func TestHandler_Me(t *testing.T) {
 	recorder := httptest.NewRecorder()
 
 	req, err := http.NewRequest(http.MethodGet, "/me", nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", bearerToken)
 	r.ServeHTTP(recorder, req)
@@ -226,7 +228,7 @@ func TestHandler_Me(t *testing.T) {
 	body := recorder.Body
 	user := &model.User{}
 	err = json.Unmarshal(body.Bytes(), user)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, id, user.ID)
 	assert.Equal(t, email, user.Email)

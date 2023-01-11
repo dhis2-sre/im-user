@@ -4,6 +4,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -19,7 +21,7 @@ func TestGetUserFromContext_Happy(t *testing.T) {
 
 	user, err := GetUserFromContext(c)
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, id, user.ID)
 }
 
