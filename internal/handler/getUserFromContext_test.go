@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/dhis2-sre/im-user/pkg/model"
@@ -31,8 +30,7 @@ func TestGetUserFromContext_NoUserOnContext(t *testing.T) {
 
 	_, err := GetUserFromContext(c)
 
-	assert.Error(t, err)
-	assert.True(t, strings.HasPrefix(err.Error(), "unable to extract user from request context for unknown reason"))
+	assert.ErrorContains(t, err, "unable to extract user from request context for unknown reason")
 }
 
 func TestGetUserFromContext_InvalidUserOnContext(t *testing.T) {
@@ -42,6 +40,5 @@ func TestGetUserFromContext_InvalidUserOnContext(t *testing.T) {
 
 	_, err := GetUserFromContext(c)
 
-	assert.Error(t, err)
-	assert.True(t, strings.HasPrefix(err.Error(), "unable to cast user for unknown reason"))
+	assert.ErrorContains(t, err, "unable to cast user for unknown reason")
 }
