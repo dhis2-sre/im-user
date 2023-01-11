@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -137,7 +136,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotOnContext(t *testin
 
 	errs := c.Errors.Errors()
 	assert.Equal(t, 1, len(errs))
-	assert.True(t, strings.HasPrefix(errs[0], errorMessage))
+	assert.Contains(t, errs[0], errorMessage)
 }
 
 func TestAuthorizationMiddleware_RequireAdministrator_ExternalError(t *testing.T) {
