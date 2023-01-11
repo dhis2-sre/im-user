@@ -12,8 +12,7 @@ import (
 
 func TestGetUserFromContext_Happy(t *testing.T) {
 	var id uint = 0
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Set("user", &model.User{
 		Model: gorm.Model{ID: id},
 	})
@@ -25,8 +24,7 @@ func TestGetUserFromContext_Happy(t *testing.T) {
 }
 
 func TestGetUserFromContext_NoUserOnContext(t *testing.T) {
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 
 	_, err := GetUserFromContext(c)
 
@@ -34,8 +32,7 @@ func TestGetUserFromContext_NoUserOnContext(t *testing.T) {
 }
 
 func TestGetUserFromContext_InvalidUserOnContext(t *testing.T) {
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Set("user", "not a user struct")
 
 	_, err := GetUserFromContext(c)

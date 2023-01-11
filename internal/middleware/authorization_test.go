@@ -32,8 +32,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_Happy(t *testing.T) {
 		},
 	}, nil)
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Set("user", &model.User{
 		Model: gorm.Model{ID: id},
 	})
@@ -59,8 +58,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_NotInAdministratorGroup(t 
 		Password: password,
 	}, nil)
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Set("user", &model.User{
 		Model: gorm.Model{ID: id},
 	})
@@ -84,8 +82,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotFound(t *testing.T)
 		On("FindById", id).
 		Return(nil, errors.New(errorMessage))
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Set("user", &model.User{
 		Model: gorm.Model{ID: id},
 	})
@@ -109,8 +106,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotFoundError(t *testi
 		On("FindById", id).
 		Return(nil, errdef.NewNotFound(fmt.Errorf(errorMessage)))
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Set("user", &model.User{
 		Model: gorm.Model{ID: id},
 	})
@@ -132,8 +128,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_UserNotOnContext(t *testin
 	errorMessage := "unable to extract user from request context for unknown reason: "
 	authorization := NewAuthorization(userService)
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 
 	authorization.RequireAdministrator(c)
 
@@ -154,8 +149,7 @@ func TestAuthorizationMiddleware_RequireAdministrator_ExternalError(t *testing.T
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request = req
 
 	userService := &mockUserService{}

@@ -34,8 +34,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_Happy(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(email, password)
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request = req
 
 	_, exists := c.Get("user")
@@ -64,8 +63,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_NoCredentials(t *testing.T
 	assert.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request = req
 
 	_, exists := c.Get("user")
@@ -96,8 +94,7 @@ func TestAuthenticationMiddleware_BasicAuthentication_WrongCredentials(t *testin
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.SetBasicAuth(email, password)
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request = req
 
 	_, exists := c.Get("user")
@@ -122,8 +119,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_Happy(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request = req
 
 	userService := &mockUserService{}
@@ -157,8 +153,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_TokenValidationFail(t *tes
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request = req
 
 	userService := &mockUserService{}
@@ -188,8 +183,7 @@ func TestAuthenticationMiddleware_TokenAuthentication_ExternalError(t *testing.T
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 	req.Header.Set("Authorization", "Bearer token")
 
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.Request = req
 
 	userService := &mockUserService{}
