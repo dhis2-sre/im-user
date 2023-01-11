@@ -106,8 +106,7 @@ func Test_service_AddUser_UserNotFound(t *testing.T) {
 
 	err := service.AddUser(groupName, userId)
 
-	require.Error(t, err)
-	assert.Equal(t, errorMessage, err.Error())
+	assert.ErrorContains(t, err, errorMessage)
 
 	userService.AssertExpectations(t)
 	repository.AssertExpectations(t)
@@ -129,8 +128,7 @@ func Test_service_AddUser_GroupNotFound(t *testing.T) {
 
 	err := service.AddUser(groupName, userId)
 
-	require.Error(t, err)
-	assert.Equal(t, errorMessage, err.Error())
+	assert.ErrorContains(t, err, errorMessage)
 
 	userService.AssertExpectations(t)
 	repository.AssertExpectations(t)
@@ -179,8 +177,7 @@ func Test_service_Create_NotFound(t *testing.T) {
 	found, err := service.Create(name, hostname)
 
 	assert.True(t, found == nil)
-	require.Error(t, err)
-	assert.Equal(t, errorMessage, err.Error())
+	assert.ErrorContains(t, err, errorMessage)
 
 	userService.AssertExpectations(t)
 	repository.AssertExpectations(t)
@@ -225,8 +222,7 @@ func Test_service_Find_NotFound(t *testing.T) {
 	found, err := service.Find(name)
 
 	assert.True(t, found == nil)
-	require.Error(t, err)
-	assert.Equal(t, errorMessage, err.Error())
+	assert.ErrorContains(t, err, errorMessage)
 
 	userService.AssertExpectations(t)
 	repository.AssertExpectations(t)
@@ -274,8 +270,7 @@ func Test_service_FindOrCreate_NotFound(t *testing.T) {
 	found, err := service.FindOrCreate(name, hostname)
 
 	assert.True(t, found == nil)
-	require.Error(t, err)
-	assert.Equal(t, errorMessage, err.Error())
+	assert.ErrorContains(t, err, errorMessage)
 
 	userService.AssertExpectations(t)
 	repository.AssertExpectations(t)
