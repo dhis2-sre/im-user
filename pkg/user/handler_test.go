@@ -25,8 +25,7 @@ func TestHandler_SignUp(t *testing.T) {
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 
-	c, err := config.New()
-	require.NoError(t, err)
+	c := config.Config{}
 
 	userService := &mockUserService{}
 	userService.
@@ -51,7 +50,7 @@ func TestHandler_SignUp(t *testing.T) {
 
 	body := recorder.Body
 	user := &model.User{}
-	err = json.Unmarshal(body.Bytes(), user)
+	err := json.Unmarshal(body.Bytes(), user)
 	require.NoError(t, err)
 
 	assert.Equal(t, id, user.ID)
@@ -84,8 +83,7 @@ func TestHandler_SignIn_Happy(t *testing.T) {
 	refreshToken := ""
 	expiresIn := uint(0)
 
-	c, err := config.New()
-	require.NoError(t, err)
+	c := config.Config{}
 
 	userService := &mockUserService{}
 	userService.
@@ -142,8 +140,7 @@ func TestHandler_SignIn_GetTokensError(t *testing.T) {
 	password := "passwordpasswordpasswordpassword"
 	errorMessage := "some err"
 
-	c, err := config.New()
-	require.NoError(t, err)
+	c := config.Config{}
 
 	userService := &mockUserService{}
 	userService.
@@ -187,8 +184,7 @@ func TestHandler_Me(t *testing.T) {
 	email := "someone@something.org"
 	password := "passwordpasswordpasswordpassword"
 
-	c, err := config.New()
-	require.NoError(t, err)
+	c := config.Config{}
 
 	userService := &mockUserService{}
 	userService.
