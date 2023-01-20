@@ -96,6 +96,11 @@ func (o *SignInCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the sign in created response
+func (o *SignInCreated) Code() int {
+	return 201
+}
+
 func (o *SignInCreated) Error() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInCreated  %+v", 201, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *SignInUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the sign in unauthorized response
+func (o *SignInUnauthorized) Code() int {
+	return 401
+}
+
 func (o *SignInUnauthorized) Error() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *SignInForbidden) IsServerError() bool {
 // IsCode returns true when this sign in forbidden response a status code equal to that given
 func (o *SignInForbidden) IsCode(code int) bool {
 	return code == 403
+}
+
+// Code gets the status code for the sign in forbidden response
+func (o *SignInForbidden) Code() int {
+	return 403
 }
 
 func (o *SignInForbidden) Error() string {
@@ -257,6 +272,11 @@ func (o *SignInNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the sign in not found response
+func (o *SignInNotFound) Code() int {
+	return 404
+}
+
 func (o *SignInNotFound) Error() string {
 	return fmt.Sprintf("[POST /tokens][%d] signInNotFound ", 404)
 }
@@ -305,6 +325,11 @@ func (o *SignInUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this sign in unsupported media type response a status code equal to that given
 func (o *SignInUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the sign in unsupported media type response
+func (o *SignInUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *SignInUnsupportedMediaType) Error() string {

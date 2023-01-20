@@ -96,6 +96,11 @@ func (o *FindGroupByNameOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the find group by name o k response
+func (o *FindGroupByNameOK) Code() int {
+	return 200
+}
+
 func (o *FindGroupByNameOK) Error() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameOK  %+v", 200, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *FindGroupByNameUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the find group by name unauthorized response
+func (o *FindGroupByNameUnauthorized) Code() int {
+	return 401
+}
+
 func (o *FindGroupByNameUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *FindGroupByNameForbidden) IsServerError() bool {
 // IsCode returns true when this find group by name forbidden response a status code equal to that given
 func (o *FindGroupByNameForbidden) IsCode(code int) bool {
 	return code == 403
+}
+
+// Code gets the status code for the find group by name forbidden response
+func (o *FindGroupByNameForbidden) Code() int {
+	return 403
 }
 
 func (o *FindGroupByNameForbidden) Error() string {
@@ -257,6 +272,11 @@ func (o *FindGroupByNameNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the find group by name not found response
+func (o *FindGroupByNameNotFound) Code() int {
+	return 404
+}
+
 func (o *FindGroupByNameNotFound) Error() string {
 	return fmt.Sprintf("[GET /groups/{name}][%d] findGroupByNameNotFound ", 404)
 }
@@ -305,6 +325,11 @@ func (o *FindGroupByNameUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this find group by name unsupported media type response a status code equal to that given
 func (o *FindGroupByNameUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the find group by name unsupported media type response
+func (o *FindGroupByNameUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *FindGroupByNameUnsupportedMediaType) Error() string {

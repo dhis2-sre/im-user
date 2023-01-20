@@ -96,6 +96,11 @@ func (o *GroupCreateCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the group create created response
+func (o *GroupCreateCreated) Code() int {
+	return 201
+}
+
 func (o *GroupCreateCreated) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateCreated  %+v", 201, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *GroupCreateBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the group create bad request response
+func (o *GroupCreateBadRequest) Code() int {
+	return 400
+}
+
 func (o *GroupCreateBadRequest) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateBadRequest ", 400)
 }
@@ -205,6 +215,11 @@ func (o *GroupCreateUnauthorized) IsServerError() bool {
 // IsCode returns true when this group create unauthorized response a status code equal to that given
 func (o *GroupCreateUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the group create unauthorized response
+func (o *GroupCreateUnauthorized) Code() int {
+	return 401
 }
 
 func (o *GroupCreateUnauthorized) Error() string {
@@ -257,6 +272,11 @@ func (o *GroupCreateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the group create forbidden response
+func (o *GroupCreateForbidden) Code() int {
+	return 403
+}
+
 func (o *GroupCreateForbidden) Error() string {
 	return fmt.Sprintf("[POST /groups][%d] groupCreateForbidden ", 403)
 }
@@ -305,6 +325,11 @@ func (o *GroupCreateUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this group create unsupported media type response a status code equal to that given
 func (o *GroupCreateUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the group create unsupported media type response
+func (o *GroupCreateUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *GroupCreateUnsupportedMediaType) Error() string {

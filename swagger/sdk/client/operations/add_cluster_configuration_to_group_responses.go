@@ -96,6 +96,11 @@ func (o *AddClusterConfigurationToGroupCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the add cluster configuration to group created response
+func (o *AddClusterConfigurationToGroupCreated) Code() int {
+	return 201
+}
+
 func (o *AddClusterConfigurationToGroupCreated) Error() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupCreated  %+v", 201, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *AddClusterConfigurationToGroupBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the add cluster configuration to group bad request response
+func (o *AddClusterConfigurationToGroupBadRequest) Code() int {
+	return 400
+}
+
 func (o *AddClusterConfigurationToGroupBadRequest) Error() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupBadRequest ", 400)
 }
@@ -205,6 +215,11 @@ func (o *AddClusterConfigurationToGroupUnauthorized) IsServerError() bool {
 // IsCode returns true when this add cluster configuration to group unauthorized response a status code equal to that given
 func (o *AddClusterConfigurationToGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the add cluster configuration to group unauthorized response
+func (o *AddClusterConfigurationToGroupUnauthorized) Code() int {
+	return 401
 }
 
 func (o *AddClusterConfigurationToGroupUnauthorized) Error() string {
@@ -257,6 +272,11 @@ func (o *AddClusterConfigurationToGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the add cluster configuration to group forbidden response
+func (o *AddClusterConfigurationToGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *AddClusterConfigurationToGroupForbidden) Error() string {
 	return fmt.Sprintf("[POST /groups/{group}/cluster-configuration][%d] addClusterConfigurationToGroupForbidden ", 403)
 }
@@ -305,6 +325,11 @@ func (o *AddClusterConfigurationToGroupUnsupportedMediaType) IsServerError() boo
 // IsCode returns true when this add cluster configuration to group unsupported media type response a status code equal to that given
 func (o *AddClusterConfigurationToGroupUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the add cluster configuration to group unsupported media type response
+func (o *AddClusterConfigurationToGroupUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *AddClusterConfigurationToGroupUnsupportedMediaType) Error() string {

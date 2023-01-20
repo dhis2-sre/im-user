@@ -96,6 +96,11 @@ func (o *FindUserByIDOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the find user by Id o k response
+func (o *FindUserByIDOK) Code() int {
+	return 200
+}
+
 func (o *FindUserByIDOK) Error() string {
 	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdOK  %+v", 200, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *FindUserByIDUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the find user by Id unauthorized response
+func (o *FindUserByIDUnauthorized) Code() int {
+	return 401
+}
+
 func (o *FindUserByIDUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *FindUserByIDForbidden) IsServerError() bool {
 // IsCode returns true when this find user by Id forbidden response a status code equal to that given
 func (o *FindUserByIDForbidden) IsCode(code int) bool {
 	return code == 403
+}
+
+// Code gets the status code for the find user by Id forbidden response
+func (o *FindUserByIDForbidden) Code() int {
+	return 403
 }
 
 func (o *FindUserByIDForbidden) Error() string {
@@ -257,6 +272,11 @@ func (o *FindUserByIDNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the find user by Id not found response
+func (o *FindUserByIDNotFound) Code() int {
+	return 404
+}
+
 func (o *FindUserByIDNotFound) Error() string {
 	return fmt.Sprintf("[GET /users/{id}][%d] findUserByIdNotFound ", 404)
 }
@@ -305,6 +325,11 @@ func (o *FindUserByIDUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this find user by Id unsupported media type response a status code equal to that given
 func (o *FindUserByIDUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the find user by Id unsupported media type response
+func (o *FindUserByIDUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *FindUserByIDUnsupportedMediaType) Error() string {

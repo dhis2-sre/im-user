@@ -84,6 +84,11 @@ func (o *RefreshTokenCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the refresh token created response
+func (o *RefreshTokenCreated) Code() int {
+	return 201
+}
+
 func (o *RefreshTokenCreated) Error() string {
 	return fmt.Sprintf("[POST /refresh][%d] refreshTokenCreated  %+v", 201, o.Payload)
 }
@@ -145,6 +150,11 @@ func (o *RefreshTokenBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the refresh token bad request response
+func (o *RefreshTokenBadRequest) Code() int {
+	return 400
+}
+
 func (o *RefreshTokenBadRequest) Error() string {
 	return fmt.Sprintf("[POST /refresh][%d] refreshTokenBadRequest ", 400)
 }
@@ -193,6 +203,11 @@ func (o *RefreshTokenUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this refresh token unsupported media type response a status code equal to that given
 func (o *RefreshTokenUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the refresh token unsupported media type response
+func (o *RefreshTokenUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *RefreshTokenUnsupportedMediaType) Error() string {
