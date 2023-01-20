@@ -4,10 +4,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"strings"
+	"strconv"
 	"testing"
+
+	"gorm.io/gorm"
+
+	"github.com/dhis2-sre/im-user/internal/errdef"
+	"github.com/stretchr/testify/require"
 
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/gin-gonic/gin"
@@ -15,96 +21,225 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestHandler_Create_Happy(t *testing.T) {
-	name := "name"
-	hostname := "hostname"
-
-	groupService := &mockGroupService{}
-	groupService.
-		On("Create", name, hostname).
-		Return(&model.Group{Name: name, Hostname: hostname}, nil)
-
-	handler := NewHandler(groupService)
-
+func TestHandler_Find(t *testing.T) {
+	repository := &mockGroupRepository{}
+	repository.
+		On("find", "name").
+		Return(&model.Group{Name: "name"}, nil)
+	service := NewService(repository, nil)
+	handler := NewHandler(service)
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
-	c.Request = newRequest(t, http.MethodPost, "/groups", &CreateGroupRequest{Name: name, Hostname: hostname})
+	c.AddParam("name", "name")
+
+	handler.Find(c)
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+	assert.Empty(t, c.Errors)
+	repository.AssertExpectations(t)
+}
+
+func TestHandler_Find_NotFound(t *testing.T) {
+	errorMessage := "not found"
+	repository := &mockGroupRepository{}
+	repository.
+		On("find", "name").
+		Return(nil, errdef.NewNotFound(errors.New(errorMessage)))
+	service := NewService(repository, nil)
+	handler := NewHandler(service)
+	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	c.AddParam("name", "name")
+
+	handler.Find(c)
+
+	assert.Equal(t, 1, len(c.Errors))
+	assert.Error(t, c.Errors[0].Err, errorMessage)
+	repository.AssertExpectations(t)
+}
+
+type mockUserService struct{ mock.Mock }
+
+func (m *mockUserService) FindById(id uint) (*model.User, error) {
+	called := m.Called(id)
+	user, ok := called.Get(0).(*model.User)
+	if ok {
+		return user, nil
+	}
+	return nil, called.Error(1)
+}
+
+func TestHandler_AddUserToGroup(t *testing.T) {
+	name := "name"
+	group := &model.Group{Name: name}
+	var userId uint = 1
+	user := &model.User{
+		Model: gorm.Model{ID: userId},
+	}
+	repository := &mockGroupRepository{}
+	repository.
+		On("find", name).
+		Return(group)
+	repository.
+		On("addUser", group, user).
+		Return(nil)
+	userService := &mockUserService{}
+	userService.
+		On("FindById", userId).
+		Return(user, nil)
+	service := NewService(repository, userService)
+	handler := NewHandler(service)
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.AddParam("userId", strconv.FormatUint(uint64(userId), 10))
+	c.AddParam("group", name)
+
+	handler.AddUserToGroup(c)
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+	assert.Empty(t, c.Errors)
+	repository.AssertExpectations(t)
+	userService.AssertExpectations(t)
+}
+
+func TestHandler_AddUserToGroup_BadUserId(t *testing.T) {
+	repository := &mockGroupRepository{}
+	service := NewService(repository, nil)
+	handler := NewHandler(service)
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.AddParam("userId", "-")
+	c.AddParam("group", "name")
+
+	handler.AddUserToGroup(c)
+
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	assert.Equal(t, 1, len(c.Errors))
+	errorMessage := fmt.Sprintf("failed to parse userId: strconv.ParseUint: parsing %q: invalid syntax", "-")
+	assert.Error(t, c.Errors[0].Err, errorMessage)
+	repository.AssertExpectations(t)
+}
+
+func TestHandler_AddUserToGroup_RepositoryError(t *testing.T) {
+	name := "name"
+	errorMessage := "some error"
+	group := &model.Group{Name: name}
+	var userId uint = 1
+	user := &model.User{
+		Model: gorm.Model{ID: userId},
+	}
+	repository := &mockGroupRepository{}
+	repository.
+		On("find", name).
+		Return(group)
+	repository.
+		On("addUser", group, user).
+		Return(errdef.NewNotFound(errors.New(errorMessage)))
+	userService := &mockUserService{}
+	userService.
+		On("FindById", userId).
+		Return(user, nil)
+	service := NewService(repository, userService)
+	handler := NewHandler(service)
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.AddParam("userId", "1")
+	c.AddParam("group", name)
+
+	handler.AddUserToGroup(c)
+
+	assert.Equal(t, http.StatusNotFound, recorder.Code)
+	assert.Equal(t, 1, len(c.Errors))
+	err := c.Errors[0].Err
+	assert.True(t, errdef.IsNotFound(err))
+	assert.ErrorContains(t, err, errorMessage)
+	repository.AssertExpectations(t)
+}
+
+func TestHandler_Create(t *testing.T) {
+	name := "name"
+	hostname := "hostname"
+	group := &model.Group{Name: name, Hostname: hostname}
+	repository := &mockGroupRepository{}
+	repository.
+		On("create", group).
+		Return(nil)
+	service := NewService(repository, nil)
+	handler := NewHandler(service)
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.Request = newPost(t, "/groups", &CreateGroupRequest{Name: name, Hostname: hostname})
 
 	handler.Create(c)
 
 	assert.Equal(t, http.StatusCreated, recorder.Code)
-
-	groupService.AssertExpectations(t)
+	repository.AssertExpectations(t)
 }
 
 func TestHandler_Create_CanNotCreateGroup(t *testing.T) {
 	name := "name"
 	hostname := "hostname"
 	errorMessage := "some error"
-
-	groupService := &mockGroupService{}
-	groupService.
-		On("Create", name, hostname).
-		Return(nil, errors.New(errorMessage))
-
-	handler := NewHandler(groupService)
-
+	group := &model.Group{Name: name, Hostname: hostname}
+	repository := &mockGroupRepository{}
+	repository.
+		On("create", group).
+		Return(errors.New(errorMessage))
+	service := NewService(repository, nil)
+	handler := NewHandler(service)
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
-	c.Request = newRequest(t, http.MethodPost, "/groups", &CreateGroupRequest{Name: name, Hostname: hostname})
+	c.Request = newPost(t, "/groups", &CreateGroupRequest{Name: name, Hostname: hostname})
 
 	handler.Create(c)
 
 	assert.Equal(t, http.StatusBadRequest, recorder.Code)
-	errs := c.Errors.Errors()
-	assert.Equal(t, 1, len(errs))
-	assert.True(t, strings.HasPrefix(errs[0], errorMessage))
-
-	groupService.AssertExpectations(t)
+	assert.Equal(t, 1, len(c.Errors))
+	assert.ErrorContains(t, c.Errors[0].Err, errorMessage)
+	repository.AssertExpectations(t)
 }
 
-func newRequest(t *testing.T, method string, path string, request any) *http.Request {
+func newPost(t *testing.T, path string, request any) *http.Request {
 	body, err := json.Marshal(request)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
-	req, err := http.NewRequest(method, path, bytes.NewReader(body))
-	assert.NoError(t, err)
+	req, err := http.NewRequest(http.MethodPost, path, bytes.NewReader(body))
+	require.NoError(t, err)
 
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.Header.Set("Authorization", "token")
 
 	return req
 }
 
-type mockGroupService struct{ mock.Mock }
+type mockGroupRepository struct{ mock.Mock }
 
-func (m *mockGroupService) Create(name string, hostname string) (*model.Group, error) {
-	called := m.Called(name, hostname)
+func (m *mockGroupRepository) create(group *model.Group) error {
+	called := m.Called(group)
+	return called.Error(0)
+}
+
+func (m *mockGroupRepository) addUser(group *model.Group, user *model.User) error {
+	called := m.Called(group, user)
+	return called.Error(0)
+}
+
+func (m *mockGroupRepository) addClusterConfiguration(configuration *model.ClusterConfiguration) error {
+	panic("implement me")
+}
+
+func (m *mockGroupRepository) getClusterConfiguration(groupName string) (*model.ClusterConfiguration, error) {
+	panic("implement me")
+}
+
+func (m *mockGroupRepository) find(name string) (*model.Group, error) {
+	called := m.Called(name)
 	group, ok := called.Get(0).(*model.Group)
 	if ok {
 		return group, nil
-	} else {
-		return nil, called.Error(1)
 	}
+	return nil, called.Error(1)
 }
 
-func (m *mockGroupService) AddUser(groupName string, userId uint) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (m *mockGroupService) AddClusterConfiguration(clusterConfiguration *model.ClusterConfiguration) error {
-	panic("implement me")
-}
-
-func (m *mockGroupService) GetClusterConfiguration(groupName string) (*model.ClusterConfiguration, error) {
-	panic("implement me")
-}
-
-func (m *mockGroupService) Find(name string) (*model.Group, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (m *mockGroupService) FindOrCreate(name string, hostname string) (*model.Group, error) {
+func (m *mockGroupRepository) findOrCreate(group *model.Group) (*model.Group, error) {
 	panic("implement me")
 }
