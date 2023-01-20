@@ -84,6 +84,11 @@ func (o *SignUpCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the sign up created response
+func (o *SignUpCreated) Code() int {
+	return 201
+}
+
 func (o *SignUpCreated) Error() string {
 	return fmt.Sprintf("[POST /users][%d] signUpCreated  %+v", 201, o.Payload)
 }
@@ -145,6 +150,11 @@ func (o *SignUpBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the sign up bad request response
+func (o *SignUpBadRequest) Code() int {
+	return 400
+}
+
 func (o *SignUpBadRequest) Error() string {
 	return fmt.Sprintf("[POST /users][%d] signUpBadRequest ", 400)
 }
@@ -193,6 +203,11 @@ func (o *SignUpUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this sign up unsupported media type response a status code equal to that given
 func (o *SignUpUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the sign up unsupported media type response
+func (o *SignUpUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *SignUpUnsupportedMediaType) Error() string {

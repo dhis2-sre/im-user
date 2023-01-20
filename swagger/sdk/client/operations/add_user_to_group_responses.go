@@ -96,6 +96,11 @@ func (o *AddUserToGroupCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the add user to group created response
+func (o *AddUserToGroupCreated) Code() int {
+	return 201
+}
+
 func (o *AddUserToGroupCreated) Error() string {
 	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupCreated  %+v", 201, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *AddUserToGroupBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the add user to group bad request response
+func (o *AddUserToGroupBadRequest) Code() int {
+	return 400
+}
+
 func (o *AddUserToGroupBadRequest) Error() string {
 	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupBadRequest ", 400)
 }
@@ -205,6 +215,11 @@ func (o *AddUserToGroupUnauthorized) IsServerError() bool {
 // IsCode returns true when this add user to group unauthorized response a status code equal to that given
 func (o *AddUserToGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
+}
+
+// Code gets the status code for the add user to group unauthorized response
+func (o *AddUserToGroupUnauthorized) Code() int {
+	return 401
 }
 
 func (o *AddUserToGroupUnauthorized) Error() string {
@@ -257,6 +272,11 @@ func (o *AddUserToGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the add user to group forbidden response
+func (o *AddUserToGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *AddUserToGroupForbidden) Error() string {
 	return fmt.Sprintf("[POST /groups/{group}/users/{userId}][%d] addUserToGroupForbidden ", 403)
 }
@@ -305,6 +325,11 @@ func (o *AddUserToGroupUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this add user to group unsupported media type response a status code equal to that given
 func (o *AddUserToGroupUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the add user to group unsupported media type response
+func (o *AddUserToGroupUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *AddUserToGroupUnsupportedMediaType) Error() string {

@@ -80,6 +80,11 @@ func (o *SignOutOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the sign out o k response
+func (o *SignOutOK) Code() int {
+	return 200
+}
+
 func (o *SignOutOK) Error() string {
 	return fmt.Sprintf("[DELETE /users][%d] signOutOK ", 200)
 }
@@ -130,6 +135,11 @@ func (o *SignOutUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the sign out unauthorized response
+func (o *SignOutUnauthorized) Code() int {
+	return 401
+}
+
 func (o *SignOutUnauthorized) Error() string {
 	return fmt.Sprintf("[DELETE /users][%d] signOutUnauthorized ", 401)
 }
@@ -178,6 +188,11 @@ func (o *SignOutUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this sign out unsupported media type response a status code equal to that given
 func (o *SignOutUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the sign out unsupported media type response
+func (o *SignOutUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *SignOutUnsupportedMediaType) Error() string {

@@ -84,6 +84,11 @@ func (o *JwksOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the jwks o k response
+func (o *JwksOK) Code() int {
+	return 200
+}
+
 func (o *JwksOK) Error() string {
 	return fmt.Sprintf("[GET /jwks][%d] jwksOK  %+v", 200, o.Payload)
 }
@@ -145,6 +150,11 @@ func (o *JwksUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
 }
 
+// Code gets the status code for the jwks unsupported media type response
+func (o *JwksUnsupportedMediaType) Code() int {
+	return 415
+}
+
 func (o *JwksUnsupportedMediaType) Error() string {
 	return fmt.Sprintf("[GET /jwks][%d] jwksUnsupportedMediaType ", 415)
 }
@@ -193,6 +203,11 @@ func (o *JwksInternalServerError) IsServerError() bool {
 // IsCode returns true when this jwks internal server error response a status code equal to that given
 func (o *JwksInternalServerError) IsCode(code int) bool {
 	return code == 500
+}
+
+// Code gets the status code for the jwks internal server error response
+func (o *JwksInternalServerError) Code() int {
+	return 500
 }
 
 func (o *JwksInternalServerError) Error() string {

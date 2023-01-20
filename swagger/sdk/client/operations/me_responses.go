@@ -96,6 +96,11 @@ func (o *MeOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the me o k response
+func (o *MeOK) Code() int {
+	return 200
+}
+
 func (o *MeOK) Error() string {
 	return fmt.Sprintf("[GET /me][%d] meOK  %+v", 200, o.Payload)
 }
@@ -157,6 +162,11 @@ func (o *MeUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the me unauthorized response
+func (o *MeUnauthorized) Code() int {
+	return 401
+}
+
 func (o *MeUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /me][%d] meUnauthorized ", 401)
 }
@@ -205,6 +215,11 @@ func (o *MeForbidden) IsServerError() bool {
 // IsCode returns true when this me forbidden response a status code equal to that given
 func (o *MeForbidden) IsCode(code int) bool {
 	return code == 403
+}
+
+// Code gets the status code for the me forbidden response
+func (o *MeForbidden) Code() int {
+	return 403
 }
 
 func (o *MeForbidden) Error() string {
@@ -257,6 +272,11 @@ func (o *MeNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the me not found response
+func (o *MeNotFound) Code() int {
+	return 404
+}
+
 func (o *MeNotFound) Error() string {
 	return fmt.Sprintf("[GET /me][%d] meNotFound ", 404)
 }
@@ -305,6 +325,11 @@ func (o *MeUnsupportedMediaType) IsServerError() bool {
 // IsCode returns true when this me unsupported media type response a status code equal to that given
 func (o *MeUnsupportedMediaType) IsCode(code int) bool {
 	return code == 415
+}
+
+// Code gets the status code for the me unsupported media type response
+func (o *MeUnsupportedMediaType) Code() int {
+	return 415
 }
 
 func (o *MeUnsupportedMediaType) Error() string {
