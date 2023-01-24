@@ -95,7 +95,7 @@ func TestHandler_AddUserToGroup(t *testing.T) {
 		Return(nil)
 	userService := &mockUserService{}
 	userService.
-		On("FindById", 1).
+		On("FindById", uint(1)).
 		Return(user, nil)
 	service := NewService(repository, userService)
 	handler := NewHandler(service)
@@ -146,7 +146,7 @@ func TestHandler_AddUserToGroup_RepositoryError(t *testing.T) {
 		Return(errdef.NewNotFound(errors.New("some error")))
 	userService := &mockUserService{}
 	userService.
-		On("FindById", 1).
+		On("FindById", uint(1)).
 		Return(user, nil)
 	service := NewService(repository, userService)
 	handler := NewHandler(service)
