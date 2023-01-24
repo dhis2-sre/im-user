@@ -22,38 +22,52 @@ import (
 )
 
 func TestHandler_Find(t *testing.T) {
+	group := &model.Group{Name: "name"}
 	repository := &mockGroupRepository{}
 	repository.
 		On("find", "name").
-		Return(&model.Group{Name: "name"}, nil)
+		Return(group, nil)
 	service := NewService(repository, nil)
 	handler := NewHandler(service)
+
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
 	c.AddParam("name", "name")
 
 	handler.Find(c)
 
-	assert.Equal(t, http.StatusOK, recorder.Code)
 	assert.Empty(t, c.Errors)
+	var body model.Group
+	assertResponse(t, recorder, http.StatusOK, &body, group)
 	repository.AssertExpectations(t)
 }
 
+func assertResponse(t *testing.T, rec *httptest.ResponseRecorder, expectedCode int, bodyType any, expectedBody any) {
+	assert.Equal(t, expectedCode, rec.Code, "HTTP status code does not match")
+	assertJSON(t, rec.Body, bodyType, expectedBody)
+}
+
+func assertJSON(t *testing.T, body *bytes.Buffer, v any, expected any) {
+	err := json.Unmarshal(body.Bytes(), v)
+	require.NoError(t, err)
+	assert.Equal(t, expected, v, "HTTP response body does not match")
+}
+
 func TestHandler_Find_NotFound(t *testing.T) {
-	errorMessage := "not found"
 	repository := &mockGroupRepository{}
 	repository.
 		On("find", "name").
-		Return(nil, errdef.NewNotFound(errors.New(errorMessage)))
+		Return(nil, errdef.NewNotFound(errors.New("not found")))
 	service := NewService(repository, nil)
 	handler := NewHandler(service)
+
 	c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	c.AddParam("name", "name")
 
 	handler.Find(c)
 
 	assert.Equal(t, 1, len(c.Errors))
-	assert.Error(t, c.Errors[0].Err, errorMessage)
+	assert.Error(t, c.Errors[0].Err, "not found")
 	repository.AssertExpectations(t)
 }
 
@@ -69,29 +83,27 @@ func (m *mockUserService) FindById(id uint) (*model.User, error) {
 }
 
 func TestHandler_AddUserToGroup(t *testing.T) {
-	name := "name"
-	group := &model.Group{Name: name}
-	var userId uint = 1
 	user := &model.User{
-		Model: gorm.Model{ID: userId},
+		Model: gorm.Model{ID: 1},
 	}
 	repository := &mockGroupRepository{}
 	repository.
-		On("find", name).
-		Return(group)
+		On("find", "name").
+		Return(&model.Group{Name: "name"})
 	repository.
-		On("addUser", group, user).
+		On("addUser", &model.Group{Name: "name"}, user).
 		Return(nil)
 	userService := &mockUserService{}
 	userService.
-		On("FindById", userId).
+		On("FindById", 1).
 		Return(user, nil)
 	service := NewService(repository, userService)
 	handler := NewHandler(service)
+
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
-	c.AddParam("userId", strconv.FormatUint(uint64(userId), 10))
-	c.AddParam("group", name)
+	c.AddParam("userId", strconv.FormatUint(uint64(1), 10))
+	c.AddParam("group", "name")
 
 	handler.AddUserToGroup(c)
 
@@ -105,6 +117,7 @@ func TestHandler_AddUserToGroup_BadUserId(t *testing.T) {
 	repository := &mockGroupRepository{}
 	service := NewService(repository, nil)
 	handler := NewHandler(service)
+
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
 	c.AddParam("userId", "-")
@@ -120,30 +133,27 @@ func TestHandler_AddUserToGroup_BadUserId(t *testing.T) {
 }
 
 func TestHandler_AddUserToGroup_RepositoryError(t *testing.T) {
-	name := "name"
-	errorMessage := "some error"
-	group := &model.Group{Name: name}
-	var userId uint = 1
+	group := &model.Group{Name: "name"}
 	user := &model.User{
-		Model: gorm.Model{ID: userId},
+		Model: gorm.Model{ID: 1},
 	}
 	repository := &mockGroupRepository{}
 	repository.
-		On("find", name).
+		On("find", "name").
 		Return(group)
 	repository.
 		On("addUser", group, user).
-		Return(errdef.NewNotFound(errors.New(errorMessage)))
+		Return(errdef.NewNotFound(errors.New("some error")))
 	userService := &mockUserService{}
 	userService.
-		On("FindById", userId).
+		On("FindById", 1).
 		Return(user, nil)
 	service := NewService(repository, userService)
 	handler := NewHandler(service)
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
 	c.AddParam("userId", "1")
-	c.AddParam("group", name)
+	c.AddParam("group", "name")
 
 	handler.AddUserToGroup(c)
 
@@ -151,23 +161,21 @@ func TestHandler_AddUserToGroup_RepositoryError(t *testing.T) {
 	assert.Equal(t, 1, len(c.Errors))
 	err := c.Errors[0].Err
 	assert.True(t, errdef.IsNotFound(err))
-	assert.ErrorContains(t, err, errorMessage)
+	assert.ErrorContains(t, err, "some error")
 	repository.AssertExpectations(t)
 }
 
 func TestHandler_Create(t *testing.T) {
-	name := "name"
-	hostname := "hostname"
-	group := &model.Group{Name: name, Hostname: hostname}
 	repository := &mockGroupRepository{}
 	repository.
-		On("create", group).
+		On("create", &model.Group{Name: "name", Hostname: "hostname"}).
 		Return(nil)
 	service := NewService(repository, nil)
 	handler := NewHandler(service)
+
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
-	c.Request = newPost(t, "/groups", &CreateGroupRequest{Name: name, Hostname: hostname})
+	c.Request = newPost(t, "/groups", &CreateGroupRequest{Name: "name", Hostname: "hostname"})
 
 	handler.Create(c)
 
@@ -176,30 +184,28 @@ func TestHandler_Create(t *testing.T) {
 }
 
 func TestHandler_Create_CanNotCreateGroup(t *testing.T) {
-	name := "name"
-	hostname := "hostname"
-	errorMessage := "some error"
-	group := &model.Group{Name: name, Hostname: hostname}
+	group := &model.Group{Name: "name", Hostname: "hostname"}
 	repository := &mockGroupRepository{}
 	repository.
 		On("create", group).
-		Return(errors.New(errorMessage))
+		Return(errors.New("some error"))
 	service := NewService(repository, nil)
 	handler := NewHandler(service)
+
 	recorder := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(recorder)
-	c.Request = newPost(t, "/groups", &CreateGroupRequest{Name: name, Hostname: hostname})
+	c.Request = newPost(t, "/groups", &CreateGroupRequest{Name: "name", Hostname: "hostname"})
 
 	handler.Create(c)
 
 	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 	assert.Equal(t, 1, len(c.Errors))
-	assert.ErrorContains(t, c.Errors[0].Err, errorMessage)
+	assert.ErrorContains(t, c.Errors[0].Err, "some error")
 	repository.AssertExpectations(t)
 }
 
-func newPost(t *testing.T, path string, request any) *http.Request {
-	body, err := json.Marshal(request)
+func newPost(t *testing.T, path string, jsonBody any) *http.Request {
+	body, err := json.Marshal(jsonBody)
 	require.NoError(t, err)
 
 	req, err := http.NewRequest(http.MethodPost, path, bytes.NewReader(body))
