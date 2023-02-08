@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-$HTTP "$INSTANCE_HOST/users/health"
+$HTTP get "$INSTANCE_HOST/users/health"
