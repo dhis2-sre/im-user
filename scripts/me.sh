@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-$HTTP "$INSTANCE_HOST/me" "Authorization: Bearer $ACCESS_TOKEN"
+$HTTP get "$INSTANCE_HOST/me" "Authorization: Bearer $ACCESS_TOKEN"
