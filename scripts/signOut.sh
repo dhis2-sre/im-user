@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-$HTTP delete "$INSTANCE_HOST/users" "Authorization: Bearer $ACCESS_TOKEN"
+$HTTP delete "$IM_HOST/users" "Authorization: Bearer $ACCESS_TOKEN"
