@@ -54,10 +54,10 @@ cp .env.example .env
 
 In order to automatically export the variables, the author of this application recommends [direnv](https://direnv.net/).
 
-If we're dealing with a locally running instance, the variable `INSTANCE_HOST`, should be defined as below.
+If we're dealing with a locally running instance, the variable `IM_HOST`, should be defined as below.
 
 ```sh
-INSTANCE_HOST=:8080
+IM_HOST=:8080
 ```
 
 The environment is configured correctly if the `health.sh` script returns 200 and "status: up"

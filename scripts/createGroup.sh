@@ -8,4 +8,4 @@ HOSTNAME=$2
 echo "{
   \"name\": \"$GROUP\",
   \"hostname\": \"$HOSTNAME\"
-}" | $HTTP post "$INSTANCE_HOST/groups" "Authorization: Bearer $ACCESS_TOKEN"
+}" | $HTTP post "$IM_HOST/groups" "Authorization: Bearer $ACCESS_TOKEN"

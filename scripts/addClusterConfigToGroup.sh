@@ -9,6 +9,6 @@ ENCRYPTED_CONFIG_FILE=$(mktemp)
 
 sops -e "$PLAIN_TEXT_CONFIG_FILE" > $ENCRYPTED_CONFIG_FILE
 
-$HTTP --ignore-stdin --form post "$INSTANCE_HOST/groups/$GROUP/cluster-configuration" "kubernetesConfiguration@$ENCRYPTED_CONFIG_FILE" "Authorization: Bearer $ACCESS_TOKEN"
+$HTTP --ignore-stdin --form post "$IM_HOST/groups/$GROUP/cluster-configuration" "kubernetesConfiguration@$ENCRYPTED_CONFIG_FILE" "Authorization: Bearer $ACCESS_TOKEN"
 
 rm $ENCRYPTED_CONFIG_FILE

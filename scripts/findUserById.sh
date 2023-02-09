@@ -4,4 +4,4 @@ set -euo pipefail
 
 USER_ID=$1
 
-$HTTP get "$INSTANCE_HOST/users/$USER_ID" "Authorization: Bearer $ACCESS_TOKEN"
+$HTTP get "$IM_HOST/users/$USER_ID" "Authorization: Bearer $ACCESS_TOKEN"
