@@ -1,3 +1,4 @@
 helm/
 skaffold.yaml
 Makefile
+.idea
