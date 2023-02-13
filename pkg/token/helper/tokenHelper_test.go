@@ -21,10 +21,10 @@ func TestGenerateAccessToken(t *testing.T) {
 	require.NoError(t, err)
 
 	key, err := c.Authentication.Keys.GetPrivateKey()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	_, err = GenerateAccessToken(user, key, 12)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	// TODO
 	//	assert.WithinDuration(t, , , 5*time.Second)
 
@@ -44,16 +44,16 @@ func TestValidateAccessToken(t *testing.T) {
 	require.NoError(t, err)
 
 	privateKey, err := c.Authentication.Keys.GetPrivateKey()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	publicKey, err := c.Authentication.Keys.GetPublicKey()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	token, err := GenerateAccessToken(user, privateKey, 12)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	claims, err := ValidateAccessToken(token, publicKey)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// TODO: Assert more
 	assert.Equal(t, "email", claims.User.Email)
@@ -68,7 +68,7 @@ func TestGenerateRefreshToken(t *testing.T) {
 	signedStringPrefix := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
 
 	tokenData, err := GenerateRefreshToken(user, secretKey, expiration)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, expiration, int(tokenData.ExpiresIn.Seconds()))
 	assert.True(t, strings.HasPrefix(tokenData.SignedString, signedStringPrefix))
@@ -84,10 +84,10 @@ func TestValidateRefreshToken(t *testing.T) {
 	expiration := 12
 
 	tokenData, err := GenerateRefreshToken(user, secretKey, expiration)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	refreshTokenData, err := ValidateRefreshToken(tokenData.SignedString, secretKey)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	assert.Equal(t, user.ID, refreshTokenData.UserId)
 	assert.WithinDuration(t, time.Unix(int64(expiration), 0), time.Unix(int64(refreshTokenData.ExpiresIn.Seconds()), 0), 1*time.Second)

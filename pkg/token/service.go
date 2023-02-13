@@ -13,10 +13,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-func NewService(
-	c config.Config,
-	tokenRepository repository,
-) (*tokenService, error) {
+func NewService(c config.Config, tokenRepository repository) (*tokenService, error) {
 	privateKey, err := c.Authentication.Keys.GetPrivateKey()
 	if err != nil {
 		return nil, err

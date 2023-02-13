@@ -17,5 +17,12 @@ func GetUserFromContext(c *gin.Context) (*model.User, error) {
 		return nil, err
 	}
 
-	return user.(*model.User), nil
+	u, ok := user.(*model.User)
+	if !ok {
+		err := fmt.Errorf("unable to cast user for unknown reason: %+v", c)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
+		return nil, err
+	}
+
+	return u, nil
 }

@@ -27,6 +27,7 @@ type userService interface {
 func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
 	u, err := handler.GetUserFromContext(c)
 	if err != nil {
+		log.Println(err)
 		return
 	}
 
@@ -37,6 +38,7 @@ func (m AuthorizationMiddleware) RequireAdministrator(c *gin.Context) {
 		} else {
 			_ = c.Error(err)
 		}
+		c.Abort()
 		return
 	}
 

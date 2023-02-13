@@ -20,7 +20,7 @@ type userRepository interface {
 	create(user *model.User) error
 	findByEmail(email string) (*model.User, error)
 	findById(id uint) (*model.User, error)
-	findOrCreate(email *model.User) (*model.User, error)
+	findOrCreate(user *model.User) (*model.User, error)
 }
 
 type service struct {
