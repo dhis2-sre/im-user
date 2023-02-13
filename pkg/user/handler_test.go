@@ -64,6 +64,28 @@ func TestHandler_SignIn(t *testing.T) {
 	tokenService.AssertExpectations(t)
 }
 
+func TestHandler_Me(t *testing.T) {
+	user := &model.User{Model: gorm.Model{ID: 1}, Email: "someone@something.org", Password: "passwordpasswordpasswordpassword"}
+	userRepository := &mockUserRepository{}
+	userRepository.
+		On("findById", uint(1)).
+		Return(user, nil)
+	userService := NewService(userRepository)
+	tokenService := &mockTokenService{}
+	handler := NewHandler(config.Config{}, userService, tokenService)
+
+	w := httptest.NewRecorder()
+	c := newContext(w, "group-name")
+
+	handler.Me(c)
+
+	require.Empty(t, c.Errors)
+	expectedUser := &model.User{Model: gorm.Model{ID: 1}, Email: "someone@something.org", Password: ""}
+	assertResponse(t, w, http.StatusOK, expectedUser)
+	userRepository.AssertExpectations(t)
+	tokenService.AssertExpectations(t)
+}
+
 /*
 func TestHandler_SignIn_GetTokensError(t *testing.T) {
 	var id uint = 1
@@ -108,59 +130,8 @@ func TestHandler_SignIn_GetTokensError(t *testing.T) {
 	userService.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
 }
-
-func TestHandler_Me(t *testing.T) {
-	bearerToken := "token"
-	var id uint = 1
-	email := "someone@something.org"
-	password := "passwordpasswordpasswordpassword"
-
-	c := config.Config{}
-
-	userService := &mockUserService{}
-	userService.
-		On("FindById", id).
-		Return(&model.User{
-			Model:    gorm.Model{ID: id},
-			Email:    email,
-			Password: password,
-		}, nil)
-	tokenService := &mockTokenService{}
-	tokenService.
-		On("ValidateAccessToken", bearerToken).
-		Return(&model.User{
-			Model:    gorm.Model{ID: id},
-			Email:    email,
-			Password: password,
-		}, nil)
-
-	r := gin.Default()
-	authentication := middleware.NewAuthentication(userService, tokenService)
-	r.Use(authentication.TokenAuthentication)
-	handler := NewHandler(c, userService, tokenService)
-	r.GET("/me", handler.Me)
-
-	recorder := httptest.NewRecorder()
-
-	req, err := http.NewRequest(http.MethodGet, "/me", nil)
-	require.NoError(t, err)
-	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
-	req.Header.Set("Authorization", bearerToken)
-	r.ServeHTTP(recorder, req)
-
-	body := recorder.Body
-	user := &model.User{}
-	err = json.Unmarshal(body.Bytes(), user)
-	require.NoError(t, err)
-
-	assert.Equal(t, id, user.ID)
-	assert.Equal(t, email, user.Email)
-	assert.Equal(t, "", user.Password)
-
-	userService.AssertExpectations(t)
-	tokenService.AssertExpectations(t)
-}
 */
+
 type mockTokenService struct{ mock.Mock }
 
 func (t *mockTokenService) ValidateAccessToken(tokenString string) (*model.User, error) {
@@ -198,7 +169,8 @@ func (m *mockUserRepository) findByEmail(email string) (*model.User, error) {
 }
 
 func (m *mockUserRepository) findById(id uint) (*model.User, error) {
-	panic("implement me")
+	called := m.Called(id)
+	return called.Get(0).(*model.User), nil
 }
 
 func (m *mockUserRepository) findOrCreate(user *model.User) (*model.User, error) {
