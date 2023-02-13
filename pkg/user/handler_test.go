@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/dhis2-sre/im-user/swagger/sdk/models"
+	"gorm.io/gorm"
 
 	"github.com/stretchr/testify/require"
 
@@ -43,68 +43,28 @@ func TestHandler_SignUp(t *testing.T) {
 	tokenService.AssertExpectations(t)
 }
 
-/*
-func TestHandler_SignIn_Happy(t *testing.T) {
-	var id uint = 1
-	email := "someone@something.org"
-	password := "passwordpasswordpasswordpassword"
-
-	accessToken := "access token"
-	tokenType := ""
-	refreshToken := ""
-	expiresIn := uint(0)
-
-	c := config.Config{}
-
-	userService := &mockUserService{}
-	userService.
-		On("SignIn", email, password).
-		Return(&model.User{
-			Model:    gorm.Model{ID: id},
-			Email:    email,
-			Password: password,
-		})
+func TestHandler_SignIn(t *testing.T) {
+	userRepository := &mockUserRepository{}
+	userService := NewService(userRepository)
 	tokenService := &mockTokenService{}
+	tokens := &token.Tokens{AccessToken: "access token", TokenType: "token type", RefreshToken: "refresh token", ExpiresIn: uint(123)}
 	tokenService.
 		On("GetTokens", mock.AnythingOfType("*model.User"), mock.AnythingOfType("string")).
-		Return(&token.Tokens{
-			AccessToken:  accessToken,
-			TokenType:    tokenType,
-			RefreshToken: refreshToken,
-			ExpiresIn:    expiresIn,
-		}, nil)
+		Return(tokens, nil)
+	handler := NewHandler(config.Config{}, userService, tokenService)
 
-	r := gin.Default()
-	authentication := middleware.NewAuthentication(userService, tokenService)
-	r.Use(authentication.BasicAuthentication)
-	handler := NewHandler(c, userService, tokenService)
-	r.POST("/tokens", handler.SignIn)
+	w := httptest.NewRecorder()
+	c := newContext(w, "group-name")
 
-	recorder := httptest.NewRecorder()
+	handler.SignIn(c)
 
-	req, err := http.NewRequest(http.MethodPost, "/tokens", nil)
-	require.NoError(t, err)
-	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
-	req.SetBasicAuth(email, password)
-
-	r.ServeHTTP(recorder, req)
-
-	assert.Equal(t, http.StatusCreated, recorder.Code)
-
-	body := recorder.Body
-	tokens := &token.Tokens{}
-	err = json.Unmarshal(body.Bytes(), tokens)
-	require.NoError(t, err)
-
-	assert.Equal(t, accessToken, tokens.AccessToken)
-	assert.Equal(t, tokenType, tokens.TokenType)
-	assert.Equal(t, refreshToken, tokens.RefreshToken)
-	assert.Equal(t, expiresIn, tokens.ExpiresIn)
-
-	userService.AssertExpectations(t)
+	require.Empty(t, c.Errors)
+	assertResponse(t, w, http.StatusCreated, tokens)
+	userRepository.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
 }
 
+/*
 func TestHandler_SignIn_GetTokensError(t *testing.T) {
 	var id uint = 1
 	email := "someone@something.org"
@@ -246,9 +206,9 @@ func (m *mockUserRepository) findOrCreate(user *model.User) (*model.User, error)
 }
 
 func newContext(w *httptest.ResponseRecorder, group string) *gin.Context {
-	user := &models.User{
-		ID: uint64(1),
-		Groups: []*models.Group{
+	user := &model.User{
+		Model: gorm.Model{ID: 1},
+		Groups: []model.Group{
 			{Name: group},
 		},
 	}
