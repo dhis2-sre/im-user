@@ -3,6 +3,7 @@ package user
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -27,6 +28,7 @@ func TestHandler_SignUp(t *testing.T) {
 		})).
 		Return(nil)
 	userService := NewService(userRepository)
+	// TODO: mock redisTokenRepository (or even better, mock the redis client) not the token service
 	tokenService := &mockTokenService{}
 	handler := NewHandler(config.Config{}, userService, tokenService)
 
@@ -46,6 +48,7 @@ func TestHandler_SignUp(t *testing.T) {
 func TestHandler_SignIn(t *testing.T) {
 	userRepository := &mockUserRepository{}
 	userService := NewService(userRepository)
+	// TODO: mock redisTokenRepository (or even better, mock the redis client) not the token service
 	tokenService := &mockTokenService{}
 	tokens := &token.Tokens{AccessToken: "access token", TokenType: "token type", RefreshToken: "refresh token", ExpiresIn: uint(123)}
 	tokenService.
@@ -64,6 +67,28 @@ func TestHandler_SignIn(t *testing.T) {
 	tokenService.AssertExpectations(t)
 }
 
+func TestHandler_SignIn_GetTokensError(t *testing.T) {
+	userRepository := &mockUserRepository{}
+	userService := NewService(userRepository)
+	// TODO: mock redisTokenRepository (or even better, mock the redis client) not the token service
+	tokenService := &mockTokenService{}
+	tokenService.
+		On("GetTokens", mock.AnythingOfType("*model.User"), "").
+		Return(nil, errors.New("some err"))
+	handler := NewHandler(config.Config{}, userService, tokenService)
+
+	w := httptest.NewRecorder()
+	c := newContext(w, "group-name")
+
+	handler.SignIn(c)
+
+	require.NotEqual(t, http.StatusCreated, w.Code)
+	require.Len(t, c.Errors, 1)
+	require.ErrorContains(t, c.Errors[0].Err, "some err")
+	tokenService.AssertExpectations(t)
+	userRepository.AssertExpectations(t)
+}
+
 func TestHandler_Me(t *testing.T) {
 	user := &model.User{Model: gorm.Model{ID: 1}, Email: "someone@something.org", Password: "passwordpasswordpasswordpassword"}
 	userRepository := &mockUserRepository{}
@@ -71,6 +96,7 @@ func TestHandler_Me(t *testing.T) {
 		On("findById", uint(1)).
 		Return(user, nil)
 	userService := NewService(userRepository)
+	// TODO: mock redisTokenRepository (or even better, mock the redis client) not the token service
 	tokenService := &mockTokenService{}
 	handler := NewHandler(config.Config{}, userService, tokenService)
 
@@ -85,52 +111,6 @@ func TestHandler_Me(t *testing.T) {
 	userRepository.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
 }
-
-/*
-func TestHandler_SignIn_GetTokensError(t *testing.T) {
-	var id uint = 1
-	email := "someone@something.org"
-	password := "passwordpasswordpasswordpassword"
-	errorMessage := "some err"
-
-	c := config.Config{}
-
-	userService := &mockUserService{}
-	userService.
-		On("SignIn", email, password).
-		Return(&model.User{
-			Model:    gorm.Model{ID: id},
-			Email:    email,
-			Password: password,
-		})
-	tokenService := &mockTokenService{}
-	tokenService.
-		On("GetTokens", mock.AnythingOfType("*model.User"), "").
-		Return(nil, errors.New(errorMessage))
-
-	r := gin.Default()
-	authentication := middleware.NewAuthentication(userService, tokenService)
-	r.Use(middleware.ErrorHandler(), authentication.BasicAuthentication)
-	handler := NewHandler(c, userService, tokenService)
-	r.POST("/tokens", handler.SignIn)
-
-	recorder := httptest.NewRecorder()
-
-	req, err := http.NewRequest(http.MethodPost, "/tokens", nil)
-	require.NoError(t, err)
-	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
-	req.SetBasicAuth(email, password)
-
-	r.ServeHTTP(recorder, req)
-
-	assert.Equal(t, http.StatusInternalServerError, recorder.Code)
-
-	assert.Contains(t, recorder.Body.String(), "something went wrong. We'll look into it if you send us the id")
-
-	userService.AssertExpectations(t)
-	tokenService.AssertExpectations(t)
-}
-*/
 
 type mockTokenService struct{ mock.Mock }
 
