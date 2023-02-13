@@ -194,6 +194,7 @@ func Test_service_FindOrCreate_Happy(t *testing.T) {
 	assert.Equal(t, password, user.Password)
 }
 
+/*
 type mockUserRepository struct {
 	mock.Mock
 }
@@ -233,3 +234,4 @@ func (r *mockUserRepository) findOrCreate(email *model.User) (*model.User, error
 		return nil, errdef.NewNotFound(errors.New(""))
 	}
 }
+*/

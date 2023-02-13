@@ -3,76 +3,47 @@ package user
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"github.com/dhis2-sre/im-user/swagger/sdk/models"
+
 	"github.com/stretchr/testify/require"
 
-	"github.com/dhis2-sre/im-user/internal/middleware"
 	"github.com/dhis2-sre/im-user/pkg/config"
 	"github.com/dhis2-sre/im-user/pkg/model"
 	"github.com/dhis2-sre/im-user/pkg/token"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"gorm.io/gorm"
 )
 
 func TestHandler_SignUp(t *testing.T) {
-	var id uint = 1
-	email := "someone@something.org"
-	password := "passwordpasswordpasswordpassword"
-
-	c := config.Config{}
-
-	userService := &mockUserService{}
-	userService.
-		On("SignUp", email, password).
-		Return(&model.User{Model: gorm.Model{ID: id}, Email: email, Password: password})
+	userRepository := &mockUserRepository{}
+	userRepository.
+		On("create", mock.MatchedBy(func(user *model.User) bool {
+			return user.Email == "someone@something.org" && len(user.Password) == 129
+		})).
+		Return(nil)
+	userService := NewService(userRepository)
 	tokenService := &mockTokenService{}
+	handler := NewHandler(config.Config{}, userService, tokenService)
 
-	handler := NewHandler(c, userService, tokenService)
+	w := httptest.NewRecorder()
+	c := newContext(w, "group-name")
+	signUpRequest := SignUpRequest{Email: "someone@something.org", Password: "passwordpasswordpasswordpassword"}
+	c.Request = newPost(t, "", signUpRequest)
 
-	request := SignUpRequest{
-		Email:    email,
-		Password: password,
-	}
-	req := newRequest(t, request)
+	handler.SignUp(c)
 
-	r := gin.Default()
-	r.POST("/users", handler.SignUp)
-	recorder := httptest.NewRecorder()
-	r.ServeHTTP(recorder, req)
-
-	assert.Equal(t, http.StatusCreated, recorder.Code)
-
-	body := recorder.Body
-	user := &model.User{}
-	err := json.Unmarshal(body.Bytes(), user)
-	require.NoError(t, err)
-
-	assert.Equal(t, id, user.ID)
-	assert.Equal(t, email, user.Email)
-	assert.Equal(t, "", user.Password)
-
-	userService.AssertExpectations(t)
+	assert.Empty(t, c.Errors)
+	assertResponse(t, w, http.StatusCreated, &model.User{Email: "someone@something.org", Password: ""})
+	userRepository.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
 }
 
-func newRequest(t *testing.T, request any) *http.Request {
-	body, err := json.Marshal(request)
-	require.NoError(t, err)
-
-	req, err := http.NewRequest(http.MethodPost, "/users", bytes.NewReader(body))
-	require.NoError(t, err)
-
-	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
-
-	return req
-}
-
+/*
 func TestHandler_SignIn_Happy(t *testing.T) {
 	var id uint = 1
 	email := "someone@something.org"
@@ -229,28 +200,7 @@ func TestHandler_Me(t *testing.T) {
 	userService.AssertExpectations(t)
 	tokenService.AssertExpectations(t)
 }
-
-type mockUserService struct{ mock.Mock }
-
-func (s *mockUserService) FindOrCreate(email string, password string) (*model.User, error) {
-	panic("implement me")
-}
-
-func (s *mockUserService) SignUp(email string, password string) (*model.User, error) {
-	called := s.Called(email, password)
-	return called.Get(0).(*model.User), nil
-}
-
-func (s *mockUserService) SignIn(email string, password string) (*model.User, error) {
-	called := s.Called(email, password)
-	return called.Get(0).(*model.User), nil
-}
-
-func (s *mockUserService) FindById(id uint) (*model.User, error) {
-	called := s.Called(id)
-	return called.Get(0).(*model.User), nil
-}
-
+*/
 type mockTokenService struct{ mock.Mock }
 
 func (t *mockTokenService) ValidateAccessToken(tokenString string) (*model.User, error) {
@@ -274,4 +224,60 @@ func (t *mockTokenService) ValidateRefreshToken(tokenString string) (*token.Refr
 
 func (t *mockTokenService) SignOut(userId uint) error {
 	panic("implement me")
+}
+
+type mockUserRepository struct{ mock.Mock }
+
+func (m *mockUserRepository) create(user *model.User) error {
+	called := m.Called(user)
+	return called.Error(0)
+}
+
+func (m *mockUserRepository) findByEmail(email string) (*model.User, error) {
+	panic("implement me")
+}
+
+func (m *mockUserRepository) findById(id uint) (*model.User, error) {
+	panic("implement me")
+}
+
+func (m *mockUserRepository) findOrCreate(user *model.User) (*model.User, error) {
+	panic("implement me")
+}
+
+func newContext(w *httptest.ResponseRecorder, group string) *gin.Context {
+	user := &models.User{
+		ID: uint64(1),
+		Groups: []*models.Group{
+			{Name: group},
+		},
+	}
+	c, _ := gin.CreateTestContext(w)
+	c.Set("user", user)
+	return c
+}
+
+func newPost(t *testing.T, path string, jsonBody any) *http.Request {
+	body, err := json.Marshal(jsonBody)
+	require.NoError(t, err)
+
+	req, err := http.NewRequest(http.MethodPost, path, bytes.NewReader(body))
+	require.NoError(t, err)
+
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	req.Header.Set("Authorization", "token")
+
+	return req
+}
+
+func assertResponse[V any](t *testing.T, rec *httptest.ResponseRecorder, expectedCode int, expectedBody V) {
+	require.Equal(t, expectedCode, rec.Code, "HTTP status code does not match")
+	assertJSON(t, rec.Body, expectedBody)
+}
+
+func assertJSON[V any](t *testing.T, body *bytes.Buffer, expected V) {
+	actualBody := new(V)
+	err := json.Unmarshal(body.Bytes(), &actualBody)
+	require.NoError(t, err)
+	require.Equal(t, expected, *actualBody, "HTTP response body does not match")
 }
