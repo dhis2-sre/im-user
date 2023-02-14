@@ -53,4 +53,4 @@ swagger-client: swagger-check-install
 
 swagger: swagger-clean swagger-docs swagger-client
 
-.PHONY: binary check docker-image init push-docker-image dev test dev-test helm-chart publish-helm
+.PHONY: check docker-image init push-docker-image dev test
