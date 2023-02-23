@@ -1,4 +1,14 @@
-helm/
-skaffold.yaml
+.env
+.env.example
+.envrc
+.git
+.github
+.gitignore
+helm
 Makefile
+*.md
+.pre-commit-config.yaml
+scripts
 .idea
+docker-compose.yml
+skaffold.yaml
