@@ -25,15 +25,17 @@ type Handler struct {
 }
 
 // Jwks godoc
-// swagger:route GET /jwks Jwks
-//
-// Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
-//
-// responses:
-//   200: Jwks
-//   415: Error
-//   500: Error
 func (h *Handler) Jwks(c *gin.Context) {
+	// swagger:route GET /jwks Jwks
+	//
+	// JWKS
+	//
+	// Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
+	//
+	// responses:
+	//   200: Jwks
+	//   415: Error
+	//   500: Error
 	jwks, err := helper.CreateJwks(h.publicKey)
 	if err != nil {
 		_ = c.Error(err)

@@ -1,27 +1,23 @@
 // Package classification Instance Manager User Service.
+// User Service is part of the Instance Manager environment
 //
-// User Service as part of the Instance Manager environment
+//	Version: 0.1.0
+//	License: TODO
+//	Contact: <info@dhis2.org> https://github.com/dhis2-sre/im-user
 //
-// Terms Of Service:
+//	Consumes:
+//	  - application/json
+//	  - multipart/form-data
 //
-// there are no TOS at this moment, use at your own risk we take no responsibility
+//	SecurityDefinitions:
+//	  basicAuth:
+//	    type: basic
+//	  oauth2:
+//	    type: oauth2
+//	    tokenUrl: /tokens
+//	    refreshUrl: /refresh
+//	    flow: password
 //
-//    Version: 0.1.0
-//    License: TODO
-//    Contact: <info@dhis2.org> https://github.com/dhis2-sre/im-user
-//
-//    Consumes:
-//      - application/json
-//      - multipart/form-data
-//
-//    SecurityDefinitions:
-//      basicAuth:
-//        type: basic
-//      oauth2:
-//        type: oauth2
-//        tokenUrl: /tokens
-//        refreshUrl: /refresh
-//        flow: password
 // swagger:meta
 package main
 
