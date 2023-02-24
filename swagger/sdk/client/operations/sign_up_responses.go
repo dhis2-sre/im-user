@@ -51,7 +51,8 @@ func NewSignUpCreated() *SignUpCreated {
 	return &SignUpCreated{}
 }
 
-/* SignUpCreated describes a response with status code 201, with default header values.
+/*
+SignUpCreated describes a response with status code 201, with default header values.
 
 User
 */
@@ -118,7 +119,8 @@ func NewSignUpBadRequest() *SignUpBadRequest {
 	return &SignUpBadRequest{}
 }
 
-/* SignUpBadRequest describes a response with status code 400, with default header values.
+/*
+SignUpBadRequest describes a response with status code 400, with default header values.
 
 SignUpBadRequest sign up bad request
 */
@@ -173,7 +175,8 @@ func NewSignUpUnsupportedMediaType() *SignUpUnsupportedMediaType {
 	return &SignUpUnsupportedMediaType{}
 }
 
-/* SignUpUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+SignUpUnsupportedMediaType describes a response with status code 415, with default header values.
 
 SignUpUnsupportedMediaType sign up unsupported media type
 */

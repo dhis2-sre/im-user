@@ -48,7 +48,8 @@ func NewSignOutOK() *SignOutOK {
 	return &SignOutOK{}
 }
 
-/* SignOutOK describes a response with status code 200, with default header values.
+/*
+SignOutOK describes a response with status code 200, with default header values.
 
 SignOutOK sign out o k
 */
@@ -103,7 +104,8 @@ func NewSignOutUnauthorized() *SignOutUnauthorized {
 	return &SignOutUnauthorized{}
 }
 
-/* SignOutUnauthorized describes a response with status code 401, with default header values.
+/*
+SignOutUnauthorized describes a response with status code 401, with default header values.
 
 SignOutUnauthorized sign out unauthorized
 */
@@ -158,7 +160,8 @@ func NewSignOutUnsupportedMediaType() *SignOutUnsupportedMediaType {
 	return &SignOutUnsupportedMediaType{}
 }
 
-/* SignOutUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+SignOutUnsupportedMediaType describes a response with status code 415, with default header values.
 
 SignOutUnsupportedMediaType sign out unsupported media type
 */

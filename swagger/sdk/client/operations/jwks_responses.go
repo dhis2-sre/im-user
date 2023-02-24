@@ -51,7 +51,8 @@ func NewJwksOK() *JwksOK {
 	return &JwksOK{}
 }
 
-/* JwksOK describes a response with status code 200, with default header values.
+/*
+JwksOK describes a response with status code 200, with default header values.
 
 JwksOK jwks o k
 */
@@ -118,7 +119,8 @@ func NewJwksUnsupportedMediaType() *JwksUnsupportedMediaType {
 	return &JwksUnsupportedMediaType{}
 }
 
-/* JwksUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+JwksUnsupportedMediaType describes a response with status code 415, with default header values.
 
 JwksUnsupportedMediaType jwks unsupported media type
 */
@@ -173,7 +175,8 @@ func NewJwksInternalServerError() *JwksInternalServerError {
 	return &JwksInternalServerError{}
 }
 
-/* JwksInternalServerError describes a response with status code 500, with default header values.
+/*
+JwksInternalServerError describes a response with status code 500, with default header values.
 
 JwksInternalServerError jwks internal server error
 */

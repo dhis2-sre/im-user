@@ -52,10 +52,12 @@ func NewMeParamsWithHTTPClient(client *http.Client) *MeParams {
 	}
 }
 
-/* MeParams contains all the parameters to send to the API endpoint
-   for the me operation.
+/*
+MeParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the me operation.
+
+	Typically these are written to a http.Request.
 */
 type MeParams struct {
 	timeout    time.Duration

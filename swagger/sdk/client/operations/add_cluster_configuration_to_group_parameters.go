@@ -52,10 +52,12 @@ func NewAddClusterConfigurationToGroupParamsWithHTTPClient(client *http.Client) 
 	}
 }
 
-/* AddClusterConfigurationToGroupParams contains all the parameters to send to the API endpoint
-   for the add cluster configuration to group operation.
+/*
+AddClusterConfigurationToGroupParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the add cluster configuration to group operation.
+
+	Typically these are written to a http.Request.
 */
 type AddClusterConfigurationToGroupParams struct {
 

@@ -63,7 +63,8 @@ func NewMeOK() *MeOK {
 	return &MeOK{}
 }
 
-/* MeOK describes a response with status code 200, with default header values.
+/*
+MeOK describes a response with status code 200, with default header values.
 
 User
 */
@@ -130,7 +131,8 @@ func NewMeUnauthorized() *MeUnauthorized {
 	return &MeUnauthorized{}
 }
 
-/* MeUnauthorized describes a response with status code 401, with default header values.
+/*
+MeUnauthorized describes a response with status code 401, with default header values.
 
 MeUnauthorized me unauthorized
 */
@@ -185,7 +187,8 @@ func NewMeForbidden() *MeForbidden {
 	return &MeForbidden{}
 }
 
-/* MeForbidden describes a response with status code 403, with default header values.
+/*
+MeForbidden describes a response with status code 403, with default header values.
 
 MeForbidden me forbidden
 */
@@ -240,7 +243,8 @@ func NewMeNotFound() *MeNotFound {
 	return &MeNotFound{}
 }
 
-/* MeNotFound describes a response with status code 404, with default header values.
+/*
+MeNotFound describes a response with status code 404, with default header values.
 
 MeNotFound me not found
 */
@@ -295,7 +299,8 @@ func NewMeUnsupportedMediaType() *MeUnsupportedMediaType {
 	return &MeUnsupportedMediaType{}
 }
 
-/* MeUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+MeUnsupportedMediaType describes a response with status code 415, with default header values.
 
 MeUnsupportedMediaType me unsupported media type
 */

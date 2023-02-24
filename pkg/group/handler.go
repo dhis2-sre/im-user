@@ -41,20 +41,22 @@ type CreateGroupRequest struct {
 }
 
 // Create group
-// swagger:route POST /groups groupCreate
-//
-// Create group
-//
-// security:
-//   oauth2:
-//
-// responses:
-//   201: Group
-//   400: Error
-//   401: Error
-//   403: Error
-//   415: Error
 func (h Handler) Create(c *gin.Context) {
+	// swagger:route POST /groups groupCreate
+	//
+	// Create group
+	//
+	// Create a group...
+	//
+	// security:
+	//   oauth2:
+	//
+	// responses:
+	//   201: Group
+	//   400: Error
+	//   401: Error
+	//   403: Error
+	//   415: Error
 	var request CreateGroupRequest
 
 	if err := handler.DataBinder(c, &request); err != nil {
@@ -71,20 +73,22 @@ func (h Handler) Create(c *gin.Context) {
 }
 
 // AddUserToGroup group
-// swagger:route POST /groups/{group}/users/{userId} addUserToGroup
-//
-// Add user to group
-//
-// security:
-//   oauth2:
-//
-// responses:
-//   201: Group
-//   400: Error
-//   401: Error
-//   403: Error
-//   415: Error
 func (h Handler) AddUserToGroup(c *gin.Context) {
+	// swagger:route POST /groups/{group}/users/{userId} addUserToGroup
+	//
+	// Add user to group
+	//
+	// Add a user to a group...
+	//
+	// security:
+	//   oauth2:
+	//
+	// responses:
+	//   201: Group
+	//   400: Error
+	//   401: Error
+	//   403: Error
+	//   415: Error
 	groupName := c.Param("group")
 	userIdString := c.Param("userId")
 
@@ -112,20 +116,24 @@ type CreateClusterConfigurationRequest struct {
 }
 
 // AddClusterConfiguration group
-// swagger:route POST /groups/{group}/cluster-configuration addClusterConfigurationToGroup
-//
-// Add cluster configuration to group
-//
-// security:
-//   oauth2:
-//
-// responses:
-//   201: Group
-//   401: Error
-//   400: Error
-//   403: Error
-//   415: Error
 func (h Handler) AddClusterConfiguration(c *gin.Context) {
+	// swagger:route POST /groups/{group}/cluster-configuration addClusterConfigurationToGroup
+	//
+	// Add cluster configuration to group
+	//
+	// Add a cluster configuration to a group. This will allow deploying to a remote cluster.
+	// Currently only configurations with embedded access tokens are support.
+	// The configuration needs to be encrypted using Mozilla Sops. Please see ./scripts/addClusterConfigToGroup.sh for an example of how this can be done.
+	//
+	// security:
+	//   oauth2:
+	//
+	// responses:
+	//   201: Group
+	//   401: Error
+	//   400: Error
+	//   403: Error
+	//   415: Error
 	var request CreateClusterConfigurationRequest
 	if err := handler.DataBinder(c, &request); err != nil {
 		return
@@ -176,20 +184,22 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 }
 
 // Find group by name
-// swagger:route GET /groups/{name} findGroupByName
-//
-// Return a group by name
-//
-// responses:
-//   200: Group
-//   401: Error
-//   403: Error
-//   404: Error
-//   415: Error
-//
-// security:
-//   oauth2:
 func (h Handler) Find(c *gin.Context) {
+	// swagger:route GET /groups/{name} findGroupByName
+	//
+	// Find group
+	//
+	// Find a group by its name
+	//
+	// responses:
+	//   200: Group
+	//   401: Error
+	//   403: Error
+	//   404: Error
+	//   415: Error
+	//
+	// security:
+	//   oauth2:
 	name := c.Param("name")
 
 	group, err := h.groupService.Find(name)

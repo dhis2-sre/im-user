@@ -527,11 +527,14 @@ definitions:
             Note that the Path field is stored in decoded form: /%47%6f%2f becomes /Go/.
             A consequence is that it is impossible to tell which slashes in the Path were
             slashes in the raw URL and which were %2f. This distinction is rarely important,
-            but when it is, the code should use RawPath, an optional field which only gets
-            set if the default encoding is different from Path.
+            but when it is, the code should use the EscapedPath method, which preserves
+            the original encoding of Path.
 
-            URL's String method uses the EscapedPath method to obtain the path. See the
-            EscapedPath method for more details.
+            The RawPath field is an optional field which is only set when the default
+            encoding of Path is different from the escaped path. See the EscapedPath method
+            for more details.
+
+            URL's String method uses the EscapedPath method to obtain the path.
         properties:
             ForceQuery:
                 type: boolean
@@ -539,6 +542,8 @@ definitions:
                 type: string
             Host:
                 type: string
+            OmitHost:
+                type: boolean
             Opaque:
                 type: string
             Path:
@@ -603,7 +608,7 @@ info:
 paths:
     /groups:
         post:
-            description: Create group
+            description: Create a group...
             operationId: groupCreate
             parameters:
                 - description: Refresh token request body parameter
@@ -627,9 +632,13 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - oauth2: []
+            summary: Create group
     /groups/{group}/cluster-configuration:
         post:
-            description: Add cluster configuration to group
+            description: |-
+                Add a cluster configuration to a group. This will allow deploying to a remote cluster.
+                Currently only configurations with embedded access tokens are support.
+                The configuration needs to be encrypted using Mozilla Sops. Please see ./scripts/addClusterConfigToGroup.sh for an example of how this can be done.
             operationId: addClusterConfigurationToGroup
             parameters:
                 - in: path
@@ -657,9 +666,10 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - oauth2: []
+            summary: Add cluster configuration to group
     /groups/{group}/users/{userId}:
         post:
-            description: Add user to group
+            description: Add a user to a group...
             operationId: addUserToGroup
             parameters:
                 - in: path
@@ -688,9 +698,10 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - oauth2: []
+            summary: Add user to group
     /groups/{name}:
         get:
-            description: Return a group by name
+            description: Find a group by its name
             operationId: findGroupByName
             parameters:
                 - in: path
@@ -713,13 +724,15 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - oauth2: []
+            summary: Find group
     /health:
         get:
-            description: Service health status
+            description: Show service health status
             operationId: health
             responses:
                 "200":
                     $ref: '#/responses/Response'
+            summary: Health status
     /jwks:
         get:
             description: Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
@@ -733,7 +746,7 @@ paths:
                     $ref: '#/responses/Error'
     /me:
         get:
-            description: Return user details
+            description: Current user details
             operationId: me
             responses:
                 "200":
@@ -750,6 +763,7 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - oauth2: []
+            summary: User details
     /refresh:
         post:
             description: Refresh user tokens
@@ -768,9 +782,10 @@ paths:
                     $ref: '#/responses/Error'
                 "415":
                     $ref: '#/responses/Error'
+            summary: Refresh tokens
     /tokens:
         post:
-            description: Return user tokens
+            description: Sign in... And get tokens
             operationId: signIn
             responses:
                 "201":
@@ -785,9 +800,10 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - basicAuth: []
+            summary: Sign in
     /users:
         delete:
-            description: Sign out user
+            description: Sign out user... The authentication is done using oauth and JWT. A JWT can't easily be invalidated so even after calling this endpoint a user can still sign in assuming the JWT isn't expired. However, the token can't be refreshed using the refresh token supplied upon signin
             operationId: signOut
             responses:
                 "200":
@@ -798,8 +814,9 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - oauth2: []
+            summary: Sign out
         post:
-            description: SignUp user
+            description: Sign up a user. This endpoint is publicly accessible and therefor anyone can sign up. However, before being able to perform any actions, users needs to be a member of a group. And only administrators can add users to groups.
             operationId: signUp
             parameters:
                 - description: SignUp request body parameter
@@ -817,9 +834,10 @@ paths:
                     $ref: '#/responses/Error'
                 "415":
                     $ref: '#/responses/Error'
+            summary: SignUp user
     /users/{id}:
         get:
-            description: Return a user by id
+            description: Find a user by its id
             operationId: findUserById
             parameters:
                 - format: uint64
@@ -843,6 +861,7 @@ paths:
                     $ref: '#/responses/Error'
             security:
                 - oauth2: []
+            summary: Find user
 responses:
     Error:
         description: ""

@@ -63,7 +63,8 @@ func NewAddUserToGroupCreated() *AddUserToGroupCreated {
 	return &AddUserToGroupCreated{}
 }
 
-/* AddUserToGroupCreated describes a response with status code 201, with default header values.
+/*
+AddUserToGroupCreated describes a response with status code 201, with default header values.
 
 Group
 */
@@ -130,7 +131,8 @@ func NewAddUserToGroupBadRequest() *AddUserToGroupBadRequest {
 	return &AddUserToGroupBadRequest{}
 }
 
-/* AddUserToGroupBadRequest describes a response with status code 400, with default header values.
+/*
+AddUserToGroupBadRequest describes a response with status code 400, with default header values.
 
 AddUserToGroupBadRequest add user to group bad request
 */
@@ -185,7 +187,8 @@ func NewAddUserToGroupUnauthorized() *AddUserToGroupUnauthorized {
 	return &AddUserToGroupUnauthorized{}
 }
 
-/* AddUserToGroupUnauthorized describes a response with status code 401, with default header values.
+/*
+AddUserToGroupUnauthorized describes a response with status code 401, with default header values.
 
 AddUserToGroupUnauthorized add user to group unauthorized
 */
@@ -240,7 +243,8 @@ func NewAddUserToGroupForbidden() *AddUserToGroupForbidden {
 	return &AddUserToGroupForbidden{}
 }
 
-/* AddUserToGroupForbidden describes a response with status code 403, with default header values.
+/*
+AddUserToGroupForbidden describes a response with status code 403, with default header values.
 
 AddUserToGroupForbidden add user to group forbidden
 */
@@ -295,7 +299,8 @@ func NewAddUserToGroupUnsupportedMediaType() *AddUserToGroupUnsupportedMediaType
 	return &AddUserToGroupUnsupportedMediaType{}
 }
 
-/* AddUserToGroupUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+AddUserToGroupUnsupportedMediaType describes a response with status code 415, with default header values.
 
 AddUserToGroupUnsupportedMediaType add user to group unsupported media type
 */

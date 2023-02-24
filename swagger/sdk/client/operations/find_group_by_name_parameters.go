@@ -52,10 +52,12 @@ func NewFindGroupByNameParamsWithHTTPClient(client *http.Client) *FindGroupByNam
 	}
 }
 
-/* FindGroupByNameParams contains all the parameters to send to the API endpoint
-   for the find group by name operation.
+/*
+FindGroupByNameParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the find group by name operation.
+
+	Typically these are written to a http.Request.
 */
 type FindGroupByNameParams struct {
 
