@@ -58,7 +58,9 @@ type ClientService interface {
 }
 
 /*
-Jwks Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
+Jwks js w k s
+
+Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
 */
 func (a *Client) Jwks(params *JwksParams, opts ...ClientOption) (*JwksOK, error) {
 	// TODO: Validate the params before sending

@@ -11,8 +11,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewRepository(DB *gorm.DB) *repository {
-	return &repository{db: DB}
+func NewRepository(db *gorm.DB) *repository {
+	return &repository{db}
 }
 
 type repository struct {
