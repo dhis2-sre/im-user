@@ -63,7 +63,8 @@ func NewGroupCreateCreated() *GroupCreateCreated {
 	return &GroupCreateCreated{}
 }
 
-/* GroupCreateCreated describes a response with status code 201, with default header values.
+/*
+GroupCreateCreated describes a response with status code 201, with default header values.
 
 Group
 */
@@ -130,7 +131,8 @@ func NewGroupCreateBadRequest() *GroupCreateBadRequest {
 	return &GroupCreateBadRequest{}
 }
 
-/* GroupCreateBadRequest describes a response with status code 400, with default header values.
+/*
+GroupCreateBadRequest describes a response with status code 400, with default header values.
 
 GroupCreateBadRequest group create bad request
 */
@@ -185,7 +187,8 @@ func NewGroupCreateUnauthorized() *GroupCreateUnauthorized {
 	return &GroupCreateUnauthorized{}
 }
 
-/* GroupCreateUnauthorized describes a response with status code 401, with default header values.
+/*
+GroupCreateUnauthorized describes a response with status code 401, with default header values.
 
 GroupCreateUnauthorized group create unauthorized
 */
@@ -240,7 +243,8 @@ func NewGroupCreateForbidden() *GroupCreateForbidden {
 	return &GroupCreateForbidden{}
 }
 
-/* GroupCreateForbidden describes a response with status code 403, with default header values.
+/*
+GroupCreateForbidden describes a response with status code 403, with default header values.
 
 GroupCreateForbidden group create forbidden
 */
@@ -295,7 +299,8 @@ func NewGroupCreateUnsupportedMediaType() *GroupCreateUnsupportedMediaType {
 	return &GroupCreateUnsupportedMediaType{}
 }
 
-/* GroupCreateUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+GroupCreateUnsupportedMediaType describes a response with status code 415, with default header values.
 
 GroupCreateUnsupportedMediaType group create unsupported media type
 */

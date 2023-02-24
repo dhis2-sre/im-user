@@ -63,7 +63,8 @@ func NewAddClusterConfigurationToGroupCreated() *AddClusterConfigurationToGroupC
 	return &AddClusterConfigurationToGroupCreated{}
 }
 
-/* AddClusterConfigurationToGroupCreated describes a response with status code 201, with default header values.
+/*
+AddClusterConfigurationToGroupCreated describes a response with status code 201, with default header values.
 
 Group
 */
@@ -130,7 +131,8 @@ func NewAddClusterConfigurationToGroupBadRequest() *AddClusterConfigurationToGro
 	return &AddClusterConfigurationToGroupBadRequest{}
 }
 
-/* AddClusterConfigurationToGroupBadRequest describes a response with status code 400, with default header values.
+/*
+AddClusterConfigurationToGroupBadRequest describes a response with status code 400, with default header values.
 
 AddClusterConfigurationToGroupBadRequest add cluster configuration to group bad request
 */
@@ -185,7 +187,8 @@ func NewAddClusterConfigurationToGroupUnauthorized() *AddClusterConfigurationToG
 	return &AddClusterConfigurationToGroupUnauthorized{}
 }
 
-/* AddClusterConfigurationToGroupUnauthorized describes a response with status code 401, with default header values.
+/*
+AddClusterConfigurationToGroupUnauthorized describes a response with status code 401, with default header values.
 
 AddClusterConfigurationToGroupUnauthorized add cluster configuration to group unauthorized
 */
@@ -240,7 +243,8 @@ func NewAddClusterConfigurationToGroupForbidden() *AddClusterConfigurationToGrou
 	return &AddClusterConfigurationToGroupForbidden{}
 }
 
-/* AddClusterConfigurationToGroupForbidden describes a response with status code 403, with default header values.
+/*
+AddClusterConfigurationToGroupForbidden describes a response with status code 403, with default header values.
 
 AddClusterConfigurationToGroupForbidden add cluster configuration to group forbidden
 */
@@ -295,7 +299,8 @@ func NewAddClusterConfigurationToGroupUnsupportedMediaType() *AddClusterConfigur
 	return &AddClusterConfigurationToGroupUnsupportedMediaType{}
 }
 
-/* AddClusterConfigurationToGroupUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+AddClusterConfigurationToGroupUnsupportedMediaType describes a response with status code 415, with default header values.
 
 AddClusterConfigurationToGroupUnsupportedMediaType add cluster configuration to group unsupported media type
 */

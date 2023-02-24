@@ -54,10 +54,12 @@ func NewSignUpParamsWithHTTPClient(client *http.Client) *SignUpParams {
 	}
 }
 
-/* SignUpParams contains all the parameters to send to the API endpoint
-   for the sign up operation.
+/*
+SignUpParams contains all the parameters to send to the API endpoint
 
-   Typically these are written to a http.Request.
+	for the sign up operation.
+
+	Typically these are written to a http.Request.
 */
 type SignUpParams struct {
 

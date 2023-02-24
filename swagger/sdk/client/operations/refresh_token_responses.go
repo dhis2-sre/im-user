@@ -51,7 +51,8 @@ func NewRefreshTokenCreated() *RefreshTokenCreated {
 	return &RefreshTokenCreated{}
 }
 
-/* RefreshTokenCreated describes a response with status code 201, with default header values.
+/*
+RefreshTokenCreated describes a response with status code 201, with default header values.
 
 RefreshTokenCreated refresh token created
 */
@@ -118,7 +119,8 @@ func NewRefreshTokenBadRequest() *RefreshTokenBadRequest {
 	return &RefreshTokenBadRequest{}
 }
 
-/* RefreshTokenBadRequest describes a response with status code 400, with default header values.
+/*
+RefreshTokenBadRequest describes a response with status code 400, with default header values.
 
 RefreshTokenBadRequest refresh token bad request
 */
@@ -173,7 +175,8 @@ func NewRefreshTokenUnsupportedMediaType() *RefreshTokenUnsupportedMediaType {
 	return &RefreshTokenUnsupportedMediaType{}
 }
 
-/* RefreshTokenUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+RefreshTokenUnsupportedMediaType describes a response with status code 415, with default header values.
 
 RefreshTokenUnsupportedMediaType refresh token unsupported media type
 */

@@ -63,7 +63,8 @@ func NewFindGroupByNameOK() *FindGroupByNameOK {
 	return &FindGroupByNameOK{}
 }
 
-/* FindGroupByNameOK describes a response with status code 200, with default header values.
+/*
+FindGroupByNameOK describes a response with status code 200, with default header values.
 
 Group
 */
@@ -130,7 +131,8 @@ func NewFindGroupByNameUnauthorized() *FindGroupByNameUnauthorized {
 	return &FindGroupByNameUnauthorized{}
 }
 
-/* FindGroupByNameUnauthorized describes a response with status code 401, with default header values.
+/*
+FindGroupByNameUnauthorized describes a response with status code 401, with default header values.
 
 FindGroupByNameUnauthorized find group by name unauthorized
 */
@@ -185,7 +187,8 @@ func NewFindGroupByNameForbidden() *FindGroupByNameForbidden {
 	return &FindGroupByNameForbidden{}
 }
 
-/* FindGroupByNameForbidden describes a response with status code 403, with default header values.
+/*
+FindGroupByNameForbidden describes a response with status code 403, with default header values.
 
 FindGroupByNameForbidden find group by name forbidden
 */
@@ -240,7 +243,8 @@ func NewFindGroupByNameNotFound() *FindGroupByNameNotFound {
 	return &FindGroupByNameNotFound{}
 }
 
-/* FindGroupByNameNotFound describes a response with status code 404, with default header values.
+/*
+FindGroupByNameNotFound describes a response with status code 404, with default header values.
 
 FindGroupByNameNotFound find group by name not found
 */
@@ -295,7 +299,8 @@ func NewFindGroupByNameUnsupportedMediaType() *FindGroupByNameUnsupportedMediaTy
 	return &FindGroupByNameUnsupportedMediaType{}
 }
 
-/* FindGroupByNameUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+FindGroupByNameUnsupportedMediaType describes a response with status code 415, with default header values.
 
 FindGroupByNameUnsupportedMediaType find group by name unsupported media type
 */

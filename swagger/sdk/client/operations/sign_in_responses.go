@@ -63,7 +63,8 @@ func NewSignInCreated() *SignInCreated {
 	return &SignInCreated{}
 }
 
-/* SignInCreated describes a response with status code 201, with default header values.
+/*
+SignInCreated describes a response with status code 201, with default header values.
 
 SignInCreated sign in created
 */
@@ -130,7 +131,8 @@ func NewSignInUnauthorized() *SignInUnauthorized {
 	return &SignInUnauthorized{}
 }
 
-/* SignInUnauthorized describes a response with status code 401, with default header values.
+/*
+SignInUnauthorized describes a response with status code 401, with default header values.
 
 SignInUnauthorized sign in unauthorized
 */
@@ -185,7 +187,8 @@ func NewSignInForbidden() *SignInForbidden {
 	return &SignInForbidden{}
 }
 
-/* SignInForbidden describes a response with status code 403, with default header values.
+/*
+SignInForbidden describes a response with status code 403, with default header values.
 
 SignInForbidden sign in forbidden
 */
@@ -240,7 +243,8 @@ func NewSignInNotFound() *SignInNotFound {
 	return &SignInNotFound{}
 }
 
-/* SignInNotFound describes a response with status code 404, with default header values.
+/*
+SignInNotFound describes a response with status code 404, with default header values.
 
 SignInNotFound sign in not found
 */
@@ -295,7 +299,8 @@ func NewSignInUnsupportedMediaType() *SignInUnsupportedMediaType {
 	return &SignInUnsupportedMediaType{}
 }
 
-/* SignInUnsupportedMediaType describes a response with status code 415, with default header values.
+/*
+SignInUnsupportedMediaType describes a response with status code 415, with default header values.
 
 SignInUnsupportedMediaType sign in unsupported media type
 */

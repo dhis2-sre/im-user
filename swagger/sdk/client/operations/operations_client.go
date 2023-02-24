@@ -58,7 +58,7 @@ type ClientService interface {
 }
 
 /*
-  Jwks Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
+Jwks Return a JWKS containing the public key which can be used to validate the JWT's dispensed at /signin
 */
 func (a *Client) Jwks(params *JwksParams, opts ...ClientOption) (*JwksOK, error) {
 	// TODO: Validate the params before sending
@@ -96,7 +96,12 @@ func (a *Client) Jwks(params *JwksParams, opts ...ClientOption) (*JwksOK, error)
 }
 
 /*
-  AddClusterConfigurationToGroup Add cluster configuration to group
+	AddClusterConfigurationToGroup adds cluster configuration to group
+
+	Add a cluster configuration to a group. This will allow deploying to a remote cluster.
+
+Currently only configurations with embedded access tokens are support.
+The configuration needs to be encrypted using Mozilla Sops. Please see ./scripts/addClusterConfigToGroup.sh for an example of how this can be done.
 */
 func (a *Client) AddClusterConfigurationToGroup(params *AddClusterConfigurationToGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddClusterConfigurationToGroupCreated, error) {
 	// TODO: Validate the params before sending
@@ -135,7 +140,9 @@ func (a *Client) AddClusterConfigurationToGroup(params *AddClusterConfigurationT
 }
 
 /*
-  AddUserToGroup Add user to group
+AddUserToGroup adds user to group
+
+Add a user to a group...
 */
 func (a *Client) AddUserToGroup(params *AddUserToGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddUserToGroupCreated, error) {
 	// TODO: Validate the params before sending
@@ -174,7 +181,9 @@ func (a *Client) AddUserToGroup(params *AddUserToGroupParams, authInfo runtime.C
 }
 
 /*
-  FindGroupByName Return a group by name
+FindGroupByName finds group
+
+Find a group by its name
 */
 func (a *Client) FindGroupByName(params *FindGroupByNameParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*FindGroupByNameOK, error) {
 	// TODO: Validate the params before sending
@@ -213,7 +222,9 @@ func (a *Client) FindGroupByName(params *FindGroupByNameParams, authInfo runtime
 }
 
 /*
-  FindUserByID Return a user by id
+FindUserByID finds user
+
+Find a user by its id
 */
 func (a *Client) FindUserByID(params *FindUserByIDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*FindUserByIDOK, error) {
 	// TODO: Validate the params before sending
@@ -252,7 +263,9 @@ func (a *Client) FindUserByID(params *FindUserByIDParams, authInfo runtime.Clien
 }
 
 /*
-  GroupCreate Create group
+GroupCreate creates group
+
+Create a group...
 */
 func (a *Client) GroupCreate(params *GroupCreateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GroupCreateCreated, error) {
 	// TODO: Validate the params before sending
@@ -291,7 +304,9 @@ func (a *Client) GroupCreate(params *GroupCreateParams, authInfo runtime.ClientA
 }
 
 /*
-  Health Service health status
+Health healths status
+
+Show service health status
 */
 func (a *Client) Health(params *HealthParams, opts ...ClientOption) (*HealthOK, error) {
 	// TODO: Validate the params before sending
@@ -329,7 +344,9 @@ func (a *Client) Health(params *HealthParams, opts ...ClientOption) (*HealthOK, 
 }
 
 /*
-  Me Return user details
+Me users details
+
+Current user details
 */
 func (a *Client) Me(params *MeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*MeOK, error) {
 	// TODO: Validate the params before sending
@@ -368,7 +385,9 @@ func (a *Client) Me(params *MeParams, authInfo runtime.ClientAuthInfoWriter, opt
 }
 
 /*
-  RefreshToken Refresh user tokens
+RefreshToken refreshes tokens
+
+Refresh user tokens
 */
 func (a *Client) RefreshToken(params *RefreshTokenParams, opts ...ClientOption) (*RefreshTokenCreated, error) {
 	// TODO: Validate the params before sending
@@ -406,7 +425,9 @@ func (a *Client) RefreshToken(params *RefreshTokenParams, opts ...ClientOption) 
 }
 
 /*
-  SignIn Return user tokens
+SignIn signs in
+
+Sign in... And get tokens
 */
 func (a *Client) SignIn(params *SignInParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignInCreated, error) {
 	// TODO: Validate the params before sending
@@ -445,7 +466,9 @@ func (a *Client) SignIn(params *SignInParams, authInfo runtime.ClientAuthInfoWri
 }
 
 /*
-  SignOut Sign out user
+SignOut signs out
+
+Sign out user... The authentication is done using oauth and JWT. A JWT can't easily be invalidated so even after calling this endpoint a user can still sign in assuming the JWT isn't expired. However, the token can't be refreshed using the refresh token supplied upon signin
 */
 func (a *Client) SignOut(params *SignOutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SignOutOK, error) {
 	// TODO: Validate the params before sending
@@ -484,7 +507,9 @@ func (a *Client) SignOut(params *SignOutParams, authInfo runtime.ClientAuthInfoW
 }
 
 /*
-  SignUp SignUp user
+SignUp signs up user
+
+Sign up a user. This endpoint is publicly accessible and therefor anyone can sign up. However, before being able to perform any actions, users needs to be a member of a group. And only administrators can add users to groups.
 */
 func (a *Client) SignUp(params *SignUpParams, opts ...ClientOption) (*SignUpCreated, error) {
 	// TODO: Validate the params before sending
