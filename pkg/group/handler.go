@@ -3,7 +3,7 @@ package group
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"strconv"
@@ -175,7 +175,7 @@ func (h Handler) getBytes(file *multipart.FileHeader) ([]byte, error) {
 		return nil, err
 	}
 
-	bytes, err := ioutil.ReadAll(openedFile)
+	bytes, err := io.ReadAll(openedFile)
 	if err != nil {
 		return nil, err
 	}

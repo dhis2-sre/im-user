@@ -599,10 +599,9 @@ info:
     contact:
         email: info@dhis2.org
         url: https://github.com/dhis2-sre/im-user
-    description: User Service as part of the Instance Manager environment
+    description: User Service is part of the Instance Manager environment
     license:
         name: TODO
-    termsOfService: there are no TOS at this moment, use at your own risk we take no responsibility
     title: Instance Manager User Service.
     version: 0.1.0
 paths:
@@ -744,6 +743,7 @@ paths:
                     $ref: '#/responses/Error'
                 "500":
                     $ref: '#/responses/Error'
+            summary: JWKS
     /me:
         get:
             description: Current user details

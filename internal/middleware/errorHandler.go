@@ -24,6 +24,7 @@ func ErrorHandler() gin.HandlerFunc {
 			return
 		}
 
+		// nolint:gocritic
 		if errdef.IsDuplicated(err) {
 			c.String(http.StatusBadRequest, err.Error())
 		} else if errdef.IsNotFound(err) {
