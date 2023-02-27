@@ -15,7 +15,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/jackc/pgconn v1.14.0
 	github.com/lestrrat-go/jwx v1.2.25
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	golang.org/x/crypto v0.6.0
 	gorm.io/driver/postgres v1.4.8
 	gorm.io/gorm v1.24.5
